@@ -1,74 +1,81 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Modifica Mazzo</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 2em;
-      background: url('sfondo.jpg') no-repeat center center fixed;
+      margin: 0;
+      padding: 0;
+      background-image: url('sfondo.jpg');
       background-size: cover;
-      color: #222;
+      background-attachment: fixed;
     }
     header {
+      background: white;
+      padding: 1em;
       text-align: center;
-      margin-bottom: 1em;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
     header button {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0;
     }
-    header button img {
-      height: 60px;
+    header img {
+      height: 50px;
     }
-    h1 {
-      margin-bottom: 0.5em;
-    }
-    .filtro-container {
-      margin-bottom: 1em;
+    main {
+      padding: 2em;
+      background-color: rgba(255, 255, 255, 0.8);
+      max-width: 1200px;
+      margin: auto;
     }
     select, input[type="text"] {
-      padding: 0.4em;
       margin-right: 1em;
-      font-size: 1em;
+      padding: 0.5em;
     }
-    .card-list {
+    .carte-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 1em;
+      gap: 10px;
+      margin-top: 1em;
     }
-    .card-item {
-      border: 1px solid #ccc;
+    .carte-container img {
+      width: 80px;
+      height: auto;
+      border: 1px solid #aaa;
       border-radius: 6px;
-      padding: 0.5em;
-      width: 160px;
-      background: rgba(255 255 255 / 0.85);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card-item .title {
-      font-weight: bold;
-      margin-bottom: 0.3em;
-    }
-    .card-item .details {
-      font-size: 0.85em;
-      margin-bottom: 0.4em;
-    }
-    .card-item button {
-      padding: 0.3em 0.5em;
-      font-size: 0.9em;
       cursor: pointer;
+      transition: transform 0.2s;
     }
-    .info {
+    .carte-container img:hover {
+      transform: scale(1.2);
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 1.5em;
+      border: 2px solid black;
+      z-index: 100;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      border-radius: 10px;
+    }
+    .popup .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 20px;
+      cursor: pointer;
       font-weight: bold;
-      margin-bottom: 1em;
     }
-    /* Popup */
     .overlay {
       display: none;
       position: fixed;
@@ -76,332 +83,186 @@
       background: rgba(0,0,0,0.5);
       z-index: 99;
     }
-    .popup {
-      display: none;
-      position: fixed;
-      top: 15%;
-      left: 50%;
-      transform: translate(-50%, -15%);
-      background: white;
-      padding: 1em;
-      border: 2px solid black;
-      border-radius: 8px;
-      max-width: 80%;
-      max-height: 70%;
-      overflow-y: auto;
-      z-index: 100;
-    }
-    .popup h3 {
-      margin-top: 0;
-    }
-    .popup input[type="text"], .popup select {
-      width: 100%;
-      padding: 0.5em;
-      margin-bottom: 0.7em;
-      font-size: 1em;
-    }
-    .popup .card-list {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 0.5em;
-      background: #fefefe;
-    }
-    .popup .card-item {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.3em 0.5em;
-      border-bottom: 1px solid #ddd;
-      background: none;
-    }
-    .popup .card-item:last-child {
-      border-bottom: none;
-    }
-    .popup button {
-      font-size: 0.9em;
-      padding: 0.3em 0.6em;
+    #totaleCarte {
+      margin-top: 1em;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
+  <header>
+    <button onclick="window.location.href='home.html'"><img src="logo.jpg" alt="Home"></button>
+  </header>
 
-<header>
-  <button onclick="location.href='home.html'" title="Vai alla home">
-    <img src="logo.jpg" alt="Logo Vita" />
-  </button>
-</header>
+  <main>
+    <h1 id="titolo"></h1>
 
-<h1>Modifica Mazzo: <span id="nomeMazzoTitolo"></span></h1>
+    <label for="filtroTipo">Filtro Tipo:</label>
+    <select id="filtroTipo">
+      <option value="">Tutti</option>
+    </select>
 
-<div class="info">Carte totali nel mazzo: <span id="totaleCarte">0</span></div>
+    <label for="filtroPietra">Filtro Pietra:</label>
+    <select id="filtroPietra">
+      <option value="">Tutti</option>
+    </select>
 
-<div class="filtro-container">
-  <select id="filtroPietra">
-    <option value="">Tutte le Pietre</option>
-    <option>AMBRA</option><option>RUBINO</option><option>ACCIAIO</option>
-    <option>SMERALDO</option><option>AMETISTA</option><option>ZAFFIRO</option>
-  </select>
-  <select id="filtroCosto">
-    <option value="">Tutti i Costi</option>
-    <option>1</option><option>2</option><option>3</option><option>4</option>
-    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
-  </select>
-  <select id="filtroTipo">
-    <option value="">Tutti i Tipi</option>
-  </select>
-  <button id="applicaFiltriBtn">Applica Filtri</button>
-  <button id="apriAggiungiPopupBtn">Aggiungi Carta</button>
-</div>
+    <label for="filtroCosto">Filtro Costo:</label>
+    <select id="filtroCosto">
+      <option value="">Tutti</option>
+    </select>
 
-<div id="listaCarte" class="card-list"></div>
+    <button onclick="apriPopupAggiunta()">Aggiungi carta</button>
 
-<!-- Popup aggiungi carta -->
-<div class="overlay" id="overlay"></div>
-<div class="popup" id="popupAggiungi">
-  <h3>Aggiungi carta al mazzo</h3>
-  <input type="text" id="searchCarta" placeholder="Cerca per nome..." />
-  <select id="filtroPietraPopup">
-    <option value="">Tutte le Pietre</option>
-    <option>AMBRA</option><option>RUBINO</option><option>ACCIAIO</option>
-    <option>SMERALDO</option><option>AMETISTA</option><option>ZAFFIRO</option>
-  </select>
-  <select id="filtroCostoPopup">
-    <option value="">Tutti i Costi</option>
-    <option>1</option><option>2</option><option>3</option><option>4</option>
-    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
-  </select>
-  <select id="filtroTipoPopup">
-    <option value="">Tutti i Tipi</option>
-  </select>
-  <div id="listaCartePopup" class="card-list"></div>
-  <button onclick="closePopup()">Chiudi</button>
-</div>
+    <div class="carte-container" id="contenitoreCarte"></div>
+    <div id="totaleCarte"></div>
+  </main>
 
-<script>
-  // Variabili globali
-  let nomeMazzo = '';
-  let mazzo = {};
-  let cardsDatabase = [];
-  let listaCarteFiltrate = [];
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <span class="close-btn" onclick="chiudiPopup()">&times;</span>
+    <h3>Aggiungi carta al mazzo</h3>
+    <input type="text" id="inputRicerca" placeholder="Cerca per nome...">
+    <div id="risultatiRicerca"></div>
+  </div>
 
-  // Helper per leggere query string
-  function getQueryParam(param) {
+  <script>
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  }
+    const nomeMazzo = urlParams.get('nome');
+    document.getElementById('titolo').textContent = `Modifica mazzo: ${nomeMazzo}`;
 
-  // Funzione per ordinare carte per COSTO crescente
-  function ordinaPerCostoAsc(a, b) {
-    return (a.COSTO || 0) - (b.COSTO || 0);
-  }
+    let cardsDatabase = [];
+    let mazzo = JSON.parse(localStorage.getItem(`mazzo_${nomeMazzo}`)) || {};
 
-  // Caricamento mazzo e database
-  window.onload = () => {
-    nomeMazzo = getQueryParam('mazzo');
-    if (!nomeMazzo) {
-      alert('Nessun mazzo specificato nell\'URL.');
-      location.href = 'mazzi.html';
-      return;
-    }
-    document.getElementById('nomeMazzoTitolo').textContent = nomeMazzo;
-
-    // Carica mazzo da localStorage
-    const mazzoJson = localStorage.getItem('mazzo_' + nomeMazzo);
-    if (!mazzoJson) {
-      alert('Mazzo non trovato.');
-      location.href = 'mazzi.html';
-      return;
-    }
-    mazzo = JSON.parse(mazzoJson);
-
-    // Carica database carte
     fetch('cards.json')
       .then(res => res.json())
       .then(data => {
         cardsDatabase = data;
-        // Riempi filtro tipo (tipo = CLASSIFICAZIONE)
-        riempiFiltroTipo();
-        aggiornaListaCarte();
+        aggiornaFiltri();
+        mostraCarte();
       });
 
-    // Eventi filtro
-    document.getElementById('applicaFiltriBtn').onclick = aggiornaListaCarte;
-    document.getElementById('apriAggiungiPopupBtn').onclick = apriPopup;
+    function aggiornaFiltri() {
+      const tipoSet = new Set();
+      const pietraSet = new Set();
+      const costoSet = new Set();
 
-    // Popup filtri
-    document.getElementById('searchCarta').addEventListener('input', aggiornaListaCartePopup);
-    document.getElementById('filtroPietraPopup').addEventListener('change', aggiornaListaCartePopup);
-    document.getElementById('filtroCostoPopup').addEventListener('change', aggiornaListaCartePopup);
-    document.getElementById('filtroTipoPopup').addEventListener('change', aggiornaListaCartePopup);
-  };
+      for (const nome in mazzo) {
+        const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+        if (!carta) continue;
+        tipoSet.add(carta['TIPO']);
+        pietraSet.add(carta['PIETRA']);
+        costoSet.add(carta['COSTO']);
+      }
 
-  // Riempi filtro tipo da cardsDatabase (una sola volta)
-  function riempiFiltroTipo() {
-    const tipiUnici = new Set(cardsDatabase.map(c => c.CLASSIFICAZIONE).filter(x => x && x.trim() !== ''));
-    const selectTipo = document.getElementById('filtroTipo');
-    const selectTipoPopup = document.getElementById('filtroTipoPopup');
+      for (let tipo of [...tipoSet].sort()) {
+        const op = document.createElement('option');
+        op.value = tipo;
+        op.textContent = tipo;
+        document.getElementById('filtroTipo').appendChild(op);
+      }
 
-    tipiUnici.forEach(tipo => {
-      const option1 = document.createElement('option');
-      option1.textContent = tipo;
-      option1.value = tipo;
-      selectTipo.appendChild(option1);
+      for (let p of [...pietraSet].sort()) {
+        const op = document.createElement('option');
+        op.value = p;
+        op.textContent = p;
+        document.getElementById('filtroPietra').appendChild(op);
+      }
 
-      const option2 = document.createElement('option');
-      option2.textContent = tipo;
-      option2.value = tipo;
-      selectTipoPopup.appendChild(option2);
-    });
-  }
-
-  // Aggiorna lista carte nel mazzo filtrando e ordinando
-  function aggiornaListaCarte() {
-    const filtroPietra = document.getElementById('filtroPietra').value;
-    const filtroCosto = document.getElementById('filtroCosto').value;
-    const filtroTipo = document.getElementById('filtroTipo').value;
-
-    // Ottieni tutte le carte presenti nel mazzo con quantità
-    // Converte mazzo {nomeCarta: qty} in array di oggetti {carta, qty}
-    let carteConQty = [];
-    for (const nomeCarta in mazzo) {
-      const carta = cardsDatabase.find(c => c["NOME CARTA"] === nomeCarta);
-      if (!carta) continue;
-      carteConQty.push({ carta, qty: mazzo[nomeCarta] });
+      for (let c of [...costoSet].sort((a,b)=>a-b)) {
+        const op = document.createElement('option');
+        op.value = c;
+        op.textContent = c;
+        document.getElementById('filtroCosto').appendChild(op);
+      }
     }
 
-    // Filtra in base ai filtri
-    carteConQty = carteConQty.filter(({ carta }) => {
-      if (filtroPietra && carta.PIETRA !== filtroPietra) return false;
-      if (filtroCosto && carta.COSTO.toString() !== filtroCosto) return false;
-      if (filtroTipo && carta.CLASSIFICAZIONE !== filtroTipo) return false;
-      return true;
-    });
+    document.getElementById('filtroTipo').onchange = mostraCarte;
+    document.getElementById('filtroPietra').onchange = mostraCarte;
+    document.getElementById('filtroCosto').onchange = mostraCarte;
 
-    // Ordina per COSTO crescente
-    carteConQty.sort((a, b) => (a.carta.COSTO || 0) - (b.carta.COSTO || 0));
+    function mostraCarte() {
+      const tipo = document.getElementById('filtroTipo').value;
+      const pietra = document.getElementById('filtroPietra').value;
+      const costo = document.getElementById('filtroCosto').value;
 
-    // Mostra
-    const container = document.getElementById('listaCarte');
-    container.innerHTML = '';
+      const container = document.getElementById('contenitoreCarte');
+      container.innerHTML = '';
 
-    let totale = 0;
-    carteConQty.forEach(({ carta, qty }) => {
-      totale += qty;
-      const div = document.createElement('div');
-      div.className = 'card-item';
+      let totaleCarte = 0;
 
-      const titolo = document.createElement('div');
-      titolo.className = 'title';
-      titolo.textContent = carta["NOME CARTA"];
-      div.appendChild(titolo);
+      for (const nome in mazzo) {
+        const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+        if (!carta) continue;
+        if (tipo && carta['TIPO'] !== tipo) continue;
+        if (pietra && carta['PIETRA'] !== pietra) continue;
+        if (costo && carta['COSTO'].toString() !== costo) continue;
 
-      const dettagli = document.createElement('div');
-      dettagli.className = 'details';
-      dettagli.innerHTML = `Pietra: ${carta.PIETRA}<br>Costo: ${carta.COSTO}<br>Tipo: ${carta.CLASSIFICAZIONE}<br>Quantità: ${qty}`;
-      div.appendChild(dettagli);
+        const numero = carta['N.'];
+        const quantita = mazzo[nome];
+        totaleCarte += quantita;
 
-      const btnRimuovi = document.createElement('button');
-      btnRimuovi.textContent = 'Rimuovi 1 copia';
-      btnRimuovi.onclick = () => {
-        rimuoviCarta(carta["NOME CARTA"]);
-      };
-      div.appendChild(btnRimuovi);
+        for (let i = 0; i < quantita; i++) {
+          const img = document.createElement('img');
+          img.src = `img/${numero}.jpg`;
+          img.alt = nome;
+          img.onclick = () => rimuoviCarta(nome);
+          container.appendChild(img);
+        }
+      }
 
-      container.appendChild(div);
-    });
-
-    document.getElementById('totaleCarte').textContent = totale;
-  }
-
-  // Rimuove una copia di carta dal mazzo e aggiorna localStorage
-  function rimuoviCarta(nomeCarta) {
-    if (!mazzo[nomeCarta]) return;
-    mazzo[nomeCarta]--;
-    if (mazzo[nomeCarta] <= 0) {
-      delete mazzo[nomeCarta];
+      document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} / 60`;
     }
-    salvaMazzo();
-    aggiornaListaCarte();
-  }
 
-  // Salva mazzo su localStorage
-  function salvaMazzo() {
-    localStorage.setItem('mazzo_' + nomeMazzo, JSON.stringify(mazzo));
-  }
-
-  // Apri popup aggiungi carta
-  function apriPopup() {
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById('popupAggiungi').style.display = 'block';
-    aggiornaListaCartePopup();
-  }
-
-  // Chiudi popup
-  function closePopup() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('popupAggiungi').style.display = 'none';
-  }
-
-  // Aggiorna lista carte del popup aggiungi, con filtri e ricerca
-  function aggiornaListaCartePopup() {
-    const search = document.getElementById('searchCarta').value.toLowerCase();
-    const filtroPietra = document.getElementById('filtroPietraPopup').value;
-    const filtroCosto = document.getElementById('filtroCostoPopup').value;
-    const filtroTipo = document.getElementById('filtroTipoPopup').value;
-
-    // Filtra carte database
-    listaCarteFiltrate = cardsDatabase.filter(carta => {
-      if (search && !carta["NOME CARTA"].toLowerCase().includes(search)) return false;
-      if (filtroPietra && carta.PIETRA !== filtroPietra) return false;
-      if (filtroCosto && carta.COSTO.toString() !== filtroCosto) return false;
-      if (filtroTipo && carta.CLASSIFICAZIONE !== filtroTipo) return false;
-      return true;
-    });
-
-    // Mostra carte filtrate
-    const container = document.getElementById('listaCartePopup');
-    container.innerHTML = '';
-
-    listaCarteFiltrate.forEach(carta => {
-      const div = document.createElement('div');
-      div.className = 'card-item';
-
-      const nome = document.createElement('div');
-      nome.textContent = carta["NOME CARTA"];
-      div.appendChild(nome);
-
-      const btnAggiungi = document.createElement('button');
-      btnAggiungi.textContent = 'Aggiungi';
-      btnAggiungi.onclick = () => {
-        aggiungiCarta(carta["NOME CARTA"]);
-      };
-      div.appendChild(btnAggiungi);
-
-      container.appendChild(div);
-    });
-  }
-
-  // Aggiunge una carta al mazzo, max 4 copie per carta e max 60 carte totali
-  function aggiungiCarta(nomeCarta) {
-    const totale = Object.values(mazzo).reduce((a,b) => a + b, 0);
-    if (totale >= 60) {
-      alert("Il mazzo non può contenere più di 60 carte.");
-      return;
+    function rimuoviCarta(nome) {
+      if (mazzo[nome] > 1) {
+        mazzo[nome]--;
+      } else {
+        delete mazzo[nome];
+      }
+      localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
+      mostraCarte();
     }
-    const copieAttuali = mazzo[nomeCarta] || 0;
-    if (copieAttuali >= 4) {
-      alert("Puoi avere massimo 4 copie per ogni carta.");
-      return;
+
+    function apriPopupAggiunta() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
     }
-    mazzo[nomeCarta] = copieAttuali + 1;
-    salvaMazzo();
-    aggiornaListaCarte();
-    alert(`Carta "${nomeCarta}" aggiunta!`);
-  }
 
-</script>
+    function chiudiPopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('inputRicerca').value = '';
+      document.getElementById('risultatiRicerca').innerHTML = '';
+    }
 
+    document.getElementById('inputRicerca').oninput = () => {
+      const val = document.getElementById('inputRicerca').value.toLowerCase();
+      const risultati = cardsDatabase.filter(c => c['NOME CARTA'].toLowerCase().includes(val));
+      const div = document.getElementById('risultatiRicerca');
+      div.innerHTML = '';
+      risultati.forEach(carta => {
+        const btn = document.createElement('button');
+        btn.textContent = `${carta['NOME CARTA']} (${carta['COSTO']})`;
+        btn.onclick = () => aggiungiCarta(carta['NOME CARTA']);
+        div.appendChild(btn);
+      });
+    };
+
+    function aggiungiCarta(nome) {
+      const quantitaTotale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+      if (mazzo[nome] >= 4) {
+        alert('Puoi avere al massimo 4 copie di una carta.');
+        return;
+      }
+      if (quantitaTotale >= 60) {
+        alert('Il mazzo ha già 60 carte.');
+        return;
+      }
+      mazzo[nome] = (mazzo[nome] || 0) + 1;
+      localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
+      mostraCarte();
+    }
+  </script>
 </body>
 </html>
