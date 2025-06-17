@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>I miei mazzi</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { margin-bottom: 1em; }
+    .mazzo { margin-bottom: 2em; }
+    .carte-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 0.5em;
+    }
+    .carte-container img {
+      width: 80px;
+      height: auto;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+    .carte-container img:hover {
+      transform: scale(1.2);
+      z-index: 10;
+    }
+    button { margin-top: 0.5em; margin-right: 0.5em; }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background: white;
+      padding: 1.5em;
+      border: 2px solid black;
+      z-index: 100;
+      max-width: 80%;
+      max-height: 80%;
+      overflow: auto;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <h1>I miei mazzi salvati</h1>
+  <div id="listaMazzi"></div>
+  <a href="index.html">⬅️ Torna al sito</a>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <pre id="popupContent"></pre>
+    <button onclick="chiudiPopup()">Chiudi</button>
+  </div>
+
+  <script>
+    const lista = document.getElementById('listaMazzi');
+    let cardsDatabase = [];
+
+    // Carica il database delle carte
+    fetch('cards.json')
+      .then(res => res.json())
+      .then(data => {
+        cardsDatabase = data;
+        mostraMazzi();
+      });
+
+    function mostraMazzi() {
+      for (let key in localStorage) {
+        if (key.startsWith('mazzo_')) {
+          const nome = key.replace('mazzo_', '');
+          const mazzo = JSON.parse(localStorage.getItem(key));
+
+          const div = document.createElement('div');
+          div.classList.add('mazzo');
+          div.innerHTML = `<h3>${nome}</h3>`;
+
+          const container = document.createElement('div');
+          container.className = 'carte-container';
+
+          for (const nomeCarta in mazzo) {
+            const quantita = mazzo[nomeCarta];
+            const carta = cardsDatabase.find(c => c["NOME CARTA"] === nomeCarta);
+            if (!carta) continue;
+
+            const numero = carta["N."];
+            for (let i = 0; i < quantita; i++) {
+              const img = document.createElement('img');
+              img.src = `img/${numero}.jpg`;
+              img.alt = nomeCarta;
+              img.title = nomeCarta;
+              img.onclick = () => mostraDettagliCarta(carta);
+              container.appendChild(img);
+            }
+          }
+
+          const btn1 = document.createElement('button');
+          btn1.textContent = 'Carica in sito';
+          btn1.onclick = () => carica(key);
+
+          const btn2 = document.createElement('button');
+          btn2.textContent = 'Elimina';
+          btn2.onclick = () => elimina(key);
+
+          div.appendChild(container);
+          div.appendChild(btn1);
+          div.appendChild(btn2);
+
+          lista.appendChild(div);
+        }
+      }
+    }
+
+    function mostraDettagliCarta(carta) {
+      const dettagli = {};
+      for (const chiave in carta) {
+        if (carta[chiave] && carta[chiave].toString().trim() !== '') {
+          dettagli[chiave] = carta[chiave];
+        }
+      }
+      document.getElementById('popupContent').textContent = JSON.stringify(dettagli, null, 2);
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function chiudiPopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function carica(chiave) {
+      const mazzo = localStorage.getItem(chiave);
+      localStorage.setItem('mazzo_corrente', mazzo);
+      alert('Mazzo caricato! Vai alla home.');
+    }
+
+    function elimina(chiave) {
+      if (confirm("Sicuro di voler eliminare questo mazzo?")) {
+        localStorage.removeItem(chiave);
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
