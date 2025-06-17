@@ -1,152 +1,206 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>I miei mazzi</title>
+  <meta charset="UTF-8" />
+  <title>I tuoi Mazzi - Vita</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    h1 { margin-bottom: 1em; }
-    .mazzo { margin-bottom: 2em; }
-    .carte-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 0.5em;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      background: url('sfondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #222;
     }
-    .carte-container img {
-      width: 80px;
-      height: auto;
-      border: 1px solid #aaa;
-      border-radius: 6px;
-      transition: transform 0.2s ease;
+    header {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    header button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    header button img {
+      height: 60px;
+    }
+    h1 {
+      margin-bottom: 1em;
+    }
+    #listaMazzi {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .mazzo-item {
+      background: rgba(255 255 255 / 0.85);
+      border-radius: 8px;
+      padding: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 5px #aaa;
+    }
+    .mazzo-info {
+      flex: 1;
+    }
+    .mazzo-info strong {
+      font-size: 1.2em;
+    }
+    .mazzo-cards {
+      margin-top: 0.5em;
+      font-size: 0.9em;
+      color: #444;
+    }
+    .mazzo-buttons button {
+      margin-left: 0.5em;
+      padding: 0.4em 0.8em;
+      font-size: 1em;
       cursor: pointer;
     }
-    .carte-container img:hover {
-      transform: scale(1.2);
-      z-index: 10;
-    }
-    button { margin-top: 0.5em; margin-right: 0.5em; }
-    .popup {
-      display: none;
-      position: fixed;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, -20%);
-      background: white;
-      padding: 1.5em;
-      border: 2px solid black;
-      z-index: 100;
-      max-width: 80%;
-      max-height: 80%;
-      overflow: auto;
-    }
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 99;
+    #aggiungiMazzoBtn {
+      margin-top: 1.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1.1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 5px;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <h1>I miei mazzi salvati</h1>
-  <div id="listaMazzi"></div>
-  <a href="index.html">⬅️ Torna al sito</a>
 
-  <div class="overlay" id="overlay"></div>
-  <div class="popup" id="popup">
-    <pre id="popupContent"></pre>
-    <button onclick="chiudiPopup()">Chiudi</button>
-  </div>
+<header>
+  <button onclick="location.href='home.html'" title="Vai alla home">
+    <img src="logo.jpg" alt="Logo Vita" />
+  </button>
+</header>
 
-  <script>
-    const lista = document.getElementById('listaMazzi');
-    let cardsDatabase = [];
+<h1>I tuoi Mazzi</h1>
+<div id="listaMazzi">
+  <!-- Lista mazzi caricata via JS -->
+</div>
 
-    // Carica il database delle carte
-    fetch('cards.json')
-      .then(res => res.json())
-      .then(data => {
-        cardsDatabase = data;
-        mostraMazzi();
-      });
+<button id="aggiungiMazzoBtn">Aggiungi nuovo mazzo</button>
 
-    function mostraMazzi() {
-      for (let key in localStorage) {
-        if (key.startsWith('mazzo_')) {
-          const nome = key.replace('mazzo_', '');
-          const mazzo = JSON.parse(localStorage.getItem(key));
+<script>
+  // Carica mazzi da localStorage, mostra ordinati per nome
+  function caricaMazzi() {
+    const container = document.getElementById('listaMazzi');
+    container.innerHTML = '';
+    const keys = Object.keys(localStorage)
+      .filter(k => k.startsWith('mazzo_'))
+      .sort();
 
-          const div = document.createElement('div');
-          div.classList.add('mazzo');
-          div.innerHTML = `<h3>${nome}</h3>`;
+    if (keys.length === 0) {
+      container.textContent = 'Nessun mazzo salvato.';
+      return;
+    }
 
-          const container = document.createElement('div');
-          container.className = 'carte-container';
+    keys.forEach(key => {
+      const nomeMazzo = key.slice(6); // togli 'mazzo_'
+      let mazzo;
+      try {
+        mazzo = JSON.parse(localStorage.getItem(key));
+      } catch {
+        mazzo = null;
+      }
+      if (!mazzo) return;
 
+      // Ottieni carte nel mazzo con dati da database e ordina per COSTO crescente
+      // Per avere info carte serve fetch cards.json sincronizzato? Facciamo asincrono:
+      fetch('cards.json')
+        .then(res => res.json())
+        .then(cardsDatabase => {
+          // Converte mazzo {nomeCarta: qty} in array con info
+          const carteConInfo = [];
           for (const nomeCarta in mazzo) {
-            const quantita = mazzo[nomeCarta];
-            const carta = cardsDatabase.find(c => c["NOME CARTA"] === nomeCarta);
-            if (!carta) continue;
-
-            const numero = carta["N."];
-            for (let i = 0; i < quantita; i++) {
-              const img = document.createElement('img');
-              img.src = `img/${numero}.jpg`;
-              img.alt = nomeCarta;
-              img.title = nomeCarta;
-              img.onclick = () => mostraDettagliCarta(carta);
-              container.appendChild(img);
-            }
+            const cartaInfo = cardsDatabase.find(c => c["NOME CARTA"] === nomeCarta);
+            if (!cartaInfo) continue;
+            carteConInfo.push({ nomeCarta, qty: mazzo[nomeCarta], costo: cartaInfo.COSTO || 0 });
           }
+          carteConInfo.sort((a,b) => a.costo - b.costo);
 
-          const btn1 = document.createElement('button');
-          btn1.textContent = 'Carica in sito';
-          btn1.onclick = () => carica(key);
+          // Crea markup
+          const divMazzo = document.createElement('div');
+          divMazzo.className = 'mazzo-item';
 
-          const btn2 = document.createElement('button');
-          btn2.textContent = 'Elimina';
-          btn2.onclick = () => elimina(key);
+          const infoDiv = document.createElement('div');
+          infoDiv.className = 'mazzo-info';
 
-          div.appendChild(container);
-          div.appendChild(btn1);
-          div.appendChild(btn2);
+          const titolo = document.createElement('strong');
+          titolo.textContent = nomeMazzo;
+          infoDiv.appendChild(titolo);
 
-          lista.appendChild(div);
-        }
-      }
+          const cardsText = carteConInfo.map(c => `${c.nomeCarta} (${c.qty})`).join(', ');
+          const cardsDiv = document.createElement('div');
+          cardsDiv.className = 'mazzo-cards';
+          cardsDiv.textContent = cardsText || '(Mazzo vuoto)';
+          infoDiv.appendChild(cardsDiv);
+
+          divMazzo.appendChild(infoDiv);
+
+          // Buttons container
+          const buttonsDiv = document.createElement('div');
+          buttonsDiv.className = 'mazzo-buttons';
+
+          // Carica
+          const btnCarica = document.createElement('button');
+          btnCarica.textContent = 'Carica';
+          btnCarica.onclick = () => {
+            alert(`Caricato mazzo "${nomeMazzo}"`); 
+            // qui metti la funzione che ti serve per caricare il mazzo nell'app
+          };
+          buttonsDiv.appendChild(btnCarica);
+
+          // Modifica
+          const btnModifica = document.createElement('button');
+          btnModifica.textContent = 'Modifica';
+          btnModifica.onclick = () => {
+            location.href = `modifica_mazzo.html?mazzo=${encodeURIComponent(nomeMazzo)}`;
+          };
+          buttonsDiv.appendChild(btnModifica);
+
+          // Elimina
+          const btnElimina = document.createElement('button');
+          btnElimina.textContent = 'Elimina';
+          btnElimina.onclick = () => {
+            if (confirm(`Eliminare il mazzo "${nomeMazzo}"?`)) {
+              localStorage.removeItem(key);
+              caricaMazzi();
+            }
+          };
+          buttonsDiv.appendChild(btnElimina);
+
+          divMazzo.appendChild(buttonsDiv);
+          container.appendChild(divMazzo);
+        });
+    });
+  }
+
+  // Aggiungi nuovo mazzo (prompt per nome, crea vuoto)
+  document.getElementById('aggiungiMazzoBtn').onclick = () => {
+    let nome = prompt('Inserisci il nome del nuovo mazzo:');
+    if (!nome) return;
+    nome = nome.trim();
+    if (nome === '') {
+      alert('Nome mazzo non valido');
+      return;
     }
-
-    function mostraDettagliCarta(carta) {
-      const dettagli = {};
-      for (const chiave in carta) {
-        if (carta[chiave] && carta[chiave].toString().trim() !== '') {
-          dettagli[chiave] = carta[chiave];
-        }
-      }
-      document.getElementById('popupContent').textContent = JSON.stringify(dettagli, null, 2);
-      document.getElementById('popup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
+    const key = 'mazzo_' + nome;
+    if (localStorage.getItem(key)) {
+      alert('Un mazzo con questo nome esiste già');
+      return;
     }
+    localStorage.setItem(key, JSON.stringify({}));
+    caricaMazzi();
+  };
 
-    function chiudiPopup() {
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-    }
+  // Carica mazzi a pagina pronta
+  window.onload = caricaMazzi;
+</script>
 
-    function carica(chiave) {
-      const mazzo = localStorage.getItem(chiave);
-      localStorage.setItem('mazzo_corrente', mazzo);
-      alert('Mazzo caricato! Vai alla home.');
-    }
-
-    function elimina(chiave) {
-      if (confirm("Sicuro di voler eliminare questo mazzo?")) {
-        localStorage.removeItem(chiave);
-        location.reload();
-      }
-    }
-  </script>
 </body>
 </html>
