@@ -100,6 +100,11 @@
     <label for="filtroTipo">Filtro Tipo:</label>
     <select id="filtroTipo">
       <option value="">Tutti</option>
+      <option value="PERSONAGGIO">PERSONAGGIO</option>
+      <option value="LUOGO">LUOGO</option>
+      <option value="OGGETTO">OGGETTO</option>
+      <option value="AZIONE">AZIONE</option>
+      <option value="AZIONE (CANZONE)">AZIONE (CANZONE)</option>
     </select>
 
     <label for="filtroPietra">Filtro Pietra:</label>
@@ -143,23 +148,14 @@
       });
 
     function aggiornaFiltri() {
-      const tipoSet = new Set();
       const pietraSet = new Set();
       const costoSet = new Set();
 
       for (const nome in mazzo) {
         const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
         if (!carta) continue;
-        tipoSet.add(carta['TIPO']);
         pietraSet.add(carta['PIETRA']);
         costoSet.add(carta['COSTO']);
-      }
-
-      for (let tipo of [...tipoSet].sort()) {
-        const op = document.createElement('option');
-        op.value = tipo;
-        op.textContent = tipo;
-        document.getElementById('filtroTipo').appendChild(op);
       }
 
       for (let p of [...pietraSet].sort()) {
@@ -191,9 +187,15 @@
 
       let totaleCarte = 0;
 
-      for (const nome in mazzo) {
-        const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
-        if (!carta) continue;
+      const carteOrdinate = Object.keys(mazzo)
+        .map(nome => {
+          const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+          return carta ? { carta, nome } : null;
+        })
+        .filter(e => e !== null)
+        .sort((a, b) => a.carta['COSTO'] - b.carta['COSTO']);
+
+      for (const { carta, nome } of carteOrdinate) {
         if (tipo && carta['TIPO'] !== tipo) continue;
         if (pietra && carta['PIETRA'] !== pietra) continue;
         if (costo && carta['COSTO'].toString() !== costo) continue;
