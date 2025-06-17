@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Punteggi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background-image: url('sfondo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #111;
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 60px; background: rgba(255, 255, 255, 0.9);
+      display: flex; align-items: center; padding-left: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    header a img { height: 40px; cursor: pointer; }
+
+    .board {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 80px;
+      padding: 1em;
+      gap: 1em;
+    }
+
+    .segnapunto {
+      background: rgba(255,255,255,0.85);
+      border: 2px solid #444;
+      border-radius: 10px;
+      padding: 1em;
+      width: 140px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .punteggio {
+      font-size: 36px;
+      margin: 0.5em 0;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .controls button {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .giocatore {
+      margin-top: 0.5em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home.html"><img src="logo.jpg" alt="Logo"></a>
+  </header>
+
+  <div class="board" id="board"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const numGiocatori = parseInt(urlParams.get('giocatori')) || 2;
+
+    const board = document.getElementById('board');
+
+    for (let i = 1; i <= numGiocatori; i++) {
+      const div = document.createElement('div');
+      div.className = 'segnapunto';
+      div.innerHTML = `
+        <div class="controls">
+          <button onclick="cambia(${i}, -1)">−</button>
+          <div class="punteggio" id="punti${i}">0</div>
+          <button onclick="cambia(${i}, 1)">+</button>
+        </div>
+        <div class="giocatore">Giocatore ${i}</div>
+      `;
+      board.appendChild(div);
+    }
+
+    function cambia(id, delta) {
+      const el = document.getElementById('punti' + id);
+      let val = parseInt(el.textContent);
+      val = Math.max(0, Math.min(20, val + delta));
+      el.textContent = val;
+    }
+  </script>
+</body>
+</html>
