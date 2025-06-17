@@ -6,13 +6,88 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 2em;
+      margin: 2em;
       background: url('sfondo.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #111;
     }
-
+    input[type="text"], select {
+      padding: 0.5em;
+      margin: 0.5em 1em 1em 0;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.9);
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    button {
+      padding: 0.3em 0.6em;
+      cursor: pointer;
+    }
+    .popup, .mazzo-popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background: white;
+      padding: 1.5em;
+      border: 2px solid black;
+      z-index: 100;
+      max-width: 80%;
+      max-height: 80%;
+      overflow: auto;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    #mazzoBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 18px;
+      padding: 0.4em;
+    }
+    #linkMazzi {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ddd;
+      border: 1px solid #999;
+      border-radius: 50%;
+      font-size: 20px;
+      padding: 0.6em 0.8em;
+      text-decoration: none;
+    }
+    #messaggioAggiunta {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 200;
+    }
     header {
       text-align: center;
       margin-bottom: 2em;
@@ -25,114 +100,64 @@
     header img:hover {
       opacity: 0.8;
     }
-
-    #cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1em;
-    }
-
-    .card-img-container {
-      position: relative;
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-
-    .card-img-container:hover {
-      transform: scale(1.08);
-    }
-
-    .card-img-container img {
-      width: 180px;
-      height: auto;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      display: block;
-    }
-
-    .add-btn {
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid #555;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-      text-align: center;
-      line-height: 28px;
-      cursor: pointer;
-    }
-
-    .popup, .overlay {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-    }
-
-    .overlay {
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-
-    .popup {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 2em;
-      border: 2px solid #000;
-      border-radius: 10px;
-      max-width: 600px;
-      max-height: 80%;
-      overflow: auto;
-      box-shadow: 0 0 10px #000;
-    }
-
-    .popup img {
-      max-width: 100%;
-      border-radius: 8px;
-      border: 1px solid #000;
-    }
-
-    .popup button {
-      margin-top: 1em;
-    }
-
-    .popup .dettagli {
-      font-family: Georgia, serif;
-      background-color: #fdfdfd;
-      padding: 1em;
-      border-radius: 8px;
-      margin-top: 1em;
-      line-height: 1.4;
-      border: 1px solid #ddd;
-    }
-
-    .popup .dettagli div {
-      margin-bottom: 0.5em;
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="home.html"><img src="logo.jpg" alt="Home"></a>
+    <a href="home.html">
+      <img src="logo.jpg" alt="Home">
+    </a>
   </header>
 
+  <h1>Carte Vita</h1>
+
+  <input type="text" id="search" placeholder="Cerca una carta...">
+  <select id="filtroCosto">
+    <option value="">Costo</option>
+    <option>1</option><option>2</option><option>3</option><option>4</option>
+    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+  </select>
+  <select id="filtroPietra">
+    <option value="">Pietra</option>
+    <option>AMBRA</option><option>RUBINO</option><option>ACCIAIO</option>
+    <option>SMERALDO</option><option>AMETISTA</option><option>ZAFFIRO</option>
+  </select>
+  <select id="filtroClassificazione">
+    <option value="">Classificazione</option>
+    <option>ANIMALE</option><option>ATTENDIAMOCI</option><option>COALIZZATI</option>
+    <option>COLLEGA</option><option>DISERTORE</option><option>FANTASIOSO</option>
+    <option>FRATELLANZA</option><option>FONDATORE</option><option>GUIDA</option>
+    <option>PARENTE</option><option>POTENZIATO</option><option>PROTAGONISTA</option>
+    <option>SOSTENITORE</option><option>STARLIGHT</option>
+  </select>
+  <button id="applicaFiltriBtn">🎯 Applica Filtri</button>
+
+  <button id="mazzoBtn">🧺 Mazzo</button>
+  <a href="mazzi.html" id="linkMazzi" title="I miei mazzi">💽</a>
+
+  <div id="messaggioAggiunta">Carta aggiunta al mazzo!</div>
   <div id="cards"></div>
 
   <div class="overlay" id="overlay"></div>
   <div class="popup" id="popup">
     <div id="popup-content"></div>
+    <button onclick="closePopup()">Chiudi</button>
+  </div>
+
+  <div class="mazzo-popup" id="mazzoPopup">
+    <h2>Mazzo Virtuale</h2>
+    <p id="contatoreCarte"><strong>Totale carte:</strong> 0 / 60</p>
+    <ul id="mazzo"></ul>
+    <input type="text" id="nomeMazzo" placeholder="Dai un nome al mazzo">
+    <button id="salvaMazzo">💾 Salva Mazzo</button>
+    <button onclick="closeMazzo()">Chiudi Mazzo</button>
   </div>
 
   <script>
     let tutteLeCarte = [];
     let cartaAttiva = null;
+    let mazzo = {};
 
     fetch('cards.json')
       .then(response => response.json())
@@ -141,76 +166,172 @@
         mostraCarte(data);
       });
 
+    document.getElementById('applicaFiltriBtn').addEventListener('click', filtraCarte);
+    document.getElementById('salvaMazzo').addEventListener('click', () => {
+      const nome = document.getElementById('nomeMazzo').value.trim();
+      if (!nome) return alert('Dai un nome al mazzo!');
+      localStorage.setItem('mazzo_' + nome, JSON.stringify(mazzo));
+      alert('Mazzo salvato come "' + nome + '"');
+    });
+
+    function filtraCarte() {
+      const testo = document.getElementById('search').value.toLowerCase();
+      const costo = document.getElementById('filtroCosto').value.trim();
+      const pietra = document.getElementById('filtroPietra').value.toLowerCase();
+      const classi = document.getElementById('filtroClassificazione').value.toLowerCase();
+
+      const filtrate = tutteLeCarte.filter(c => {
+        const matchTesto = (c["NOME CARTA"] || '').toLowerCase().includes(testo) ||
+                           (c.EFFETTI || '').toLowerCase().includes(testo) ||
+                           (c["ABILITA'"] || '').toLowerCase().includes(testo);
+        const matchCosto = !costo || (c.COSTO && c.COSTO.toString() === costo);
+        const matchPietra = !pietra || (c.PIETRA || '').toLowerCase().includes(pietra);
+        const matchClassi = !classi || (c.CLASSIFICAZIONE || '').toLowerCase().includes(classi);
+        return matchTesto && matchCosto && matchPietra && matchClassi;
+      });
+
+      mostraCarte(filtrate);
+    }
+
     function mostraCarte(carte) {
       const container = document.getElementById('cards');
       container.innerHTML = '';
-
-      carte.forEach(carta => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'card-img-container';
-
+      container.style.display = 'flex';
+      container.style.flexWrap = 'wrap';
+      container.style.gap = '1em';
+    
+      carte.forEach((carta) => {
+        const div = document.createElement('div');
+        div.style.position = 'relative';
+        div.style.textAlign = 'center';
+    
         const img = document.createElement('img');
         img.src = `img/${carta["N."]}.jpg`;
         img.alt = carta["NOME CARTA"];
+        img.style.width = '160px';
+        img.style.transition = 'transform 0.2s';
+        img.style.borderRadius = '8px';
+        img.style.cursor = 'pointer';
+        img.onmouseenter = () => img.style.transform = 'scale(1.05)';
+        img.onmouseleave = () => img.style.transform = 'scale(1)';
         img.onclick = () => apriPopup(carta);
-
-        const add = document.createElement('div');
-        add.className = 'add-btn';
-        add.textContent = '+';
-        add.onclick = (e) => {
-          e.stopPropagation();
-          aggiungiAlMazzo(carta["NOME CARTA"]);
-        };
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(add);
-        container.appendChild(wrapper);
+    
+        const btn = document.createElement('button');
+        btn.textContent = '+';
+        btn.style.marginTop = '5px';
+        btn.onclick = () => aggiungiAlMazzo(carta["NOME CARTA"]);
+    
+        div.appendChild(img);
+        div.appendChild(btn);
+        container.appendChild(div);
       });
+
     }
 
-    const mazzo = {};
-
     function aggiungiAlMazzo(nome) {
+      const totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+      if (totale >= 60) {
+        alert('Il mazzo ha già 60 carte!');
+        return;
+      }
       if (mazzo[nome] && mazzo[nome] >= 4) {
-        alert('Massimo 4 copie per carta!');
+        alert('Non puoi aggiungere più di 4 copie della stessa carta!');
         return;
       }
       mazzo[nome] = (mazzo[nome] || 0) + 1;
-      console.log('Mazzo:', mazzo);
+      aggiornaMazzo();
+      mostraMessaggio();
+    }
+
+    function mostraMessaggio() {
+      const msg = document.getElementById('messaggioAggiunta');
+      msg.style.opacity = '1';
+      setTimeout(() => {
+        msg.style.opacity = '0';
+      }, 2000);
+    }
+
+    function rimuoviDalMazzo(nome) {
+      if (mazzo[nome] > 1) mazzo[nome]--;
+      else delete mazzo[nome];
+      aggiornaMazzo();
+    }
+
+    function aggiornaMazzo() {
+      const lista = document.getElementById('mazzo');
+      lista.innerHTML = '';
+      let totale = 0;
+
+      for (const nome in mazzo) {
+        const count = mazzo[nome];
+        totale += count;
+
+        const li = document.createElement('li');
+        li.textContent = `${nome} x${count}`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Rimuovi';
+        btn.onclick = () => rimuoviDalMazzo(nome);
+        li.appendChild(btn);
+        lista.appendChild(li);
+      }
+
+      document.getElementById('contatoreCarte').textContent = `Totale carte: ${totale} / 60`;
     }
 
     function apriPopup(carta) {
       cartaAttiva = carta;
+      const content = document.getElementById('popup-content');
       const numero = carta["N."];
-      const popup = document.getElementById('popup-content');
 
-      popup.innerHTML = `
-        <img src="img/${numero}.jpg" alt="Carta">
-        <br><button id="btnDettagli">📄 Mostra dettagli testuali</button>
-      `;
+      if (numero) {
+        content.innerHTML = `
+          <img src="img/${numero}.jpg" alt="Carta" style="max-width:50%; display:block; margin:auto; border: 1px solid #000; border-radius: 8px;">
+          <br><button id="btnDettagli">📄 Mostra dettagli testuali</button>
+        `;
+      } else {
+        content.innerHTML = `
+          <p>Immagine non disponibile.</p>
+          <button id="btnDettagli">📄 Mostra dettagli testuali</button>
+        `;
+      }
 
       document.getElementById('btnDettagli').onclick = mostraDettagli;
-      document.getElementById('popup').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
     }
 
     function mostraDettagli() {
       if (!cartaAttiva) return;
-      const dettagli = Object.entries(cartaAttiva)
-        .filter(([k, v]) => v && v.toString().trim() !== '')
-        .map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`)
-        .join('');
 
-      document.getElementById('popup-content').innerHTML = `
-        <div class="dettagli">${dettagli}</div>
-        <button onclick="apriPopup(cartaAttiva)">🖼️ Torna all'immagine</button>
+      const dettagli = {};
+      for (const chiave in cartaAttiva) {
+        if (cartaAttiva[chiave] && cartaAttiva[chiave].toString().trim() !== '') {
+          dettagli[chiave] = cartaAttiva[chiave];
+        }
+      }
+
+      const content = document.getElementById('popup-content');
+      content.innerHTML = `
+        <pre>${JSON.stringify(dettagli, null, 2)}</pre>
+        <button id="btnTornaImmagine">🖼️ Torna all'immagine</button>
       `;
-    }
 
-    document.getElementById('overlay').onclick = closePopup;
+      document.getElementById('btnTornaImmagine').onclick = () => apriPopup(cartaAttiva);
+    }
 
     function closePopup() {
       document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    document.getElementById('mazzoBtn').addEventListener('click', () => {
+      aggiornaMazzo();
+      document.getElementById('mazzoPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+
+    function closeMazzo() {
+      document.getElementById('mazzoPopup').style.display = 'none';
       document.getElementById('overlay').style.display = 'none';
     }
   </script>
