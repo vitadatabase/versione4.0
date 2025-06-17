@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuova Partita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background-image: url('sfondo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #111;
+    }
+
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 60px; background: rgba(255, 255, 255, 0.9);
+      display: flex; align-items: center; padding-left: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    header a img { height: 40px; cursor: pointer; }
+
+    .container {
+      margin-top: 100px;
+      text-align: center;
+    }
+
+    .counter {
+      font-size: 48px;
+      margin: 1em;
+    }
+
+    .controls button {
+      font-size: 32px;
+      margin: 0 20px;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+    }
+
+    .start-btn {
+      margin-top: 2em;
+      padding: 1em 2em;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home.html"><img src="logo.jpg" alt="Logo"></a>
+  </header>
+
+  <div class="container">
+    <h1>Giocatori in campo</h1>
+    <div class="controls">
+      <button onclick="modificaGiocatori(-1)">−</button>
+      <span class="counter" id="numeroGiocatori">2</span>
+      <button onclick="modificaGiocatori(1)">+</button>
+    </div>
+    <button class="start-btn" onclick="iniziaPartita()">INIZIA</button>
+  </div>
+
+  <script>
+    let numero = 2;
+    const min = 2;
+    const max = 8;
+
+    function modificaGiocatori(delta) {
+      numero = Math.min(max, Math.max(min, numero + delta));
+      document.getElementById('numeroGiocatori').textContent = numero;
+    }
+
+    function iniziaPartita() {
+      window.location.href = `punteggi.html?giocatori=${numero}`;
+    }
+  </script>
+</body>
+</html>
