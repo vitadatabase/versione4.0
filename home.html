@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Vita - Il Gioco</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('sfondo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #111;
+    }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      font-family: 'Georgia', serif;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    header a {
+      color: #111;
+      text-decoration: none;
+      text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    }
+
+    .content-wrapper {
+      background-color: rgba(255, 255, 255, 0.85);
+      margin: 80px auto 40px auto;
+      padding: 40px;
+      max-width: 900px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    h1, h2 { color: #222; }
+    p { margin-bottom: 1em; }
+
+    .btn-container {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    .btn-container button {
+      padding: 1em;
+      font-size: 1.1em;
+      background-color: rgba(255,255,255,0.85);
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #111;
+      text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    }
+
+    .btn-container button:hover {
+      background-color: rgba(255,255,255,1);
+    }
+
+    #regole {
+      margin-top: 4em;
+      padding-top: 2em;
+      border-top: 1px solid #ccc;
+    }
+
+    ul { margin-top: 1em; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="home.html">VITA</a>
+  </header>
+
+  <div class="content-wrapper">
+    <h1>Benvenuto in VITA - Il Gioco</h1>
+    <p>
+      Questo gioco nasce come un esperimento creativo, ispirato dalle dinamiche di <strong>Lorcana</strong>, ma con un tocco totalmente personale.
+      Invece di evocare personaggi fantastici, qui evochiamo <strong>pezzi di vita</strong>, persone che conosciamo, situazioni assurde realmente accadute (o quasi)...
+      Ogni carta rappresenta un momento, un personaggio, un ricordo condiviso.
+    </p>
+    <p>
+      L'idea è di divertirci, sì, ma anche di ricordare insieme momenti iconici, ridere delle assurdità (tipo: "Sposto Don Simone a casa di Marica" 🤯), e costruire mazzi
+      che rispecchiano la nostra storia.
+    </p>
+
+    <div class="btn-container">
+      <button onclick="document.getElementById('regole').scrollIntoView({ behavior: 'smooth' })">📜 Regole del Gioco (Lorcana)</button>
+      <button onclick="window.location.href='index.html'">📚 Enciclopedia delle Carte</button>
+      <button onclick="window.location.href='mazzi.html'">💾 Biblioteca dei Mazzi</button>
+    </div>
+
+    <div id="regole">
+      <h2>Regole del gioco (basate su Lorcana)</h2>
+      <p><strong>Obiettivo:</strong> Raggiungere per primi 20 punti leggenda, attraverso il gioco strategico delle carte.</p>
+      <p><strong>Tipi di carte:</strong> Personaggi, Azioni, Oggetti e Luoghi. Ogni carta ha un costo in inchiostro, abilità e effetti.</p>
+      <p><strong>Turno di gioco:</strong> Ogni giocatore può:
+        <ul>
+          <li>Inchiostrare una carta (giocarla coperta come risorsa)</li>
+          <li>Giocare carte dalla mano pagando il costo con l'inchiostro</li>
+          <li>Attivare abilità, effettuare sfide o esplorare (per guadagnare leggenda)</li>
+        </ul>
+      </p>
+      <p><strong>Personaggi:</strong> Possono essere usati per sfidare quelli dell’avversario o per esplorare (guadagnando leggenda). Alcuni hanno abilità speciali, effetti automatici o costi di spostamento.</p>
+      <p><strong>Fine del gioco:</strong> Vince il primo giocatore che raggiunge 20 punti leggenda.</p>
+      <p><em>Nota: queste regole sono una versione semplificata e adattata per "Vita". Puoi personalizzarle quanto vuoi!</em></p>
+    </div>
+  </div>
+</body>
+</html>
