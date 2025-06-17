@@ -302,33 +302,24 @@
 
     function mostraDettagli() {
       if (!cartaAttiva) return;
-
-      const dettagli = {};
-      for (const chiave in cartaAttiva) {
-        if (cartaAttiva[chiave] && cartaAttiva[chiave].toString().trim() !== '') {
-          dettagli[chiave] = cartaAttiva[chiave];
-        }
-      }
-
+    
+      const dettagli = Object.entries(cartaAttiva)
+        .filter(([_, val]) => val && val.toString().trim() !== '')
+        .map(([chiave, valore]) => `<strong>${chiave}:</strong> ${valore}`)
+        .join('<br>');
+    
       const content = document.getElementById('popup-content');
       content.innerHTML = `
-        <pre>${JSON.stringify(dettagli, null, 2)}</pre>
+        <div style="font-family: Georgia, serif; font-size: 16px; line-height: 1.5;">
+          ${dettagli}
+        </div>
+        <br>
         <button id="btnTornaImmagine">🖼️ Torna all'immagine</button>
       `;
-
+    
       document.getElementById('btnTornaImmagine').onclick = () => apriPopup(cartaAttiva);
     }
 
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-    }
-
-    document.getElementById('mazzoBtn').addEventListener('click', () => {
-      aggiornaMazzo();
-      document.getElementById('mazzoPopup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    });
 
     function closeMazzo() {
       document.getElementById('mazzoPopup').style.display = 'none';
