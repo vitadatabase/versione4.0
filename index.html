@@ -215,7 +215,13 @@
         img.onmouseenter = () => img.style.transform = 'scale(1.05)';
         img.onmouseleave = () => img.style.transform = 'scale(1)';
         img.onclick = () => apriPopup(carta);
-    
+        
+        // Aggiungi aura dorata se è PROMO
+        if ((carta["RARITA'"] || '').toUpperCase() === 'PROMO') {
+          img.style.boxShadow = '0 0 15px 5px gold';
+          img.style.border = '2px solid gold';
+        }
+
         const btn = document.createElement('button');
         btn.textContent = '+';
         btn.style.marginTop = '5px';
@@ -234,14 +240,22 @@
         alert('Il mazzo ha già 60 carte!');
         return;
       }
-      if (mazzo[nome] && mazzo[nome] >= 4) {
-        alert('Non puoi aggiungere più di 4 copie della stessa carta!');
+    
+      const carta = tutteLeCarte.find(c => c["NOME CARTA"] === nome);
+      const rarita = carta?.["RARITA'"]?.toUpperCase() || '';
+    
+      const maxCopie = (rarita === 'PROMO') ? 1 : 4;
+    
+      if (mazzo[nome] && mazzo[nome] >= maxCopie) {
+        alert(`Non puoi aggiungere più di ${maxCopie} copia${maxCopie > 1 ? 'e' : ''} di questa carta (${rarita})!`);
         return;
       }
+    
       mazzo[nome] = (mazzo[nome] || 0) + 1;
       aggiornaMazzo();
       mostraMessaggio();
     }
+
 
     function mostraMessaggio() {
       const msg = document.getElementById('messaggioAggiunta');
