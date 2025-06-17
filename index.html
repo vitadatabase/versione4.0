@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Carte Vita</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    input[type="text"], select { padding: 0.5em; margin: 0.5em 1em 1em 0; }
+    .card { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; border-radius: 8px; }
+    .card-title { font-weight: bold; font-size: 1.2em; }
+    button { padding: 0.3em 0.6em; cursor: pointer; }
+    .popup, .mazzo-popup {
+      display: none; position: fixed; top: 20%; left: 50%;
+      transform: translate(-50%, -20%); background: white;
+      padding: 1.5em; border: 2px solid black; z-index: 100;
+      max-width: 80%; max-height: 80%; overflow: auto;
+    }
+    .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 99; }
+    #mazzoBtn { position: fixed; top: 20px; right: 20px; background: #f9f9f9;
+      border: 1px solid #ccc; border-radius: 8px; font-size: 18px; padding: 0.4em; }
+    #salvaMazzo { margin-top: 1em; }
+    #linkMazzi { position: fixed; bottom: 20px; right: 20px; background: #ddd;
+      border: 1px solid #999; border-radius: 50%; font-size: 20px; padding: 0.6em 0.8em; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Carte Vita</h1>
+  <input type="text" id="search" placeholder="Cerca una carta...">
+  <select id="filtroCosto">
+    <option value="">Costo</option>
+    <option>1</option><option>2</option><option>3</option><option>4</option>
+    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+  </select>
+  <select id="filtroPietra">
+    <option value="">Pietra</option>
+    <option>AMBRA</option><option>RUBINO</option><option>ACCIAIO</option>
+    <option>SMERALDO</option><option>AMETISTA</option><option>ZAFFIRO</option>
+  </select>
+  <select id="filtroClassificazione">
+    <option value="">Classificazione</option>
+    <option>ANIMALE</option><option>ATTENDIAMOCI</option><option>COALIZZATI</option>
+    <option>COLLEGA</option><option>DISERTORE</option><option>FANTASIOSO</option>
+    <option>FRATELLANZA</option><option>FONDATORE</option><option>GUIDA</option>
+    <option>PARENTE</option><option>POTENZIATO</option><option>PROTAGONISTA</option>
+    <option>SOSTENITORE</option><option>STARLIGHT</option>
+  </select>
+  <button id="applicaFiltriBtn">🎯 Applica Filtri</button>
+
+  <button id="mazzoBtn">🧺 Mazzo</button>
+  <a href="mazzi.html" id="linkMazzi" title="I miei mazzi">💽</a>
+  <div id="cards"></div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <div id="popup-content"></div>
+    <button onclick="closePopup()">Chiudi</button>
+  </div>
+
+  <div class="mazzo-popup" id="mazzoPopup">
+    <h2>Mazzo Virtuale</h2>
+    <ul id="mazzo"></ul>
+    <input type="text" id="nomeMazzo" placeholder="Dai un nome al mazzo">
+    <button id="salvaMazzo">💾 Salva Mazzo</button>
+    <button onclick="closeMazzo()">Chiudi Mazzo</button>
+  </div>
+
+  <script>
+    let tutteLeCarte = [];
+    let cartaAttiva = null;
+    let mazzo = {};
+
+    fetch('cards.json')
+      .then(response => response.json())
+      .then(data => {
+        tutteLeCarte = data;
+        mostraCarte(data);
+      });
+
+    document.getElementById('applicaFiltriBtn').addEventListener('click', filtraCarte);
+    document.getElementById('salvaMazzo').addEventListener('click', () => {
+      const nome = document.getElementById('nomeMazzo').value.trim();
+      if (!nome) return alert('Dai un nome al mazzo!');
+      localStorage.setItem('mazzo_' + nome, JSON.stringify(mazzo));
+      alert('Mazzo salvato come "' + nome + '"');
+    });
+
+    function filtraCarte() {
+      const testo = document.getElementById('search').value.toLowerCase();
+      const costo = document.getElementById('filtroCosto').value.trim();
+      const pietra = document.getElementById('filtroPietra').value.toLowerCase();
+      const classi = document.getElementById('filtroClassificazione').value.toLowerCase();
+
+      const filtrate = tutteLeCarte.filter(c => {
+        const matchTesto = (c["NOME CARTA"] || '').toLowerCase().includes(testo) ||
+                           (c.EFFETTI || '').toLowerCase().includes(testo) ||
+                           (c["ABILITA'"] || '').toLowerCase().includes(testo);
+        const matchCosto = !costo || (c.COSTO && c.COSTO.toString() === costo);
+        const matchPietra = !pietra || (c.PIETRA || '').toLowerCase().includes(pietra);
+        const matchClassi = !classi || (c.CLASSIFICAZIONE || '').toLowerCase().includes(classi);
+        return matchTesto && matchCosto && matchPietra && matchClassi;
+      });
+
+      mostraCarte(filtrate);
+    }
+
+    function mostraCarte(carte) {
+      const container = document.getElementById('cards');
+      container.innerHTML = '';
+      carte.forEach((carta) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+
+        let html = `<div class="card-title">${carta["NOME CARTA"]}</div>`;
+        if (carta.COSTO) html += `<div><strong>Costo:</strong> ${carta.COSTO}</div>`;
+        if (carta.PIETRA) html += `<div><strong>Pietra:</strong> ${carta.PIETRA}</div>`;
+        if (carta.CLASSIFICAZIONE) html += `<div><strong>Classificazione:</strong> ${carta.CLASSIFICAZIONE}</div>`;
+        if (carta["ABILITA'"]) html += `<div><strong>Abilità:</strong> ${carta["ABILITA'"]}</div>`;
+        if (carta.EFFETTI) html += `<div><strong>Effetti:</strong> ${carta.EFFETTI}</div>`;
+
+        html += `<button onclick="aggiungiAlMazzo('${carta["NOME CARTA"]}')">Aggiungi al mazzo</button>`;
+        div.innerHTML = html;
+
+        // Bottone dettagli: aggiunto correttamente con funzione anonima
+        const btnDettagli = document.createElement('button');
+        btnDettagli.textContent = 'Dettagli';
+        btnDettagli.onclick = () => apriPopup(carta);
+        div.appendChild(btnDettagli);
+
+        container.appendChild(div);
+      });
+    }
+
+    function aggiungiAlMazzo(nome) {
+      if (mazzo[nome]) mazzo[nome]++;
+      else mazzo[nome] = 1;
+      aggiornaMazzo();
+    }
+
+    function rimuoviDalMazzo(nome) {
+      if (mazzo[nome] > 1) mazzo[nome]--;
+      else delete mazzo[nome];
+      aggiornaMazzo();
+    }
+
+    function aggiornaMazzo() {
+      const lista = document.getElementById('mazzo');
+      lista.innerHTML = '';
+      for (const nome in mazzo) {
+        const li = document.createElement('li');
+        li.textContent = `${nome} x${mazzo[nome]}`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Rimuovi';
+        btn.onclick = () => rimuoviDalMazzo(nome);
+        li.appendChild(btn);
+        lista.appendChild(li);
+      }
+    }
+
+    function apriPopup(carta) {
+      cartaAttiva = carta; // Salva la carta cliccata
+      const content = document.getElementById('popup-content');
+      const numero = carta["N."];
+    
+      if (numero) {
+        content.innerHTML = `
+          <img src="img/${numero}.jpg" alt="Carta" style="max-width:50%; display:block; margin:auto; border: 1px solid #000; border-radius: 8px;">
+          <br><button id="btnDettagli">📄 Mostra dettagli testuali</button>
+        `;
+      } else {
+        content.innerHTML = `
+          <p>Immagine non disponibile.</p>
+          <button id="btnDettagli">📄 Mostra dettagli testuali</button>
+        `;
+      }
+    
+      document.getElementById('btnDettagli').onclick = mostraDettagli;
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+    }
+
+
+    function mostraDettagli() {
+      if (!cartaAttiva) return;
+    
+      const dettagli = {};
+      for (const chiave in cartaAttiva) {
+        if (cartaAttiva[chiave] && cartaAttiva[chiave].toString().trim() !== '') {
+          dettagli[chiave] = cartaAttiva[chiave];
+        }
+      }
+    
+      const content = document.getElementById('popup-content');
+      content.innerHTML = `
+        <pre>${JSON.stringify(dettagli, null, 2)}</pre>
+        <button id="btnTornaImmagine">🖼️ Torna all'immagine</button>
+      `;
+    
+      document.getElementById('btnTornaImmagine').onclick = () => apriPopup(cartaAttiva);
+    }
+
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    document.getElementById('mazzoBtn').addEventListener('click', () => {
+      aggiornaMazzo();
+      document.getElementById('mazzoPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+
+    function closeMazzo() {
+      document.getElementById('mazzoPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
