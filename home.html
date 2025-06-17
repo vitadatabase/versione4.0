@@ -88,39 +88,98 @@
     <a href="home.html">VITA</a>
   </header>
 
-  <div class="content-wrapper">
-    <h1>Benvenuto in VITA - Il Gioco</h1>
-    <p>
-      Questo gioco nasce come un esperimento creativo, ispirato dalle dinamiche di <strong>Lorcana</strong>, ma con un tocco totalmente personale.
-      Invece di evocare personaggi fantastici, qui evochiamo <strong>pezzi di vita</strong>, persone che conosciamo, situazioni assurde realmente accadute (o quasi)...
-      Ogni carta rappresenta un momento, un personaggio, un ricordo condiviso.
-    </p>
-    <p>
-      L'idea è di divertirci, sì, ma anche di ricordare insieme momenti iconici, ridere delle assurdità (tipo: "Sposto Don Simone a casa di Marica" 🤯), e costruire mazzi
-      che rispecchiano la nostra storia.
-    </p>
+    <div class="content-wrapper">
+      <h1>Vita - il gioco di carte collezionabili</h1>
+    
+      <p style="text-align: justify;">
+        Benvenuti in <strong>Vita</strong>, un <strong>gioco di carte collezionabili (TCG)</strong> che trasforma le <strong>esperienze personali</strong>, le <strong>relazioni</strong> e i <strong>momenti più significativi della mia esistenza</strong> in un'avventura unica.
+        Ogni carta è un <strong>frammento di storia</strong>: persone influenti, emozioni profonde ed eventi cruciali si uniscono per creare un <strong>universo di gioco ricco di strategia e significato</strong>.
+      </p>
+    
+      <p style="text-align: justify;">
+        Ispirato dalle dinamiche di <strong>Disney Lorcana</strong> (<a href="https://www.youtube.com/watch?v=UBowyremj9U" target="_blank">link al regolamento dettagliato</a>) e arricchito con <strong>regole originali</strong>, Vita è molto più di un semplice gioco di carte.
+        È un <strong>viaggio attraverso i legami e le esperienze</strong>, dove ogni mossa racconta una parte della mia storia.
+      </p>
+    
+      <p style="text-align: justify;">
+        Con Vita, voglio offrire un'esperienza che non sia solo <strong>ludica</strong>, ma anche <strong>emotiva e riflessiva</strong>, invitando i giocatori a immergersi in una sfida in cui le carte non rappresentano solo strumenti, ma anche <strong>ricordi, connessioni e significati</strong>.
+        Questo gioco è una <strong>celebrazione della vita</strong> in tutte le sue sfaccettature, un <strong>mosaico personale</strong> che prende forma a ogni partita.
+      </p>
+    
+      <p style="text-align: center; font-weight: bold; font-size: 1.2em;">
+        🎴 Gioca a Vita: una raccolta di storie ed emozioni!
+      </p>
 
     <div class="btn-container">
-      <button onclick="document.getElementById('regole').scrollIntoView({ behavior: 'smooth' })">📜 Regole del Gioco (Lorcana)</button>
       <button onclick="window.location.href='nuova_partita.html'">🎮 Nuova Partita</button>
+      <button onclick="document.getElementById('regole').scrollIntoView({ behavior: 'smooth' })">📜 Regolamento</button>
       <button onclick="window.location.href='index.html'">📚 Enciclopedia delle Carte</button>
       <button onclick="window.location.href='mazzi.html'">💾 Biblioteca dei Mazzi</button>
     </div>
 
     <div id="regole">
-      <h2>Regole del gioco (basate su Lorcana)</h2>
-      <p><strong>Obiettivo:</strong> Raggiungere per primi 20 punti leggenda, attraverso il gioco strategico delle carte.</p>
-      <p><strong>Tipi di carte:</strong> Personaggi, Azioni, Oggetti e Luoghi. Ogni carta ha un costo in inchiostro, abilità e effetti.</p>
-      <p><strong>Turno di gioco:</strong> Ogni giocatore può:
-        <ul>
-          <li>Inchiostrare una carta (giocarla coperta come risorsa)</li>
-          <li>Giocare carte dalla mano pagando il costo con l'inchiostro</li>
-          <li>Attivare abilità, effettuare sfide o esplorare (per guadagnare leggenda)</li>
-        </ul>
+      <h2><strong>REGOLAMENTO</strong></h2>
+      <p><em>(ATTENZIONE: gran parte di queste regole sono riprese dal gioco di Disney Lorcana. Supportate i prodotti originali)</em></p>
+    
+      <h3><strong>Come si Gioca a Vita: Le Regole di Base</strong></h3>
+      <p>
+        In <strong>Vita</strong>, i giocatori assumono il ruolo di persone normali e utilizzano <strong>l'inchiostro magico</strong> per evocare personaggi e mandarli all’avventura per raccogliere punti <strong>leggenda</strong>. 
+        Chi raggiunge per primo <strong>20 punti leggenda</strong> vince la partita, ma attenzione: si vince anche se l’avversario non può più pescare carte quando richiesto (all’inizio del turno o tramite effetti).
       </p>
-      <p><strong>Personaggi:</strong> Possono essere usati per sfidare quelli dell’avversario o per esplorare (guadagnando leggenda). Alcuni hanno abilità speciali, effetti automatici o costi di spostamento.</p>
-      <p><strong>Fine del gioco:</strong> Vince il primo giocatore che raggiunge 20 punti leggenda.</p>
-      <p><em>Nota: queste regole sono una versione semplificata e adattata per "Vita". Puoi personalizzarle quanto vuoi!</em></p>
+    
+      <h3><strong>Preparazione del Gioco</strong></h3>
+      <ul>
+        <li><strong>Mazzo:</strong> Ogni giocatore costruisce un mazzo da 60 carte, che può contenere personaggi, azioni, oggetti, canzoni e luoghi.</li>
+        <li><strong>Carte Iniziali:</strong> Ogni giocatore pesca 7 carte. Se non soddisfatto, può fare <em>mulligan</em>: rimescola le carte scelte in fondo al mazzo e pesca altrettante nuove carte.</li>
+      </ul>
+    
+      <h3><strong>Struttura del Turno</strong></h3>
+      <ol>
+        <li><strong>Pesca:</strong> Il giocatore pesca una carta.</li>
+        <li><strong>Inchiostro:</strong> Una volta per turno può "inchiostrare" una carta dalla mano.</li>
+        <li><strong>Giocare Carte:</strong> Personaggi, azioni, oggetti, canzoni, luoghi. Serve inchiostro per pagarle.</li>
+        <li><strong>Missione o Sfida:</strong> I personaggi guadagnano leggenda o attaccano quelli avversari.</li>
+        <li><strong>Passa:</strong> Il turno passa all’avversario.</li>
+      </ol>
+      <p><em>NB: le fasi 2, 3 e 4 possono essere svolte in qualsiasi ordine e non sono obbligatorie.</em></p>
+    
+      <h3><strong>Meccaniche di Gioco</strong></h3>
+      <ul>
+        <li><strong>Inchiostrare le Carte:</strong> Trasformare una carta in risorsa. Le scelte sono cruciali.</li>
+        <li><strong>Giocare un personaggio:</strong> Dopo un turno può sfidare o avventurarsi. Il numero LEGGENDA indica quanti punti ti dà se va all’avventura.</li>
+        <li><strong>Sfide:</strong> I personaggi scambiano danni pari alla loro forza. Se subiscono danni ≥ alla resistenza, vengono esiliati.</li>
+        <li><strong>Avventura:</strong> Guadagni punti leggenda pari al valore del personaggio.</li>
+        <li><strong>Oggetti, Azioni e Luoghi:</strong> Potenziano il gioco, attivano effetti, offrono sinergie e modi alternativi per guadagnare leggenda.</li>
+      </ul>
+    
+      <h3><strong>Strategie per Vincere</strong></h3>
+      <ul>
+        <li><strong>Gestione dell'inchiostro:</strong> Capire quando sacrificare una carta potente è fondamentale.</li>
+        <li><strong>Sinergie:</strong> Costruisci mazzi in cui le carte collaborano tra loro.</li>
+        <li><strong>Proteggi i personaggi chiave:</strong> La leggenda si vince anche in difesa.</li>
+      </ul>
+    
+      <h3><strong>COME POSSO OTTENERE LE CARTE?</strong></h3>
+      <h4>1. Pacchetto Base</h4>
+      <ul>
+        <li><strong>Costo:</strong> 20€</li>
+        <li><strong>Contenuto:</strong>
+          <ul>
+            <li>1 mazzo da 60 carte, pronto all’uso (include almeno una copia di tutte le carte delle due pietre scelte, escluse le PROMO)</li>
+            <li>1 porta-mazzo + 100 bustine protettive</li>
+            <li>1 carta promo a scelta (tra le 6 disponibili)</li>
+          </ul>
+        </li>
+        <li><strong>Mazzi Disponibili:</strong>
+          <ul>
+            <li>Smeraldo–Acciaio</li>
+            <li>Ambra–Zaffiro</li>
+            <li>Ametista–Rubino</li>
+          </ul>
+        </li>
+      </ul>
+    
+      <p><strong>ATTENZIONE:</strong> in futuro sarà possibile ampliare la propria collezione acquistando singole carte, per creare mazzi sempre più competitivi!</p>
     </div>
   </div>
 </body>
