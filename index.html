@@ -325,6 +325,21 @@
       document.getElementById('mazzoPopup').style.display = 'none';
       document.getElementById('overlay').style.display = 'none';
     }
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+    
+    document.getElementById('mazzoBtn').addEventListener('click', () => {
+      aggiornaMazzo();
+      document.getElementById('mazzoPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+    
+    document.getElementById('overlay').addEventListener('click', () => {
+      closePopup();
+      closeMazzo();
+    });
   </script>
 </body>
 </html>
