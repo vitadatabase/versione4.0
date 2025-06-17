@@ -4,28 +4,114 @@
   <meta charset="UTF-8">
   <title>Carte Vita</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    input[type="text"], select { padding: 0.5em; margin: 0.5em 1em 1em 0; }
-    .card { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; border-radius: 8px; }
-    .card-title { font-weight: bold; font-size: 1.2em; }
-    button { padding: 0.3em 0.6em; cursor: pointer; }
-    .popup, .mazzo-popup {
-      display: none; position: fixed; top: 20%; left: 50%;
-      transform: translate(-50%, -20%); background: white;
-      padding: 1.5em; border: 2px solid black; z-index: 100;
-      max-width: 80%; max-height: 80%; overflow: auto;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      background: url('sfondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #111;
     }
-    .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); z-index: 99; }
-    #mazzoBtn { position: fixed; top: 20px; right: 20px; background: #f9f9f9;
-      border: 1px solid #ccc; border-radius: 8px; font-size: 18px; padding: 0.4em; }
-    #salvaMazzo { margin-top: 1em; }
-    #linkMazzi { position: fixed; bottom: 20px; right: 20px; background: #ddd;
-      border: 1px solid #999; border-radius: 50%; font-size: 20px; padding: 0.6em 0.8em; text-decoration: none; }
+    input[type="text"], select {
+      padding: 0.5em;
+      margin: 0.5em 1em 1em 0;
+    }
+    .card {
+      border: 1px solid #ccc;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.9);
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    button {
+      padding: 0.3em 0.6em;
+      cursor: pointer;
+    }
+    .popup, .mazzo-popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background: white;
+      padding: 1.5em;
+      border: 2px solid black;
+      z-index: 100;
+      max-width: 80%;
+      max-height: 80%;
+      overflow: auto;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+    #mazzoBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 18px;
+      padding: 0.4em;
+    }
+    #linkMazzi {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ddd;
+      border: 1px solid #999;
+      border-radius: 50%;
+      font-size: 20px;
+      padding: 0.6em 0.8em;
+      text-decoration: none;
+    }
+    #messaggioAggiunta {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 200;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2em;
+    }
+    header img {
+      height: 60px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    header img:hover {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
+
+  <header>
+    <a href="home.html">
+      <img src="logo.jpg" alt="Home">
+    </a>
+  </header>
+
   <h1>Carte Vita</h1>
+
   <input type="text" id="search" placeholder="Cerca una carta...">
   <select id="filtroCosto">
     <option value="">Costo</option>
@@ -49,6 +135,8 @@
 
   <button id="mazzoBtn">🧺 Mazzo</button>
   <a href="mazzi.html" id="linkMazzi" title="I miei mazzi">💽</a>
+
+  <div id="messaggioAggiunta">Carta aggiunta al mazzo!</div>
   <div id="cards"></div>
 
   <div class="overlay" id="overlay"></div>
@@ -59,6 +147,7 @@
 
   <div class="mazzo-popup" id="mazzoPopup">
     <h2>Mazzo Virtuale</h2>
+    <p id="contatoreCarte"><strong>Totale carte:</strong> 0 / 60</p>
     <ul id="mazzo"></ul>
     <input type="text" id="nomeMazzo" placeholder="Dai un nome al mazzo">
     <button id="salvaMazzo">💾 Salva Mazzo</button>
@@ -121,7 +210,6 @@
         html += `<button onclick="aggiungiAlMazzo('${carta["NOME CARTA"]}')">Aggiungi al mazzo</button>`;
         div.innerHTML = html;
 
-        // Bottone dettagli: aggiunto correttamente con funzione anonima
         const btnDettagli = document.createElement('button');
         btnDettagli.textContent = 'Dettagli';
         btnDettagli.onclick = () => apriPopup(carta);
@@ -132,9 +220,26 @@
     }
 
     function aggiungiAlMazzo(nome) {
-      if (mazzo[nome]) mazzo[nome]++;
-      else mazzo[nome] = 1;
+      const totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+      if (totale >= 60) {
+        alert('Il mazzo ha già 60 carte!');
+        return;
+      }
+      if (mazzo[nome] && mazzo[nome] >= 4) {
+        alert('Non puoi aggiungere più di 4 copie della stessa carta!');
+        return;
+      }
+      mazzo[nome] = (mazzo[nome] || 0) + 1;
       aggiornaMazzo();
+      mostraMessaggio();
+    }
+
+    function mostraMessaggio() {
+      const msg = document.getElementById('messaggioAggiunta');
+      msg.style.opacity = '1';
+      setTimeout(() => {
+        msg.style.opacity = '0';
+      }, 2000);
     }
 
     function rimuoviDalMazzo(nome) {
@@ -146,22 +251,29 @@
     function aggiornaMazzo() {
       const lista = document.getElementById('mazzo');
       lista.innerHTML = '';
+      let totale = 0;
+
       for (const nome in mazzo) {
+        const count = mazzo[nome];
+        totale += count;
+
         const li = document.createElement('li');
-        li.textContent = `${nome} x${mazzo[nome]}`;
+        li.textContent = `${nome} x${count}`;
         const btn = document.createElement('button');
         btn.textContent = 'Rimuovi';
         btn.onclick = () => rimuoviDalMazzo(nome);
         li.appendChild(btn);
         lista.appendChild(li);
       }
+
+      document.getElementById('contatoreCarte').textContent = `Totale carte: ${totale} / 60`;
     }
 
     function apriPopup(carta) {
-      cartaAttiva = carta; // Salva la carta cliccata
+      cartaAttiva = carta;
       const content = document.getElementById('popup-content');
       const numero = carta["N."];
-    
+
       if (numero) {
         content.innerHTML = `
           <img src="img/${numero}.jpg" alt="Carta" style="max-width:50%; display:block; margin:auto; border: 1px solid #000; border-radius: 8px;">
@@ -173,29 +285,28 @@
           <button id="btnDettagli">📄 Mostra dettagli testuali</button>
         `;
       }
-    
+
       document.getElementById('btnDettagli').onclick = mostraDettagli;
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('popup').style.display = 'block';
     }
 
-
     function mostraDettagli() {
       if (!cartaAttiva) return;
-    
+
       const dettagli = {};
       for (const chiave in cartaAttiva) {
         if (cartaAttiva[chiave] && cartaAttiva[chiave].toString().trim() !== '') {
           dettagli[chiave] = cartaAttiva[chiave];
         }
       }
-    
+
       const content = document.getElementById('popup-content');
       content.innerHTML = `
         <pre>${JSON.stringify(dettagli, null, 2)}</pre>
         <button id="btnTornaImmagine">🖼️ Torna all'immagine</button>
       `;
-    
+
       document.getElementById('btnTornaImmagine').onclick = () => apriPopup(cartaAttiva);
     }
 
