@@ -87,6 +87,35 @@
       margin-top: 1em;
       font-weight: bold;
     }
+    @keyframes tremolio {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(1deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-1deg); }
+    }
+    
+    .tremolante {
+      animation: tremolio 0.3s infinite;
+      cursor: pointer;
+    }
+    
+    #popupCartaIngrandita {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      z-index: 200;
+      cursor: pointer;
+    }
+    
+    #popupCartaIngrandita img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -131,142 +160,161 @@
     <div id="risultatiRicerca"></div>
   </div>
 
+  <div id="popupCartaIngrandita">
+    <img src="" alt="Carta ingrandita" id="imgCartaIngrandita">
+  </div>  
+
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const nomeMazzo = urlParams.get('mazzo');
-    document.getElementById('titolo').textContent = `Modifica mazzo: ${nomeMazzo}`;
+	  let modalitaElimina = false;
+	  let cardsDatabase = [];
+	  let mazzo = JSON.parse(localStorage.getItem(`mazzo_${nomeMazzo}`)) || {};
+	
+	  fetch('cards.json')
+	    .then(res => res.json())
+	    .then(data => {
+	      cardsDatabase = data;
+	      aggiornaFiltri();
+	      mostraCarte();
+	    });
+	
+	  function aggiornaFiltri() {
+	    const pietraSet = new Set();
+	    const costoSet = new Set();
+	
+	    for (const nome in mazzo) {
+	      const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+	      if (!carta) continue;
+	      pietraSet.add(carta['PIETRA']);
+	      costoSet.add(carta['COSTO']);
+	    }
+	
+	    for (let p of [...pietraSet].sort()) {
+	      const op = document.createElement('option');
+	      op.value = p;
+	      op.textContent = p;
+	      document.getElementById('filtroPietra').appendChild(op);
+	    }
+	
+	    for (let c of [...costoSet].sort((a,b)=>a-b)) {
+	      const op = document.createElement('option');
+	      op.value = c;
+	      op.textContent = c;
+	      document.getElementById('filtroCosto').appendChild(op);
+	    }
+	  }
+	
+	  document.getElementById('filtroTipo').onchange = mostraCarte;
+	  document.getElementById('filtroPietra').onchange = mostraCarte;
+	  document.getElementById('filtroCosto').onchange = mostraCarte;
+	
+	  function mostraCarte() {
+	    const tipo = document.getElementById('filtroTipo').value;
+	    const pietra = document.getElementById('filtroPietra').value;
+	    const costo = document.getElementById('filtroCosto').value;
+	
+	    const container = document.getElementById('contenitoreCarte');
+	    container.innerHTML = '';
+	
+	    let totaleCarte = 0;
+	
+	    const carteOrdinate = Object.keys(mazzo)
+	      .map(nome => {
+	        const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+	        return carta ? { carta, nome } : null;
+	      })
+	      .filter(e => e !== null)
+	      .sort((a, b) => a.carta['COSTO'] - b.carta['COSTO']);
+	
+	    for (const { carta, nome } of carteOrdinate) {
+	      if (tipo && carta['TIPO'] !== tipo) continue;
+	      if (pietra && carta['PIETRA'] !== pietra) continue;
+	      if (costo && carta['COSTO'].toString() !== costo) continue;
+	
+	      const numero = carta['N.'];
+	      const quantita = mazzo[nome];
+	      totaleCarte += quantita;
+	
+	      for (let i = 0; i < quantita; i++) {
+	        const img = document.createElement('img');
+	        img.src = `img/${numero}.jpg`;
+	        img.alt = nome;
+	
+	        if (modalitaElimina) {
+	          img.onclick = () => {
+	            rimuoviCarta(nome);
+	            mostraCarte();
+	            aggiornaTremolio();
+	          };
+	        } else {
+	          img.onclick = () => {
+	            apriPopupCartaIngrandita(img.src);
+	          };
+	        }
+	
+	        container.appendChild(img);
+	      }
+	    }
+	
+	    document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} / 60`;
+	    aggiornaTremolio();
+	  }
+	
+	  function rimuoviCarta(nome) {
+	    if (mazzo[nome] > 1) {
+	      mazzo[nome]--;
+	    } else {
+	      delete mazzo[nome];
+	    }
+	    localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
+	  }
+	
+	  function toggleModalitaElimina() {
+	    modalitaElimina = !modalitaElimina;
+	    mostraCarte();
+	    aggiornaTremolio();
+	    const btn = document.getElementById('btnEliminaCarte');
+	    btn.textContent = modalitaElimina ? 'Esci da Modalità Elimina' : 'Elimina Carte';
+	  }
+	
+	  function aggiornaTremolio() {
+	    const immagini = document.querySelectorAll('.carte-container img');
+	    immagini.forEach(img => {
+	      if (modalitaElimina) {
+	        img.classList.add('tremolio');
+	      } else {
+	        img.classList.remove('tremolio');
+	      }
+	    });
+	  }
+	
+	  function apriPopupCartaIngrandita(src) {
+	    let popup = document.getElementById('popupCarta');
+	    if (!popup) {
+	      popup = document.createElement('div');
+	      popup.id = 'popupCarta';
+	      popup.style.position = 'fixed';
+	      popup.style.top = '50%';
+	      popup.style.left = '50%';
+	      popup.style.transform = 'translate(-50%, -50%)';
+	      popup.style.background = 'transparent';
+	      popup.style.zIndex = '10000';
+	      popup.style.cursor = 'pointer';
+	
+	      const img = document.createElement('img');
+	      img.style.maxWidth = '90vw';
+	      img.style.maxHeight = '80vh';
+	      img.style.borderRadius = '10px';
+	      popup.appendChild(img);
+	
+	      popup.onclick = () => {
+	        document.body.removeChild(popup);
+	      };
+	
+	      document.body.appendChild(popup);
+	    }
+	    popup.querySelector('img').src = src;
+	  }
 
-    let cardsDatabase = [];
-    let mazzo = JSON.parse(localStorage.getItem(`mazzo_${nomeMazzo}`)) || {};
-
-    fetch('cards.json')
-      .then(res => res.json())
-      .then(data => {
-        cardsDatabase = data;
-        aggiornaFiltri();
-        mostraCarte();
-      });
-
-    function aggiornaFiltri() {
-      const pietraSet = new Set();
-      const costoSet = new Set();
-
-      for (const nome in mazzo) {
-        const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
-        if (!carta) continue;
-        pietraSet.add(carta['PIETRA']);
-        costoSet.add(carta['COSTO']);
-      }
-
-      for (let p of [...pietraSet].sort()) {
-        const op = document.createElement('option');
-        op.value = p;
-        op.textContent = p;
-        document.getElementById('filtroPietra').appendChild(op);
-      }
-
-      for (let c of [...costoSet].sort((a,b)=>a-b)) {
-        const op = document.createElement('option');
-        op.value = c;
-        op.textContent = c;
-        document.getElementById('filtroCosto').appendChild(op);
-      }
-    }
-
-    document.getElementById('filtroTipo').onchange = mostraCarte;
-    document.getElementById('filtroPietra').onchange = mostraCarte;
-    document.getElementById('filtroCosto').onchange = mostraCarte;
-
-    function mostraCarte() {
-      const tipo = document.getElementById('filtroTipo').value;
-      const pietra = document.getElementById('filtroPietra').value;
-      const costo = document.getElementById('filtroCosto').value;
-
-      const container = document.getElementById('contenitoreCarte');
-      container.innerHTML = '';
-
-      let totaleCarte = 0;
-
-      const carteOrdinate = Object.keys(mazzo)
-        .map(nome => {
-          const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
-          return carta ? { carta, nome } : null;
-        })
-        .filter(e => e !== null)
-        .sort((a, b) => a.carta['COSTO'] - b.carta['COSTO']);
-
-      for (const { carta, nome } of carteOrdinate) {
-        if (tipo && carta['TIPO'] !== tipo) continue;
-        if (pietra && carta['PIETRA'] !== pietra) continue;
-        if (costo && carta['COSTO'].toString() !== costo) continue;
-
-        const numero = carta['N.'];
-        const quantita = mazzo[nome];
-        totaleCarte += quantita;
-
-        for (let i = 0; i < quantita; i++) {
-          const img = document.createElement('img');
-          img.src = `img/${numero}.jpg`;
-          img.alt = nome;
-          img.onclick = () => rimuoviCarta(nome);
-          container.appendChild(img);
-        }
-      }
-
-      document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} / 60`;
-    }
-
-    function rimuoviCarta(nome) {
-      if (mazzo[nome] > 1) {
-        mazzo[nome]--;
-      } else {
-        delete mazzo[nome];
-      }
-      localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
-      mostraCarte();
-    }
-
-    function apriPopupAggiunta() {
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-    }
-
-    function chiudiPopup() {
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('inputRicerca').value = '';
-      document.getElementById('risultatiRicerca').innerHTML = '';
-    }
-
-    document.getElementById('inputRicerca').oninput = () => {
-      const val = document.getElementById('inputRicerca').value.toLowerCase();
-      const risultati = cardsDatabase.filter(c => c['NOME CARTA'].toLowerCase().includes(val));
-      const div = document.getElementById('risultatiRicerca');
-      div.innerHTML = '';
-      risultati.forEach(carta => {
-        const btn = document.createElement('button');
-        btn.textContent = `${carta['NOME CARTA']} (${carta['COSTO']})`;
-        btn.onclick = () => aggiungiCarta(carta['NOME CARTA']);
-        div.appendChild(btn);
-      });
-    };
-
-    function aggiungiCarta(nome) {
-      const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
-      const carta = tutteLeCarte.find(c => c["NOME CARTA"] === nome);
-      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 4;
-      if (mazzo[nome] >= max) {
-        alert('Puoi avere al massimo ${max} copie di una carta.');
-        return;
-      }
-      if (Totale >= 60) {
-        alert('Il mazzo ha già 60 carte.');
-        return;
-      }
-      mazzo[nome] = (mazzo[nome] || 0) + 1;
-      localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
-      mostraCarte();
-    }
   </script>
 </body>
 </html>
