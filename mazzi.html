@@ -163,6 +163,30 @@
           };
           buttonsDiv.appendChild(btnModifica);
 
+          // Rinomina
+          const btnRinomina = document.createElement('button');
+          btnRinomina.textContent = '✏️ Rinomina';
+          btnRinomina.onclick = () => {
+            const nuovoNome = prompt(`Rinomina il mazzo "${nomeMazzo}" in:`, nomeMazzo);
+            if (!nuovoNome) return;
+            const nomePulito = nuovoNome.trim();
+            if (nomePulito === '') {
+              alert('Nome non valido.');
+              return;
+            }
+            const nuovaChiave = 'mazzo_' + nomePulito;
+            if (localStorage.getItem(nuovaChiave)) {
+              alert('Esiste già un mazzo con questo nome.');
+              return;
+            }
+            const dati = localStorage.getItem(key);
+            localStorage.setItem(nuovaChiave, dati);
+            localStorage.removeItem(key);
+            caricaMazzi();
+          };
+          buttonsDiv.appendChild(btnRinomina);
+
+
           // Elimina
           const btnElimina = document.createElement('button');
           btnElimina.textContent = 'Elimina';
