@@ -100,39 +100,6 @@
     header img:hover {
       opacity: 0.8;
     }
-#toggleSidebar {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      font-size: 30px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 1001;
-    }
-
-    #sidebar {
-      position: fixed;
-      top: 60px;
-      right: -300px;
-      width: 280px;
-      height: 100%;
-      background: rgba(255,255,255,0.95);
-      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-      padding: 1em;
-      transition: right 0.3s ease-in-out;
-      z-index: 1000;
-    }
-
-    #sidebar.open {
-      right: 0;
-    }
-
-    #sidebar select {
-      width: 100%;
-      padding: 0.5em;
-      margin-bottom: 1em;
-    }
   </style>
 </head>
 <body>
@@ -145,54 +112,27 @@
 
   <h1>Carte Vita</h1>
 
-<button id="toggleSidebar">≡</button>
-
-  <div id="sidebar">
-    <select id="filtroSet">
-      <option value="">SET</option>
-      <option>UN NUOVO INIZIO</option>
-    </select>
-
-    <select id="filtroPietra">
-      <option value="">PIETRA</option>
-      <option>ACCIAIO</option><option>AMBRA</option><option>AMETISTA</option>
-      <option>RUBINO</option><option>SMERALDO</option><option>ZAFFIRO</option>
-    </select>
-
-    <select id="filtroRarita">
-      <option value="">RARITÀ</option>
-      <option>COMUNE</option><option>NON COMUNE</option>
-      <option>RARO</option><option>SUPER RARO</option><option>LEGGENDARIO</option><option>PROMO</option>
-    </select>
-
-    <select id="filtroClassificazione">
-      <option value="">CLASSIFICAZIONE</option>
-      <option>ANIMALE</option><option>ATTENDIAMOCI</option><option>COALIZZATI</option>
-      <option>COLLEGA</option><option>DISERTORE</option><option>FANTASIOSO</option>
-      <option>FRATELLANZA</option><option>FONDATORE</option><option>GUIDA</option>
-      <option>PARENTE</option><option>POTENZIATO</option><option>PROTAGONISTA</option>
-      <option>SOSTENITORE</option><option>STARLIGHT</option>
-    </select>
-
-    <select id="filtroTipo">
-      <option value="">TIPO</option>
-      <option>PERSONAGGIO</option><option>OGGETTO</option>
-      <option>AZIONE</option><option>LUOGO</option><option>AZIONE (CANZONE)</option>
-    </select>
-
-    <select id="filtroCosto">
-      <option value="">COSTO</option>
-      <option>1</option><option>2</option><option>3</option>
-      <option>4</option><option>5</option><option>6</option>
-      <option>7</option><option>8</option><option>9</option>
-    </select>
-
-    <button onclick="filtraCarte()">🎯 Applica Filtri</button>
-  </div>
-
   <input type="text" id="search" placeholder="Cerca una carta...">
+  <select id="filtroCosto">
+    <option value="">Costo</option>
+    <option>1</option><option>2</option><option>3</option><option>4</option>
+    <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+  </select>
+  <select id="filtroPietra">
+    <option value="">Pietra</option>
+    <option>AMBRA</option><option>RUBINO</option><option>ACCIAIO</option>
+    <option>SMERALDO</option><option>AMETISTA</option><option>ZAFFIRO</option>
+  </select>
+  <select id="filtroClassificazione">
+    <option value="">Classificazione</option>
+    <option>ANIMALE</option><option>ATTENDIAMOCI</option><option>COALIZZATI</option>
+    <option>COLLEGA</option><option>DISERTORE</option><option>FANTASIOSO</option>
+    <option>FRATELLANZA</option><option>FONDATORE</option><option>GUIDA</option>
+    <option>PARENTE</option><option>POTENZIATO</option><option>PROTAGONISTA</option>
+    <option>SOSTENITORE</option><option>STARLIGHT</option>
+  </select>
+  <button id="applicaFiltriBtn">🎯 Applica Filtri</button>
 
-  <div id="cards"></div>
   <button id="mazzoBtn">🧺 Mazzo</button>
   <a href="mazzi.html" id="linkMazzi" title="I miei mazzi">💽</a>
 
@@ -215,9 +155,6 @@
   </div>
 
   <script>
-    document.getElementById('toggleSidebar').onclick = () => {
-      document.getElementById('sidebar').classList.toggle('open');
-    };
     let tutteLeCarte = [];
     let cartaAttiva = null;
     let mazzo = {};
@@ -229,6 +166,7 @@
         mostraCarte(data);
       });
 
+    document.getElementById('applicaFiltriBtn').addEventListener('click', filtraCarte);
     document.getElementById('salvaMazzo').addEventListener('click', () => {
       const nome = document.getElementById('nomeMazzo').value.trim();
       if (!nome) return alert('Dai un nome al mazzo!');
@@ -243,22 +181,13 @@
       const classi = document.getElementById('filtroClassificazione').value.toLowerCase();
 
       const filtrate = tutteLeCarte.filter(c => {
-      const testo = document.getElementById('search').value.toLowerCase();
-      const costo = document.getElementById('filtroCosto').value;
-      const pietra = document.getElementById('filtroPietra').value.toLowerCase();
-      const rarita = document.getElementById('filtroRarita').value.toLowerCase();
-      const classi = document.getElementById('filtroClassificazione').value.toLowerCase();
-      const tipo = document.getElementById('filtroTipo').value.toLowerCase();
-      const set = document.getElementById('filtroSet').value.toLowerCase();
-
-      const filtrate = tutteLeCarte.filter(c => {
-        return (!testo || (c["NOME CARTA"] || '').toLowerCase().includes(testo)) &&
-               (!costo || (c.COSTO + '') === costo) &&
-               (!pietra || (c.PIETRA || '').toLowerCase().includes(pietra)) &&
-               (!rarita || (c["RARITA'"] || '').toLowerCase().includes(rarita)) &&
-               (!classi || (c.CLASSIFICAZIONE || '').toLowerCase().includes(classi)) &&
-               (!tipo || (c.TIPO || '').toLowerCase().includes(tipo)) &&
-               (!set || (c.SET || '').toLowerCase().includes(set));
+        const matchTesto = (c["NOME CARTA"] || '').toLowerCase().includes(testo) ||
+                           (c.EFFETTI || '').toLowerCase().includes(testo) ||
+                           (c["ABILITA'"] || '').toLowerCase().includes(testo);
+        const matchCosto = !costo || (c.COSTO && c.COSTO.toString() === costo);
+        const matchPietra = !pietra || (c.PIETRA || '').toLowerCase().includes(pietra);
+        const matchClassi = !classi || (c.CLASSIFICAZIONE || '').toLowerCase().includes(classi);
+        return matchTesto && matchCosto && matchPietra && matchClassi;
       });
 
       mostraCarte(filtrate);
@@ -428,4 +357,3 @@
   </script>
 </body>
 </html>
-
