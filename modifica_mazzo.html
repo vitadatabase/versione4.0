@@ -158,13 +158,12 @@
     <h3>Aggiungi carta al mazzo</h3>
     <input type="text" id="inputRicerca" placeholder="Cerca per nome...">
     <div id="risultatiRicerca"></div>
-  </div>
-
-  <div id="popupCartaIngrandita">
-    <img src="" alt="Carta ingrandita" id="imgCartaIngrandita">
   </div>  
 
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const nomeMazzo = urlParams.get('mazzo');
+
 	  let modalitaElimina = false;
 	  let cardsDatabase = [];
 	  let mazzo = JSON.parse(localStorage.getItem(`mazzo_${nomeMazzo}`)) || {};
