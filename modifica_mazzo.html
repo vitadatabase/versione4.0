@@ -146,7 +146,10 @@
       <option value="">Tutti</option>
     </select>
 
-    <button onclick="apriPopupAggiunta()">Aggiungi carta</button>
+    <button onclick="apriPopupAggiunta()">➕ Aggiungi carta</button>
+
+    <button id="btnEliminaCarte" onclick="toggleModalitaElimina()">❌ Elimina Carte</button>
+
 
     <div class="carte-container" id="contenitoreCarte"></div>
     <div id="totaleCarte"></div>
@@ -312,7 +315,26 @@
 	      document.body.appendChild(popup);
 	    }
 	    popup.querySelector('img').src = src;
-	  }
+    }
+    function aggiungiCarta(nome) {
+      const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+      const carta = cardsDatabase.find(c => c["NOME CARTA"] === nome);
+      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 4;
+    
+      if (mazzo[nome] >= max) {
+        alert(`Puoi avere al massimo ${max} copia${max > 1 ? 'e' : ''} di questa carta.`);
+        return;
+      }
+      if (Totale >= 60) {
+        alert('Il mazzo ha già 60 carte.');
+        return;
+      }
+    
+      mazzo[nome] = (mazzo[nome] || 0) + 1;
+      localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
+      mostraCarte();
+    }
+
 
   </script>
 </body>
