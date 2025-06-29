@@ -214,6 +214,7 @@
     <select id="filtroCosto"><option value="">COSTO</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
     <select id="sortBy"><option value="">ORDINA PER</option><option value="nome">NOME</option><option value="costo">COSTO</option><option value="rarita">RARITÀ</option></select>
     <button onclick="filtraCarte()">🎯 Applica Filtri</button>
+    <button onclick="resetFiltri()">♻️ Reimposta filtri</button>
   </div>
 
   <div id="search-container">
@@ -288,6 +289,18 @@ function filtraCarte() {
   });
 
   mostraCarte(filtrate);
+}
+
+function resetFiltri() {
+  document.getElementById('search').value = '';
+  document.getElementById('filtroSet').value = '';
+  document.getElementById('filtroPietra').value = '';
+  document.getElementById('filtroRarita').value = '';
+  document.getElementById('filtroClassificazione').value = '';
+  document.getElementById('filtroTipo').value = '';
+  document.getElementById('filtroCosto').value = '';
+  document.getElementById('sortBy').value = '';
+  filtraCarte();
 }
 
 function mostraCarte(carte) {
