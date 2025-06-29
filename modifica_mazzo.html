@@ -334,7 +334,18 @@
       localStorage.setItem(`mazzo_${nomeMazzo}`, JSON.stringify(mazzo));
       mostraCarte();
     }
-
+    
+    function apriPopupAggiunta() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+    }
+    
+    function chiudiPopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('inputRicerca').value = '';
+      document.getElementById('risultatiRicerca').innerHTML = '';
+    }
 
   </script>
 </body>
