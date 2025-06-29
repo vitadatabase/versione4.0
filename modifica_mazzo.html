@@ -175,6 +175,20 @@
 	    .then(res => res.json())
 	    .then(data => {
 	      cardsDatabase = data;
+
+          document.getElementById('inputRicerca').oninput = () => {
+              const val = document.getElementById('inputRicerca').value.toLowerCase();
+              const risultati = cardsDatabase.filter(c => c['NOME CARTA'].toLowerCase().includes(val));
+              const div = document.getElementById('risultatiRicerca');
+              div.innerHTML = '';
+              risultati.forEach(carta => {
+                const btn = document.createElement('button');
+                btn.textContent = `${carta['NOME CARTA']} (${carta['COSTO']})`;
+                btn.onclick = () => aggiungiCarta(carta['NOME CARTA']);
+                div.appendChild(btn);
+              });
+            };
+		    
 	      aggiornaFiltri();
 	      mostraCarte();
 	    });
