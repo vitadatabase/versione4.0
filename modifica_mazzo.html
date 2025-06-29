@@ -252,12 +252,14 @@
     };
 
     function aggiungiCarta(nome) {
-      const quantitaTotale = Object.values(mazzo).reduce((a, b) => a + b, 0);
-      if (mazzo[nome] >= 4) {
-        alert('Puoi avere al massimo 4 copie di una carta.');
+      const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+      const carta = tutteLeCarte.find(c => c["NOME CARTA"] === nome);
+      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 4;
+      if (mazzo[nome] >= max) {
+        alert('Puoi avere al massimo ${max} copie di una carta.');
         return;
       }
-      if (quantitaTotale >= 60) {
+      if (Totale >= 60) {
         alert('Il mazzo ha già 60 carte.');
         return;
       }
