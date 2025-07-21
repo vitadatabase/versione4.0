@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Albo d'Oro dei Mazzi</title>
+  <style>
+    body
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('sfondo.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: #222;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60px;
+    }
+    header button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    header img {
+      height: 50px;
+      display: block;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2em auto;
+      background: rgba(255 255 255 / 0.85);
+      padding: 2em;
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    .mazzo {
+      background: white;
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 2em;
+      max-width: 800px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .mazzo-header {
+      font-weight: bold;
+      margin-bottom: 1em;
+    }
+    .carte {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .carte img {
+      width: 80px;
+      height: auto;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border: 1px solid #aaa;
+    }
+    .carte img:hover {
+      transform: scale(1.2);
+    }
+    #popupCarta {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      z-index: 9999;
+    }
+    #popupCarta img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button onclick="window.location.href='home.html'">
+      <img src="logo.jpg" alt="Home">
+    </button>
+  </header>
+  <main>
+    <h1>Albo d'Oro dei Mazzi</h1>
+    <div id="listaMazzi">Caricamento mazzi...</div>
+  </main>
+  <div id="listaMazzi">Caricamento mazzi...</div>
+
+  <div id="popupCarta" onclick="this.style.display='none'">
+    <img src="" alt="Carta Ingrandita" />
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVDt2e7O1cUVCFCKuet1ohIvpBdJjTnZo",
+      authDomain: "albo-d-oro-vita-tgc.firebaseapp.com",
+      projectId: "albo-d-oro-vita-tgc",
+      storageBucket: "albo-d-oro-vita-tgc.firebasestorage.app",
+      messagingSenderId: "750854799573",
+      appId: "1:750854799573:web:416499f272bee07d6f625c",
+      databaseURL: "https://albo-d-oro-vita-tgc-default-rtdb.europe-west1.firebasedatabase.app/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let cardsDatabase = [];
+
+    async function caricaCards() {
+      const res = await fetch('cards.json');
+      cardsDatabase = await res.json();
+    }
+
+    function mostraPopup(src) {
+      const popup = document.getElementById('popupCarta');
+      popup.querySelector('img').src = src;
+      popup.style.display = 'block';
+    }
+
+    async function caricaMazzi() {
+      await caricaCards();
+      const listaDiv = document.getElementById('listaMazzi');
+      listaDiv.textContent = 'Caricamento mazzi in corso...';
+
+      try {
+        const snapshot = await get(child(ref(db), "mazzi"));
+        if (!snapshot.exists()) {
+          listaDiv.textContent = 'Nessun mazzo caricato.';
+          return;
+        }
+
+        const data = snapshot.val();
+        const mazziArray = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        listaDiv.innerHTML = '';
+
+        mazziArray.forEach(m => {
+          const mazzoDiv = document.createElement('div');
+          mazzoDiv.className = 'mazzo';
+
+          const header = document.createElement('div');
+          header.className = 'mazzo-header';
+          header.innerText = `Utente: ${escapeHtml(m.username)} - Mazzo: ${escapeHtml(m.nomeMazzo)}`;
+          mazzoDiv.appendChild(header);
+
+          const carteContainer = document.createElement('div');
+          carteContainer.className = 'carte';
+
+          for (const nomeCarta in m.mazzo) {
+            const carta = cardsDatabase.find(c => c['NOME CARTA'] === nomeCarta);
+            if (!carta) continue;
+
+            const numero = carta['N.'];
+            const quantita = m.mazzo[nomeCarta];
+
+            for (let i = 0; i < quantita; i++) {
+              const img = document.createElement('img');
+              img.src = `img/${numero}.jpg`;
+              img.alt = nomeCarta;
+              img.title = nomeCarta;
+              img.onclick = () => mostraPopup(img.src);
+              carteContainer.appendChild(img);
+            }
+          }
+
+          mazzoDiv.appendChild(carteContainer);
+          listaDiv.appendChild(mazzoDiv);
+        });
+
+      } catch (e) {
+        listaDiv.textContent = 'Errore nel caricamento: ' + e.message;
+      }
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    caricaMazzi();
+  </script>
+</body>
+</html>
