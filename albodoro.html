@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Albo d'Oro dei Mazzi</title>
   <style>
-    body
     body {
       margin: 0;
       padding: 0;
@@ -164,7 +163,7 @@
             const carta = cardsDatabase.find(c => c['NOME CARTA'] === nomeCarta);
             if (!carta) continue;
 
-            const numero = carta['N.'];
+            const numero = carta['ID'];
             const quantita = m.mazzo[nomeCarta];
 
             for (let i = 0; i < quantita; i++) {
