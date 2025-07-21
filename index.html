@@ -185,6 +185,14 @@
       max-width: 80%; max-height: 80%;
       overflow: auto;
     }
+      .btn-add {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-top: 5px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
   </style>
 </head>
 <body>
@@ -196,7 +204,7 @@
   <div id="messaggioAggiunta">Carta aggiunta al mazzo!</div>
 
   <div id="sidebar">
-    <select id="filtroSet"><option value="">SET</option><option>UN NUOVO INIZIO</option></select>
+    <select id="filtroSet"><option value="">SET</option><option>UN NUOVO INIZIO</option><option>DIETRO LE QUINTE</option></select>
     <select id="filtroPietra"><option value="">PIETRA</option><option>ACCIAIO</option><option>AMBRA</option><option>AMETISTA</option><option>RUBINO</option><option>SMERALDO</option><option>ZAFFIRO</option></select>
     <select id="filtroRarita"><option value="">RARITÀ</option><option>COMUNE</option><option>NON COMUNE</option><option>RARO</option><option>SUPER RARO</option><option>LEGGENDARIO</option><option>PROMO</option></select>
     <select id="filtroClassificazione">
@@ -267,17 +275,20 @@ function filtraCarte() {
   const set = document.getElementById('filtroSet').value.toLowerCase();
   const pietra = document.getElementById('filtroPietra').value.toLowerCase();
   const rarita = document.getElementById('filtroRarita').value.toLowerCase();
-  const classi = document.getElementById('filtroClassificazione').value.toLowerCase();
+  const classi = document.getElementById('filtroClassificazione').value.trim().toLowerCase();
   const tipo = document.getElementById('filtroTipo').value.toLowerCase();
   const costo = document.getElementById('filtroCosto').value;
   const sortBy = document.getElementById('sortBy').value;
 
   let filtrate = tutteLeCarte.filter(c =>
-    (!testo || (c["NOME CARTA"]||'').toLowerCase().includes(testo)) &&
+    (!testo || (
+      (c["NOME CARTA"] || '').toLowerCase().includes(testo) ||
+      (c["EFFETTI"] || '').toLowerCase().includes(testo)
+    )) &&
     (!set || (c.SET||'').toLowerCase() === set) &&
     (!pietra || (c.PIETRA||'').toLowerCase() === pietra) &&
     (!rarita || (c["RARITA'"]||'').toLowerCase() === rarita) &&
-    (!classi || (c.CLASSIFICAZIONE||'').toLowerCase() === classi) &&
+    (!classi || (c.CLASSIFICAZIONE || '').toLowerCase().replace(/\s+/g, ' ').includes(classi))
     (!tipo || (c.TIPO||'').toLowerCase() === tipo) &&
     (!costo || (c.COSTO+'') === costo)
   );
@@ -309,7 +320,7 @@ function mostraCarte(carte) {
   carte.forEach(carta => {
     const div = document.createElement('div'); div.className='card-wrapper';
     const img = document.createElement('img');
-    img.src = `img/${carta["N."]}.jpg`;
+    img.src = `img/${carta["ID"]}.jpg`;
     img.alt = carta["NOME CARTA"];
     img.className = 'card-img';
     if ((carta["RARITA'"]||'').toUpperCase()==='PROMO') {
@@ -318,10 +329,21 @@ function mostraCarte(carte) {
     }
     img.onclick = () => apriPopup(carta);
     const btn = document.createElement('button');
-    btn.textContent = '+';
+    btn.className = 'btn-add';
     btn.onclick = () => aggiungiAlMazzo(carta["NOME CARTA"]);
+    
+    const imgBtn = document.createElement('img');
+    imgBtn.src = 'symbols/add.jpg';
+    imgBtn.alt = 'Aggiungi';
+    imgBtn.style.width = '30px';
+    imgBtn.style.height = '30px';
+    imgBtn.style.borderRadius = '50%';
+    imgBtn.style.objectFit = 'cover';
+    
+    btn.appendChild(imgBtn);
     div.appendChild(img);
     div.appendChild(btn);
+
     c.appendChild(div);
   });
 }
@@ -363,7 +385,7 @@ function apriPopup(carta) {
   cartaAttiva = carta;
   const cont = document.getElementById('popup-content');
   cont.innerHTML = `
-    <img src="img/${carta["N."]}.jpg" alt="">
+    <img src="img/${carta["ID"]}.jpg" alt="">
     <br>
     <button onclick="mostraDettagli()">📄 Dettagli testuali</button>
     <button onclick="aggiungiAlMazzo('${carta["NOME CARTA"]}')">➕ Aggiungi al mazzo</button>
