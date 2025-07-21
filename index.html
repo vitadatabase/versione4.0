@@ -288,7 +288,7 @@ function filtraCarte() {
     (!set || (c.SET||'').toLowerCase() === set) &&
     (!pietra || (c.PIETRA||'').toLowerCase() === pietra) &&
     (!rarita || (c["RARITA'"]||'').toLowerCase() === rarita) &&
-    (!classi || (c.CLASSIFICAZIONE || '').toLowerCase().replace(/\s+/g, ' ').includes(classi))
+    (!classi || (c.CLASSIFICAZIONE || '').toLowerCase().replace(/\s+/g, ' ').includes(classi))&&
     (!tipo || (c.TIPO||'').toLowerCase() === tipo) &&
     (!costo || (c.COSTO+'') === costo)
   );
