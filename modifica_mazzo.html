@@ -274,7 +274,7 @@
 	    document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} (min 50, max 70)`;
 			if (totaleCarte < 50 || totaleCarte > 70) {
 			  contatore.style.color = 'crimson';
-				titolo.textContent += ` ⚠️ (${totaleCarte} carte)`;
+	  		titolo.textContent += ` ⚠️ (${totaleCarte} carte)`;
 			  contatore.title = 'Il mazzo deve contenere tra 50 e 70 carte';
 			} else {
 			  contatore.style.color = '';
