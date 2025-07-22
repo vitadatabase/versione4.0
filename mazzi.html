@@ -157,6 +157,9 @@
             carteConInfo.push({ nomeCarta, qty: mazzo[nomeCarta], costo: cartaInfo.COSTO || 0 });
           }
           carteConInfo.sort((a,b) => a.costo - b.costo);
+          const totaleCarte = carteConInfo.reduce((sum, c) => sum + c.qty, 0);
+          const fuoriRange = totaleCarte < 50 || totaleCarte > 70;
+
 
           // Crea markup
           const divMazzo = document.createElement('div');
@@ -168,6 +171,13 @@
           const titolo = document.createElement('strong');
           titolo.textContent = nomeMazzo;
           infoDiv.appendChild(titolo);
+          if (fuoriRange) {
+            titolo.style.color = 'crimson';
+            titolo.textContent += ` ⚠️ (${totaleCarte} carte)`;
+          } else {
+            titolo.textContent += ` (${totaleCarte} carte)`;
+          }
+
 
           const cardsText = carteConInfo.map(c => `${c.nomeCarta} (${c.qty})`).join(', ');
           const cardsDiv = document.createElement('div');
