@@ -350,10 +350,10 @@ function mostraCarte(carte) {
 
 function aggiungiAlMazzo(nome) {
   const totale = Object.values(mazzo).reduce((a,b)=>a+b,0);
-  if (totale>=60) return alert('Mazzo pieno!');
+  if (totale>=70) return alert('Mazzo pieno!');
   const carta = tutteLeCarte.find(c=>c["NOME CARTA"]===nome);
-  const max = (carta["RARITA'"].toUpperCase()==='PROMO') ? 1 : 4;
-  if ((mazzo[nome]||0)>=max) return alert(`Max ${max} copie di questa carta!`);
+  const max = (carta["RARITA'"].toUpperCase()==='PROMO') ? 1 : 3;
+  if ((mazzo[nome]||0)>=max) return alert(`puoi avere massimo ${max} copie di questa carta!`);
   mazzo[nome] = (mazzo[nome]||0) +1;
   aggiornaMazzo();
   mostraMessaggio();
@@ -373,7 +373,7 @@ function aggiornaMazzo() {
     li.appendChild(btn);
     ul.appendChild(li);
   }
-  document.getElementById('contatoreCarte').textContent=`Totale carte: ${tot} / 60`;
+  document.getElementById('contatoreCarte').textContent=`Totale carte: ${tot} (min 50, max 70)`;
 }
 
 function mostraMessaggio() {
