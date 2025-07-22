@@ -271,17 +271,22 @@
 	      }
 	    }
 	
-	    document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} (min 50, max 70)`;
-			if (totaleCarte < 50 || totaleCarte > 70) {
-			  contatore.style.color = 'crimson';
-	  		titolo.textContent += ` ⚠️ (${totaleCarte} carte)`;
-			  contatore.title = 'Il mazzo deve contenere tra 50 e 70 carte';
-			} else {
-			  contatore.style.color = '';
-			  contatore.title = '';
-			}
+      const contatore = document.getElementById('totaleCarte');
+      const titolo = document.getElementById('titolo');
+      contatore.textContent = `Carte totali: ${totaleCarte} (min 50, max 70)`;
+      
+      if (totaleCarte < 50 || totaleCarte > 70) {
+        contatore.style.color = 'crimson';
+        contatore.title = '⚠️ Il mazzo deve contenere tra 50 e 70 carte';
+        titolo.innerHTML = `${nomeMazzo} ⚠️`;
+      } else {
+        contatore.style.color = '';
+        contatore.title = '';
+        titolo.textContent = nomeMazzo;
+      }
+
 	    aggiornaTremolio();
-	  }
+	    }
 	
 	  function rimuoviCarta(nome) {
 	    if (mazzo[nome] > 1) {
