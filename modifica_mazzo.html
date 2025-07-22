@@ -271,7 +271,15 @@
 	      }
 	    }
 	
-	    document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} / 60`;
+	    document.getElementById('totaleCarte').textContent = `Carte totali: ${totaleCarte} (min 50, max 70)`;
+			if (totaleCarte < 50 || totaleCarte > 70) {
+			  contatore.style.color = 'crimson';
+				titolo.textContent += ` ⚠️ (${totaleCarte} carte)`;
+			  contatore.title = 'Il mazzo deve contenere tra 50 e 70 carte';
+			} else {
+			  contatore.style.color = '';
+			  contatore.title = '';
+			}
 	    aggiornaTremolio();
 	  }
 	
@@ -333,14 +341,14 @@
     function aggiungiCarta(nome) {
       const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
       const carta = cardsDatabase.find(c => c["NOME CARTA"] === nome);
-      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 4;
+      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 3;
     
       if (mazzo[nome] >= max) {
-        alert(`Puoi avere al massimo ${max} copia${max > 1 ? 'e' : ''} di questa carta.`);
+        alert(`Puoi avere al massimo ${max} copie di questa carta.`);
         return;
       }
-      if (Totale >= 60) {
-        alert('Il mazzo ha già 60 carte.');
+      if (Totale >= 70) {
+        alert('Il mazzo ha già 70 carte.');
         return;
       }
     
