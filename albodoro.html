@@ -117,13 +117,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let cardsDatabase = [];
-
-    async function caricaCards() {
-      const res = await fetch('cards.json');
-      cardsDatabase = await res.json();
-    }
-
     function mostraPopup(src) {
       const popup = document.getElementById('popupCarta');
       popup.querySelector('img').src = src;
@@ -131,7 +124,6 @@
     }
 
     async function caricaMazzi() {
-      await caricaCards();
       const listaDiv = document.getElementById('listaMazzi');
       listaDiv.textContent = 'Caricamento mazzi in corso...';
 
@@ -159,18 +151,14 @@
           const carteContainer = document.createElement('div');
           carteContainer.className = 'carte';
 
-          for (const nomeCarta in m.mazzo) {
-            const carta = cardsDatabase.find(c => c['NOME CARTA'] === nomeCarta);
-            if (!carta) continue;
-
-            const numero = carta['ID'];
-            const quantita = m.mazzo[nomeCarta];
-
+          for (const idCarta in m.mazzo) {
+            const quantita = m.mazzo[idCarta];
+          
             for (let i = 0; i < quantita; i++) {
               const img = document.createElement('img');
-              img.src = `img/${numero}.jpg`;
-              img.alt = nomeCarta;
-              img.title = nomeCarta;
+              img.src = `img/${idCarta}.jpg`;
+              img.alt = `Carta ID ${idCarta}`;
+              img.title = `Carta ID ${idCarta}`;
               img.onclick = () => mostraPopup(img.src);
               carteContainer.appendChild(img);
             }
