@@ -39,7 +39,7 @@
   },
   {
     "ID": 3,
-    "NOME CARTA": "CICCIO CAR. - Lupo Riccio",
+    "NOME CARTA": "CICCIO CARIDI - Lupo Riccio",
     "N.": 3,
     "RARITA'": "COMUNE",
     "COSTO": 3,
@@ -704,7 +704,7 @@
   },
   {
     "ID": 38,
-    "NOME CARTA": "DARIO TAV. - Costruttore di Cabine",
+    "NOME CARTA": "DARIO TAV - Costruttore di Cabine",
     "N.": 38,
     "RARITA'": "NON COMUNE",
     "COSTO": 3,
@@ -723,7 +723,7 @@
   },
   {
     "ID": 39,
-    "NOME CARTA": "ALESSANDRO BOMB. - Creatore di File Excel",
+    "NOME CARTA": "ALESSANDRO BOMB - Creatore di File Excel",
     "N.": 39,
     "RARITA'": "COMUNE",
     "COSTO": 1,
@@ -799,7 +799,7 @@
   },
   {
     "ID": 43,
-    "NOME CARTA": "ALESSANDRA COPP. - Dolce Attesa",
+    "NOME CARTA": "ALESSANDRA COPP - Dolce Attesa",
     "N.": 43,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -818,7 +818,7 @@
   },
   {
     "ID": 44,
-    "NOME CARTA": "ALESSANDRA COPP. - Capo di Apice",
+    "NOME CARTA": "ALESSANDRA COPP - Capo di Apice",
     "N.": 44,
     "RARITA'": "SUPER RARO",
     "COSTO": 7,
@@ -837,7 +837,7 @@
   },
   {
     "ID": 45,
-    "NOME CARTA": "SILVIA COTR. - Tutor di Progetto",
+    "NOME CARTA": "SILVIA COTR - Tutor di Progetto",
     "N.": 45,
     "RARITA'": "NON COMUNE",
     "COSTO": 2,
@@ -856,7 +856,7 @@
   },
   {
     "ID": 46,
-    "NOME CARTA": "FILIPPO QUART. - Consigliere Comunale",
+    "NOME CARTA": "FILIPPO QUART - Consigliere Comunale",
     "N.": 46,
     "RARITA'": "RARO",
     "COSTO": 4,
@@ -951,7 +951,7 @@
   },
   {
     "ID": 51,
-    "NOME CARTA": "L'HAI MAI VISTO \"IL SOLDATINO?",
+    "NOME CARTA": "L'HAI MAI VISTO "IL SOLDATINO?",
     "N.": 51,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -1597,7 +1597,7 @@
   },
   {
     "ID": 85,
-    "NOME CARTA": "SOFIA F. - Fidanzata di Alberto",
+    "NOME CARTA": "SOFIA F - Fidanzata di Alberto",
     "N.": 85,
     "RARITA'": "COMUNE",
     "COSTO": 1,
@@ -1616,7 +1616,7 @@
   },
   {
     "ID": 86,
-    "NOME CARTA": "ANTONIO BOR. - Er Minatore",
+    "NOME CARTA": "ANTONIO BOR - Er Minatore",
     "N.": 86,
     "RARITA'": "RARO",
     "COSTO": 5,
@@ -1635,7 +1635,7 @@
   },
   {
     "ID": 87,
-    "NOME CARTA": "MARCO FER. - Er Solingo",
+    "NOME CARTA": "MARCO FER - Er Solingo",
     "N.": 87,
     "RARITA'": "SUPER RARO",
     "COSTO": 3,
@@ -1654,7 +1654,7 @@
   },
   {
     "ID": 88,
-    "NOME CARTA": "ALBERTO POL. - Er Vivido",
+    "NOME CARTA": "ALBERTO POL - Er Vivido",
     "N.": 88,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -1730,7 +1730,7 @@
   },
   {
     "ID": 92,
-    "NOME CARTA": "ALBERTO POL. - Diamante Grezzo",
+    "NOME CARTA": "ALBERTO POL - Diamante Grezzo",
     "N.": 92,
     "RARITA'": "SUPER RARO",
     "COSTO": 7,
@@ -1806,7 +1806,7 @@
   },
   {
     "ID": 96,
-    "NOME CARTA": "DANIELE CONS. - Fratello Coinquilino",
+    "NOME CARTA": "DANIELE CONS - Fratello Coinquilino",
     "N.": 96,
     "RARITA'": "RARO",
     "COSTO": 4,
@@ -1882,7 +1882,7 @@
   },
   {
     "ID": 100,
-    "NOME CARTA": "CHRISTIAN PIC. - Amico di Sempre",
+    "NOME CARTA": "CHRISTIAN PIC - Amico di Sempre",
     "N.": 100,
     "RARITA'": "RARO",
     "COSTO": 5,
@@ -2091,7 +2091,7 @@
   },
   {
     "ID": 111,
-    "NOME CARTA": "BRUNO P. - Primadonna",
+    "NOME CARTA": "BRUNO P - Primadonna",
     "N.": 111,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -2110,7 +2110,7 @@
   },
   {
     "ID": 112,
-    "NOME CARTA": "JACOPO V. - Ammiratore di Minorenni",
+    "NOME CARTA": "JACOPO V - Ammiratore di Minorenni",
     "N.": 112,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -2129,7 +2129,7 @@
   },
   {
     "ID": 113,
-    "NOME CARTA": "DAVIDE AV. - La Strega",
+    "NOME CARTA": "DAVIDE AV - La Strega",
     "N.": 113,
     "RARITA'": "COMUNE",
     "COSTO": 2,
@@ -2148,7 +2148,7 @@
   },
   {
     "ID": 114,
-    "NOME CARTA": "MARICA G. - Costumista dell'Accademia",
+    "NOME CARTA": "MARICA G - Costumista dell'Accademia",
     "N.": 114,
     "RARITA'": "RARO",
     "COSTO": 3,
@@ -2167,7 +2167,7 @@
   },
   {
     "ID": 115,
-    "NOME CARTA": "MARICA G. - Imperatrice di Tik Tok",
+    "NOME CARTA": "MARICA G - Imperatrice di Tik Tok",
     "N.": 115,
     "RARITA'": "LEGGENDARIO",
     "COSTO": 7,
@@ -2186,7 +2186,7 @@
   },
   {
     "ID": 116,
-    "NOME CARTA": "SARAH P. - Musa Ambiziosa",
+    "NOME CARTA": "SARAH P - Musa Ambiziosa",
     "N.": 116,
     "RARITA'": "COMUNE",
     "COSTO": 2,
@@ -2243,7 +2243,7 @@
   },
   {
     "ID": 119,
-    "NOME CARTA": "CHIARA CAM. - Fan di Hazbin Hotel",
+    "NOME CARTA": "CHIARA CAM - Fan di Hazbin Hotel",
     "N.": 119,
     "RARITA'": "COMUNE",
     "COSTO": 1,
@@ -2300,7 +2300,7 @@
   },
   {
     "ID": 122,
-    "NOME CARTA": "DARIO Z. - Ultraquarantenne",
+    "NOME CARTA": "DARIO Z - Ultraquarantenne",
     "N.": 122,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -2319,7 +2319,7 @@
   },
   {
     "ID": 123,
-    "NOME CARTA": "EMANUELA S. - Madame D'arque",
+    "NOME CARTA": "EMANUELA S - Madame D'arque",
     "N.": 123,
     "RARITA'": "SUPER RARO",
     "COSTO": 6,
@@ -2338,7 +2338,7 @@
   },
   {
     "ID": 124,
-    "NOME CARTA": "VALERIA B. - Musa Capricciosa",
+    "NOME CARTA": "VALERIA B - Musa Capricciosa",
     "N.": 124,
     "RARITA'": "COMUNE",
     "COSTO": 3,
@@ -2376,7 +2376,7 @@
   },
   {
     "ID": 126,
-    "NOME CARTA": "MARTINA R. - Perditempo",
+    "NOME CARTA": "MARTINA R - Perditempo",
     "N.": 126,
     "RARITA'": "COMUNE",
     "COSTO": 1,
@@ -2395,7 +2395,7 @@
   },
   {
     "ID": 127,
-    "NOME CARTA": "MARTINA MAR. - Musa Mancata",
+    "NOME CARTA": "MARTINA MAR - Musa Mancata",
     "N.": 127,
     "RARITA'": "NON COMUNE",
     "COSTO": 2,
@@ -2414,7 +2414,7 @@
   },
   {
     "ID": 128,
-    "NOME CARTA": "SOFIA F. - Mrs. Bric",
+    "NOME CARTA": "SOFIA F - Mrs. Bric",
     "N.": 128,
     "RARITA'": "RARO",
     "COSTO": 3,
@@ -2699,7 +2699,7 @@
   },
   {
     "ID": 143,
-    "NOME CARTA": "ALESSANDRO MIC. - Produttore Musicale",
+    "NOME CARTA": "ALESSANDRO MIC - Produttore Musicale",
     "N.": 143,
     "RARITA'": "SUPER RARO",
     "COSTO": 5,
@@ -2718,7 +2718,7 @@
   },
   {
     "ID": 144,
-    "NOME CARTA": "GIANLUCA LOF. - Sceriffo di Zona",
+    "NOME CARTA": "GIANLUCA LOF - Sceriffo di Zona",
     "N.": 144,
     "RARITA'": "COMUNE",
     "COSTO": 3,
@@ -2737,7 +2737,7 @@
   },
   {
     "ID": 145,
-    "NOME CARTA": "MARTINA D'ARR. - Assistente di Palco",
+    "NOME CARTA": "MARTINA D'ARR - Assistente di Palco",
     "N.": 145,
     "RARITA'": "COMUNE",
     "COSTO": 2,
@@ -2832,7 +2832,7 @@
   },
   {
     "ID": 150,
-    "NOME CARTA": "MARTINA LOM. - Rappresentante d'Istituto",
+    "NOME CARTA": "MARTINA LOM - Rappresentante d'Istituto",
     "N.": 150,
     "RARITA'": "COMUNE",
     "COSTO": 3,
@@ -2851,7 +2851,7 @@
   },
   {
     "ID": 151,
-    "NOME CARTA": "FORTUNATO LOM. - Jeans Punk",
+    "NOME CARTA": "FORTUNATO LOM - Jeans Punk",
     "N.": 151,
     "RARITA'": "COMUNE",
     "COSTO": 4,
@@ -2870,7 +2870,7 @@
   },
   {
     "ID": 152,
-    "NOME CARTA": "CHIARA GAN. - Scrittrice di CCD",
+    "NOME CARTA": "CHIARA GAN - Scrittrice di CCD",
     "N.": 152,
     "RARITA'": "NON COMUNE",
     "COSTO": 2,
@@ -2889,7 +2889,7 @@
   },
   {
     "ID": 153,
-    "NOME CARTA": "GABRIELE - Sostituto Don Din",
+    "NOME CARTA": "EZIO - Sostituto Don Din",
     "N.": 153,
     "RARITA'": "NON COMUNE",
     "COSTO": 1,
@@ -2902,7 +2902,7 @@
     "VITA": 2,
     "VAL. LEGGENDA": 1,
     "ABILITA'": "",
-    "EFFETTI": "STO IMPARANDO - Quando giochi questo personaggio, rimuovi fino a 1 danno da un tuo personaggio a tua scelta.",
+    "EFFETTI": "DAJE - Quando giochi questo personaggio, rimuovi fino a 1 danno da un tuo personaggio a tua scelta.",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "" 
   },
@@ -3649,7 +3649,7 @@
   },
   {
     "ID": 193,
-    "NOME CARTA": "DAVIDE S. - Commercialista",
+    "NOME CARTA": "DAVIDE S - Commercialista",
     "N.": 21,
     "RARITA'": "COMUNE",
     "COSTO": 4,
@@ -3668,7 +3668,7 @@
   },
   {
     "ID": 194,
-    "NOME CARTA": "ALESSANDRA DE L. - Insegnante di Teatro",
+    "NOME CARTA": "ALESSANDRA DE L - Insegnante di Teatro",
     "N.": 22,
     "RARITA'": "NON COMUNE",
     "COSTO": 5,
@@ -3687,7 +3687,7 @@
   },
   {
     "ID": 195,
-    "NOME CARTA": "ENZO DE L. - Presidente Sole e Luna",
+    "NOME CARTA": "ENZO DE L - Presidente Sole e Luna",
     "N.": 23,
     "RARITA'": "RARO",
     "COSTO": 8,
@@ -3706,7 +3706,7 @@
   },
   {
     "ID": 196,
-    "NOME CARTA": "CARMELO R. - Nostro Padre",
+    "NOME CARTA": "CARMELO R - Nostro Padre",
     "N.": 24,
     "RARITA'": "RARO",
     "COSTO": 6,
@@ -3725,7 +3725,7 @@
   },
   {
     "ID": 197,
-    "NOME CARTA": "MARCELLO GARR. - Ragazzo nel Chill",
+    "NOME CARTA": "MARCELLO GARR - Ragazzo nel Chill",
     "N.": 25,
     "RARITA'": "LEGGENDARIO",
     "COSTO": 6,
@@ -3972,7 +3972,7 @@
   },
   {
     "ID": 210,
-    "NOME CARTA": "AUGUSTO FAV. - Cantautore Reggino",
+    "NOME CARTA": "AUGUSTO FAV - Cantautore Reggino",
     "N.": 38,
     "RARITA'": "SUPER RARO",
     "COSTO": 5,
@@ -3991,7 +3991,7 @@
   },
   {
     "ID": 211,
-    "NOME CARTA": "GIULIANO BEL. - Reggino Americanizzato",
+    "NOME CARTA": "GIULIANO BEL - Reggino Americanizzato",
     "N.": 39,
     "RARITA'": "RARO",
     "COSTO": 6,
@@ -4238,7 +4238,7 @@
   },
   {
     "ID": 224,
-    "NOME CARTA": "FORTUNATO LOM. - Ciccio",
+    "NOME CARTA": "FORTUNATO LOM - Ciccio",
     "N.": 52,
     "RARITA'": "LEGGENDARIO",
     "COSTO": 7,
@@ -4257,7 +4257,7 @@
   },
   {
     "ID": 225,
-    "NOME CARTA": "MARTINA LOM. - Giovane Chantal",
+    "NOME CARTA": "MARTINA LOM - Giovane Chantal",
     "N.": 53,
     "RARITA'": "LEGGENDARIO",
     "COSTO": 6,
@@ -4371,7 +4371,7 @@
   },
   {
     "ID": 231,
-    "NOME CARTA": "CARLO COL. - Commediografo Brillante",
+    "NOME CARTA": "CARLO COL - Commediografo Brillante",
     "N.": 59,
     "RARITA'": "SUPER RARO",
     "COSTO": 6,
@@ -4390,7 +4390,7 @@
   },
   {
     "ID": 232,
-    "NOME CARTA": "GIUSEPPE R. - Sangi",
+    "NOME CARTA": "GIUSEPPE R - Sangi",
     "N.": 60,
     "RARITA'": "LEGGENDARIO",
     "COSTO": 1,
@@ -4409,7 +4409,7 @@
   },
   {
     "ID": 233,
-    "NOME CARTA": "ANTONIO CAL. - Regista dell'Amaca",
+    "NOME CARTA": "ANTONIO CAL - Regista dell'Amaca",
     "N.": 61,
     "RARITA'": "NON COMUNE",
     "COSTO": 1,
@@ -4428,7 +4428,7 @@
   },
   {
     "ID": 234,
-    "NOME CARTA": "NINO CERV. - Fornitore di Marmellate",
+    "NOME CARTA": "NINO CERV - Fornitore di Marmellate",
     "N.": 62,
     "RARITA'": "RARO",
     "COSTO": 5,
@@ -4447,7 +4447,7 @@
   },
   {
     "ID": 235,
-    "NOME CARTA": "DOTT. LAMBERTI - Tuttologo Dormiente",
+    "NOME CARTA": "DOTT LAMBERTI - Tuttologo Dormiente",
     "N.": 63,
     "RARITA'": "SUPER RARO",
     "COSTO": 8,
@@ -4466,7 +4466,7 @@
   },
   {
     "ID": 236,
-    "NOME CARTA": "MARICA G. - Presidente di Moonlight",
+    "NOME CARTA": "MARICA G - Presidente di Moonlight",
     "N.": 64,
     "RARITA'": "NON COMUNE",
     "COSTO": 5,
