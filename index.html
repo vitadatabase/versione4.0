@@ -377,13 +377,17 @@ function aggiornaMazzo() {
   for(const id in mazzo) {
     const carta = tutteLeCarte.find(c=>c.ID === id);
     if (!carta) continue;
-    const nome = carta ? carta["NOME CARTA"] : `ID ${id}`;
-    tot+=mazzo[id];
+    const nome = carta["NOME CARTA"];
     const li=document.createElement('li');
     li.textContent=`${nome} x${mazzo[id]}`;
+    tot+=mazzo[id];
+    
     const btn=document.createElement('button');
     btn.textContent='Rimuovi';
-    btn.onclick= ()=>{mazzo[id]>1?mazzo[id]--:delete mazzo[id]; aggiornaMazzo();}
+    btn.onclick= ()=>{
+      mazzo[id]>1?mazzo[id]--:delete mazzo[id]; 
+      aggiornaMazzo();
+    };
     li.appendChild(btn);
     ul.appendChild(li);
   }
