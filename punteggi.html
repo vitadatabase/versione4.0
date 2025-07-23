@@ -67,6 +67,58 @@
       margin-top: 0.5em;
       font-weight: bold;
     }
+
+    .mazzo-finito {
+      margin-top: 0.8em;
+      padding: 0.4em 0.8em;
+      font-size: 0.9em;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .vittoria-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .vittoria-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    
+    .vittoria-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 1em;
+    }
+    
+    .vittoria-buttons button {
+      font-size: 1.1em;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .vittoria-buttons button:first-child {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    .vittoria-buttons button:last-child {
+      background-color: #4CAF50;
+      color: white;
+    }
+
   </style>
 </head>
 <body>
@@ -91,7 +143,8 @@
           <div class="punteggio" id="punti${i}">0</div>
           <button onclick="cambia(${i}, 1)">+</button>
         </div>
-        <div class="giocatore">Giocatore ${i}</div>
+        <div class="giocatore" id="nomeGiocatore${i}" onclick="modificaNome(${i})">Giocatore ${i}</div>
+        <button onclick="fineMazzo(${i})" class="mazzo-finito">Ho finito il mazzo</button>
       `;
       board.appendChild(div);
     }
@@ -102,6 +155,103 @@
       val = Math.max(0, Math.min(20, val + delta));
       el.textContent = val;
     }
+    function modificaNome(id) {
+      const div = document.getElementById('nomeGiocatore' + id);
+      const currentName = div.textContent;
+    
+      // Crea input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = currentName;
+      input.style.width = '100%';
+      input.style.fontWeight = 'bold';
+      input.style.fontSize = '1em';
+    
+      // Quando finisci di modificare (fuori focus o enter)
+      function salva() {
+        const nuovoNome = input.value.trim() || `Giocatore ${id}`;
+        div.textContent = nuovoNome;
+        div.style.display = 'block';
+        input.remove();
+      }
+    
+      input.addEventListener('blur', salva);
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          input.blur();
+        }
+        if (e.key === 'Escape') {
+          input.value = currentName;
+          input.blur();
+        }
+      });
+    
+      // Nascondi il div e metti input
+      div.style.display = 'none';
+      div.parentNode.insertBefore(input, div);
+      input.focus();
+      input.select();
+    }
+
+    function fineMazzo(id) {
+      mostraVittoria(id);
+    }
+    
+    function cambia(id, delta) {
+      const el = document.getElementById('punti' + id);
+      let val = parseInt(el.textContent);
+      val = Math.max(0, Math.min(20, val + delta));
+      el.textContent = val;
+    
+      if (val === 20) {
+        mostraVittoria(id);
+      }
+    }
+    
+    function mostraVittoria(id) {
+      if (document.getElementById('overlayVittoria')) return; // già mostrata
+    
+      const nome = document.getElementById('nomeGiocatore' + id).textContent;
+    
+      const overlay = document.createElement('div');
+      overlay.id = 'overlayVittoria';
+      overlay.className = 'vittoria-overlay';
+    
+      const img = document.createElement('img');
+      img.src = 'vittoria.gif';
+      img.alt = 'Vittoria!';
+    
+      const buttons = document.createElement('div');
+      buttons.className = 'vittoria-buttons';
+    
+      const homeBtn = document.createElement('button');
+      homeBtn.textContent = 'Torna alla home';
+      homeBtn.onclick = () => window.location.href = 'home.html';
+    
+      const restartBtn = document.createElement('button');
+      restartBtn.textContent = 'Ancora una partita?';
+      restartBtn.onclick = () => window.location.href = 'nuova_partita.html';
+    
+      buttons.appendChild(homeBtn);
+      buttons.appendChild(restartBtn);
+    
+      overlay.appendChild(img);
+    
+      // Dopo 10 secondi, mostra i bottoni
+      setTimeout(() => {
+        const messaggio = document.createElement('div');
+        messaggio.style.color = 'white';
+        messaggio.style.fontSize = '1.4em';
+        messaggio.style.marginTop = '1em';
+        messaggio.innerHTML = `🏆 <strong>${nome}</strong> ha vinto!`;
+        overlay.appendChild(messaggio);
+        overlay.appendChild(buttons);
+      }, 10000);
+    
+      document.body.appendChild(overlay);
+    }
+
+
   </script>
 </body>
 </html>
