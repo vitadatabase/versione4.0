@@ -375,7 +375,7 @@ function aggiornaMazzo() {
   ul.innerHTML='';
   let tot=0;
   for(const id in mazzo) {
-    const carta = tutteLeCarte.find(c=>c.ID === id);
+    const carta = tutteLeCarte.find(c=> String(c.ID) === String(id));
     if (!carta) continue;
     const nome = carta["NOME CARTA"];
     const li=document.createElement('li');
