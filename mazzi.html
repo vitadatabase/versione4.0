@@ -105,21 +105,11 @@
     // Espone funzione per caricare un mazzo
     window.caricaMazzoFirebase = async function(nomeMazzo, mazzoData, username = "Anonimo") {
       try {
-        const res = await fetch('cards.json');
-        const cards = await res.json();
-
-        const mazzoConID = {};
-        for (const nomeCarta in mazzoData) {
-          const carta = cards.find(c => c["NOME CARTA"] === nomeCarta);
-          if (!carta || !carta.ID) continue;
-          mazzoConID[carta.ID.toString()] = mazzoData[nomeCarta];
-        }
-        
         const nuovoRef = push(ref(db, "mazzi"));
         await set(nuovoRef, {
           username,
           nomeMazzo,
-          mazzo: mazzoConID,
+          mazzo: mazzoData,
           timestamp: Date.now()
         });
         alert(`Mazzo "${nomeMazzo}" caricato sull'Albo d'Oro!`);
@@ -131,9 +121,15 @@
 
 <script>
   // Carica mazzi da localStorage, mostra ordinati per nome
-  function caricaMazzi() {
+  async function caricaMazzi() {
     const container = document.getElementById('listaMazzi');
     container.innerHTML = '';
+    const cardsRes = await fetch('cards.json');
+    const cards = await cardsRes.json();
+    
+    const idToCarta = {};
+    cards.forEach(c => idToCarta[c.ID] = c);
+    
     const keys = Object.keys(localStorage)
       .filter(k => k.startsWith('mazzo_'))
       .sort();
@@ -153,17 +149,12 @@
       }
       if (!mazzo) return;
 
-      // Ottieni carte nel mazzo con dati da database e ordina per COSTO crescente
-      // Per avere info carte serve fetch cards.json sincronizzato? Facciamo asincrono:
-      fetch('cards.json')
-        .then(res => res.json())
-        .then(cardsDatabase => {
-          // Converte mazzo {nomeCarta: qty} in array con info
+
           const carteConInfo = [];
-          for (const nomeCarta in mazzo) {
-            const cartaInfo = cardsDatabase.find(c => c["NOME CARTA"] === nomeCarta);
-            if (!cartaInfo) continue;
-            carteConInfo.push({ nomeCarta, qty: mazzo[nomeCarta], costo: cartaInfo.COSTO || 0 });
+          for (const id in mazzo) {
+            const carta = idToCarta[id];
+            if (!carta) continue;
+            carteConInfo.push({ nomeCarta: carta["NOME CARTA"], qty: mazzo[id], costo: carta.COSTO || 0 });
           }
           carteConInfo.sort((a,b) => a.costo - b.costo);
           const totaleCarte = carteConInfo.reduce((sum, c) => sum + c.qty, 0);
@@ -187,7 +178,7 @@
           } else {
             titolo.textContent += ` (${totaleCarte} carte)`;
           }
-
+          infoDiv.appendChild(titolo);
 
           const cardsText = carteConInfo.map(c => `${c.nomeCarta} (${c.qty})`).join(', ');
           const cardsDiv = document.createElement('div');
