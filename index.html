@@ -354,7 +354,7 @@ function aggiungiAlMazzo(id) {
   const carta = tutteLeCarte.find(c=>c.ID === id);
   const max = (carta["RARITA'"].toUpperCase()==='PROMO') ? 1 : 3;
   if ((mazzo[id]||0)>=max) return alert(`puoi avere massimo ${max} copie di questa carta!`);
-  mazzo[nome] = (mazzo[id]||0) +1;
+  mazzo[id] = (mazzo[id]||0) +1;
   aggiornaMazzo();
   mostraMessaggio();
 }
