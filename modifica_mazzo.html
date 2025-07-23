@@ -164,6 +164,10 @@
           <h3>Distribuzione per Costo</h3>
           <canvas id="graficoCosto" width="400" height="300"></canvas>
         </div>
+        <div>
+          <h3>Distribuzione Inchiostrabile</h3>
+          <canvas id="chartInchiostrabile" width="400" height="300"></canvas>
+        </div>
       </div>
     </section>
   </main>
@@ -475,6 +479,7 @@
             legend: { display: false }
           }
         }
+      });
           
         if(window.graficoInchiostrabile) {
           window.graficoInchiostrabile.destroy();
