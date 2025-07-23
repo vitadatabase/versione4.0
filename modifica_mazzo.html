@@ -196,7 +196,7 @@
 	    const pietraSet = new Set();
 	    const costoSet = new Set();
 	
-	    for (const nome in mazzo) {
+	    for (const id in mazzo) {
 	      const carta = cardsDatabase.find(c => String(c['ID']) === String(id));
 	      if (!carta) continue;
 	      pietraSet.add(carta['PIETRA']);
