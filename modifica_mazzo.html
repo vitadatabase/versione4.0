@@ -397,6 +397,7 @@
     function aggiornaGrafici() {
       const tipoCount = {};
       const costoCount = {};
+      const inchiostrabileCount = {};
     
       for (const id in mazzo) {
         const carta = cardsDatabase.find(c => String(c['ID']) === String(id));
@@ -409,15 +410,23 @@
         // Conta per Costo
         const costo = carta['COSTO'];
         costoCount[costo] = (costoCount[costo] || 0) + mazzo[id];
+
+        // Conteggio INCHIOSTRABILE
+        const valore = carta['INCHIOSTRABILE'] || 'Sconosciuto';
+        inchiostrabileCount[valore] = (inchiostrabileCount[valore] || 0) + mazzo[id];
       }
     
       const tipi = Object.keys(tipoCount);
       const quantitaTipo = tipi.map(t => tipoCount[t]);
       const costi = Object.keys(costoCount).sort((a,b) => a - b);
       const quantitaCosto = costi.map(c => costoCount[c]);
+      const labelsInchiostrabile = Object.keys(inchiostrabileCount);
+      const dataInchiostrabile = Object.values(inchiostrabileCount);
+      
     
       // Colori generici per il grafico a torta
       const coloriTipo = tipi.map((_, i) => `hsl(${i * 60 % 360}, 70%, 60%)`);
+      const colorsInchiostrabile = labelsInchiostrabile.map(() => `hsl(${Math.random()*360}, 70%, 60%)`);
     
       // Grafico a torta per Tipo
       const ctxTipo = document.getElementById('graficoTipo').getContext('2d');
@@ -466,6 +475,27 @@
             legend: { display: false }
           }
         }
+          
+        if(window.graficoInchiostrabile) {
+          window.graficoInchiostrabile.destroy();
+        }        
+        const ctxInchiostrabile = document.getElementById('chartInchiostrabile').getContext('2d');
+        window.graficoInchiostrabile = new Chart(ctxInchiostrabile, {
+            type: 'pie',
+            data: {
+              labels: labelsInchiostrabile,
+              datasets: [{
+                data: dataInchiostrabile,
+                backgroundColor: colorsInchiostrabile,
+              }]
+          },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { position: 'right' },
+                title: { display: true, text: 'Distribuzione INCHIOSTRABILE nel mazzo' }
+              }
+          }
       });
     }
 
