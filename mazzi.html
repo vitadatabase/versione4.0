@@ -103,8 +103,7 @@
     const db = getDatabase(app);
   
     // Espone funzione per caricare un mazzo
-    window.caricaMazzoFirebase = async function(nomeMazzo, mazzoData) {
-      const username = prompt("Inserisci il tuo nome utente per questo mazzo") || "Anonimo";
+    window.caricaMazzoFirebase = async function(nomeMazzo, mazzoData, username = "Anonimo") {
       try {
         const nuovoRef = push(ref(db, "mazzi"));
         await set(nuovoRef, {
@@ -195,13 +194,32 @@
           // Carica su Albo d'Oro
           const btnCarica = document.createElement('button');
           btnCarica.textContent = 'Carica';
-          btnCarica.onclick = () => {
-            if (typeof caricaMazzoFirebase === "function") {
-              caricaMazzoFirebase(nomeMazzo, mazzo);
+          
+            if (fuoriRange) {
+              btnCarica.disabled = true;
+              btnCarica.title = "Mazzo incompleto: deve avere tra 50 e 70 carte";
+              btnCarica.style.opacity = "0.5";
+              btnCarica.style.cursor = "not-allowed";
             } else {
-              alert("Funzione caricaMazzoFirebase non disponibile.");
+              btnCarica.onclick = () => {
+            const username = prompt("Inserisci il tuo nome utente per questo mazzo") || "Anonimo";
+          
+            const conferma = confirm(
+              `Sei sicuro di voler caricare il mazzo "${nomeMazzo}" come utente "${username}"?\n` +
+              "⚠️ Questa azione non può essere annullata."
+            );
+          
+            if (conferma) {
+              if (typeof caricaMazzoFirebase === "function") {
+                caricaMazzoFirebase(nomeMazzo, mazzo, username); // passiamo anche lo username
+              } else {
+                alert("Funzione caricaMazzoFirebase non disponibile.");
+              }
+            } else {
+              alert("Caricamento annullato.");
             }
           };
+
           buttonsDiv.appendChild(btnCarica);
 
           // Modifica
