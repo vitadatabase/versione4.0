@@ -105,11 +105,21 @@
     // Espone funzione per caricare un mazzo
     window.caricaMazzoFirebase = async function(nomeMazzo, mazzoData, username = "Anonimo") {
       try {
+        const res = await fetch('cards.json');
+        const cards = await res.json();
+
+        const mazzoConID = {};
+        for (const nomeCarta in mazzoData) {
+          const carta = cards.find(c => c["NOME CARTA"] === nomeCarta);
+          if (!carta || !carta.ID) continue;
+          mazzoConID[carta.ID] = mazzoData[nomeCarta];
+        }
+        
         const nuovoRef = push(ref(db, "mazzi"));
         await set(nuovoRef, {
           username,
           nomeMazzo,
-          mazzo: mazzoData,
+          mazzo: mazzoConID,
           timestamp: Date.now()
         });
         alert(`Mazzo "${nomeMazzo}" caricato sull'Albo d'Oro!`);
