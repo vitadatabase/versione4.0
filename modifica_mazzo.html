@@ -53,6 +53,10 @@
     .carte-container img:hover {
       transform: scale(1.2);
     }
+    .carta-orizzontale {
+      width: auto;
+      height: 80px;  
+    }
     .popup {
       display: none;
       position: fixed;
@@ -254,6 +258,10 @@
 	        const img = document.createElement('img');
 	        img.src = `img/${numero}.jpg`;
 	        img.alt = nome;
+
+          if (carta['TIPO'] === 'LUOGO') {
+            img.classList.add('carta-orizzontale');
+          }
 	
 	        if (modalitaElimina) {
 	          img.onclick = () => {
