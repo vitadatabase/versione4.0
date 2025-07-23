@@ -341,7 +341,7 @@
 	    }
 	    popup.querySelector('img').src = src;
     }
-    function aggiungiCarta(nome) {
+    function aggiungiCarta(id) {
       const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
       const carta = cardsDatabase.find(c => c["ID"] === id);
       const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 3;
