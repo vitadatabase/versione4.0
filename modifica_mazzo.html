@@ -152,6 +152,20 @@
 
     <div class="carte-container" id="contenitoreCarte"></div>
     <div id="totaleCarte"></div>
+
+    <section id="statisticheMazzo" style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); max-width: 1200px; margin-left: auto; margin-right: auto;">
+      <h2>Statistiche del Mazzo</h2>
+      <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
+        <div>
+          <h3>Distribuzione per Tipo</h3>
+          <canvas id="graficoTipo" width="400" height="300"></canvas>
+        </div>
+        <div>
+          <h3>Distribuzione per Costo</h3>
+          <canvas id="graficoCosto" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </section>
   </main>
 
   <div class="overlay" id="overlay"></div>
@@ -289,6 +303,7 @@
       }
 
 	    aggiornaTremolio();
+      aggiornaGrafici();
 	    }
 	
 	  function rimuoviCarta(id) {
@@ -376,6 +391,84 @@
       document.getElementById('inputRicerca').value = '';
       document.getElementById('risultatiRicerca').innerHTML = '';
     }
+    let graficoTipoInstance = null;
+    let graficoCostoInstance = null;
+    
+    function aggiornaGrafici() {
+      const tipoCount = {};
+      const costoCount = {};
+    
+      for (const id in mazzo) {
+        const carta = cardsDatabase.find(c => String(c['ID']) === String(id));
+        if (!carta) continue;
+    
+        // Conta per Tipo
+        const tipo = carta['TIPO'];
+        tipoCount[tipo] = (tipoCount[tipo] || 0) + mazzo[id];
+    
+        // Conta per Costo
+        const costo = carta['COSTO'];
+        costoCount[costo] = (costoCount[costo] || 0) + mazzo[id];
+      }
+    
+      const tipi = Object.keys(tipoCount);
+      const quantitaTipo = tipi.map(t => tipoCount[t]);
+      const costi = Object.keys(costoCount).sort((a,b) => a - b);
+      const quantitaCosto = costi.map(c => costoCount[c]);
+    
+      // Colori generici per il grafico a torta
+      const coloriTipo = tipi.map((_, i) => `hsl(${i * 60 % 360}, 70%, 60%)`);
+    
+      // Grafico a torta per Tipo
+      const ctxTipo = document.getElementById('graficoTipo').getContext('2d');
+      if (graficoTipoInstance) graficoTipoInstance.destroy();
+      graficoTipoInstance = new Chart(ctxTipo, {
+        type: 'pie',
+        data: {
+          labels: tipi,
+          datasets: [{
+            data: quantitaTipo,
+            backgroundColor: coloriTipo,
+            borderColor: '#fff',
+            borderWidth: 2,
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'right' }
+          }
+        }
+      });
+    
+      // Grafico a barre per Costo
+      const ctxCosto = document.getElementById('graficoCosto').getContext('2d');
+      if (graficoCostoInstance) graficoCostoInstance.destroy();
+      graficoCostoInstance = new Chart(ctxCosto, {
+        type: 'bar',
+        data: {
+          labels: costi,
+          datasets: [{
+            label: 'Numero carte',
+            data: quantitaCosto,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, stepSize: 1, ticks: { precision: 0 } },
+            x: { title: { display: true, text: 'Costo' } }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
 
   </script>
 </body>
