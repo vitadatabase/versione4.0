@@ -254,9 +254,20 @@ document.getElementById('toggleSidebar').onclick = () =>
   document.getElementById('sidebar').classList.toggle('open');
 
 document.getElementById('mazzoBtn').onclick = () => {
-  aggiornaMazzo();
-  document.getElementById('mazzoPopup').style.display = 'block';
-  document.getElementById('overlay').style.display = 'block';
+  if (tutteLeCarte.length === 0) {
+    fetch('cards.json')
+      .then(r => r.json())
+      .then(data => {
+        tutteLeCarte = data;
+        aggiornaMazzo();
+        document.getElementById('mazzoPopup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+      });
+  } else {
+    aggiornaMazzo();
+    document.getElementById('mazzoPopup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
 };
 
 document.getElementById('salvaMazzo').onclick = () => {
@@ -365,6 +376,7 @@ function aggiornaMazzo() {
   let tot=0;
   for(const id in mazzo) {
     const carta = tutteLeCarte.find(c=>c.ID === id);
+    if (!carta) continue;
     const nome = carta ? carta["NOME CARTA"] : `ID ${id}`;
     tot+=mazzo[id];
     const li=document.createElement('li');
