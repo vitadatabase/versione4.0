@@ -197,7 +197,7 @@
 	    const costoSet = new Set();
 	
 	    for (const nome in mazzo) {
-	      const carta = cardsDatabase.find(c => c['NOME CARTA'] === nome);
+	      const carta = cardsDatabase.find(c => c['ID'] === id);
 	      if (!carta) continue;
 	      pietraSet.add(carta['PIETRA']);
 	      costoSet.add(carta['COSTO']);
@@ -346,7 +346,7 @@
       const carta = cardsDatabase.find(c => c["ID"] === id);
       const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 3;
     
-      if (mazzo[id] >= max) {
+      if ((mazzo[id] || 0) >= max) {
         alert(`Puoi avere al massimo ${max} copie di questa carta.`);
         return;
       }
