@@ -330,7 +330,7 @@ function mostraCarte(carte) {
     img.onclick = () => apriPopup(carta);
     const btn = document.createElement('button');
     btn.className = 'btn-add';
-    btn.onclick = () => aggiungiAlMazzo(carta["NOME CARTA"]);
+    btn.onclick = () => aggiungiAlMazzo(carta["ID"]);
     
     const imgBtn = document.createElement('img');
     imgBtn.src = 'symbols/add.jpg';
@@ -348,10 +348,10 @@ function mostraCarte(carte) {
   });
 }
 
-function aggiungiAlMazzo(nome) {
+function aggiungiAlMazzo(id) {
   const totale = Object.values(mazzo).reduce((a,b)=>a+b,0);
   if (totale>=70) return alert('Mazzo pieno!');
-  const carta = tutteLeCarte.find(c=>c["ID"]===id);
+  const carta = tutteLeCarte.find(c=>c.ID === id);
   const max = (carta["RARITA'"].toUpperCase()==='PROMO') ? 1 : 3;
   if ((mazzo[id]||0)>=max) return alert(`puoi avere massimo ${max} copie di questa carta!`);
   mazzo[nome] = (mazzo[id]||0) +1;
@@ -363,12 +363,12 @@ function aggiornaMazzo() {
   const ul = document.getElementById('mazzo');
   ul.innerHTML='';
   let tot=0;
-  for(const n in mazzo) {
+  for(const id in mazzo) {
     const carta = tutteLeCarte.find(c=>c.ID === id);
     const nome = carta ? carta["NOME CARTA"] : `ID ${id}`;
     tot+=mazzo[id];
     const li=document.createElement('li');
-    li.textContent=`${n} x${mazzo[id]}`;
+    li.textContent=`${nome} x${mazzo[id]}`;
     const btn=document.createElement('button');
     btn.textContent='Rimuovi';
     btn.onclick= ()=>{mazzo[id]>1?mazzo[id]--:delete mazzo[id]; aggiornaMazzo();}
