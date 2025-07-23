@@ -112,7 +112,7 @@
         for (const nomeCarta in mazzoData) {
           const carta = cards.find(c => c["NOME CARTA"] === nomeCarta);
           if (!carta || !carta.ID) continue;
-          mazzoConID[carta.ID] = mazzoData[nomeCarta];
+          mazzoConID[carta.ID.toString()] = mazzoData[nomeCarta];
         }
         
         const nuovoRef = push(ref(db, "mazzi"));
