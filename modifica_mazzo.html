@@ -197,7 +197,7 @@
 	    const costoSet = new Set();
 	
 	    for (const nome in mazzo) {
-	      const carta = cardsDatabase.find(c => c['ID'] === id);
+	      const carta = cardsDatabase.find(c => String(c['ID']) === String(id));
 	      if (!carta) continue;
 	      pietraSet.add(carta['PIETRA']);
 	      costoSet.add(carta['COSTO']);
@@ -234,7 +234,7 @@
 	
 	    const carteOrdinate = Object.keys(mazzo)
 	      .map(id => {
-	        const carta = cardsDatabase.find(c => c['ID'] === id);
+	        const carta = cardsDatabase.find(c => String(c['ID']) === String(id));
 	        return carta ? { carta, id } : null;
 	      })
 	      .filter(e => e !== null)
