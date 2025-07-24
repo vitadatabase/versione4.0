@@ -55,6 +55,48 @@
       padding: 0.5em;
       margin-bottom: 1em;
     }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    
+    .dropdown-toggle {
+      width: 100%;
+      padding: 0.5em;
+      background: white;
+      border: 1px solid #ccc;
+      text-align: left;
+      cursor: pointer;
+    }
+    
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      width: 100%;
+      background: white;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 999;
+    }
+    
+    .dropdown.open .dropdown-menu {
+      display: block;
+    }
+    .dropdown-menu label {
+      display: block;
+      padding: 0.3em 0.5em;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    
+    .dropdown-menu input[type="checkbox"] {
+      margin-right: 0.5em;
+    }
+
     #search-container {
       margin-top: 150px;
     }
@@ -204,22 +246,81 @@
   <div id="messaggioAggiunta">Carta aggiunta al mazzo!</div>
 
   <div id="sidebar">
-    <select id="filtroSet"><option value="">SET</option><option>UN NUOVO INIZIO</option><option>DIETRO LE QUINTE</option></select>
-    <select id="filtroPietra"><option value="">PIETRA</option><option>ACCIAIO</option><option>AMBRA</option><option>AMETISTA</option><option>RUBINO</option><option>SMERALDO</option><option>ZAFFIRO</option><option>DIAMANTE</option></select>
-    <select id="filtroRarita"><option value="">RARITÀ</option><option>COMUNE</option><option>NON COMUNE</option><option>RARO</option><option>SUPER RARO</option><option>LEGGENDARIO</option><option>PROMO</option></select>
-    <select id="filtroClassificazione">
-      <option value="">CLASSIFICAZIONE</option>
-      <option>ANIMALE</option><option>ATTENDIAMOCI</option><option>COALIZZATI</option>
-      <option>COLLEGA</option><option>DISERTORE</option><option>EREMITA</option><option>FANTASIOSO</option>
-      <option>FRATELLANZA</option><option>FREQUENTANTE</option><option>FONDATORE</option><option>GUIDA</option>
-      <option>PARENTE</option><option>POTENZIATO</option><option>PROTAGONISTA</option>
-      <option>SOSTENITORE</option><option>STARLIGHT</option>
-    </select>
-    <select id="filtroTipo">
-      <option value="">TIPO</option>
-      <option>PERSONAGGIO</option><option>OGGETTO</option><option>AZIONE</option><option>LUOGO</option><option>AZIONE (CANZONE)</option>
-    </select>
-    <select id="filtroCosto"><option value="">COSTO</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Set')">SET</button>
+      <div class="dropdown-menu" id="dropdownSet">
+        <label><input type="checkbox" value="UN NUOVO INIZIO"> UN NUOVO INIZIO</label>
+        <label><input type="checkbox" value="DIETRO LE QUINTE"> DIETRO LE QUINTE</label>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Pietra')">PIETRA</button>
+      <div class="dropdown-menu" id="dropdownPietra">
+        <label><input type="checkbox" value="ZAFFIRO"> ACCIAIO</label>
+        <label><input type="checkbox" value="AMBRA"> AMBRA</label>
+        <label><input type="checkbox" value="AMETISTA"> AMETISTA</label>
+        <label><input type="checkbox" value="DIAMANTE"> DIAMANTE</label>
+        <label><input type="checkbox" value="RUBINO"> RUBINO</label>
+        <label><input type="checkbox" value="SMERALDO"> SMERALDO</label>
+        <label><input type="checkbox" value="ZAFFIRO"> ZAFFIRO</label>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Rarita')">RARITÀ</button>
+      <div class="dropdown-menu" id="dropdownRarita">
+        <label><input type="checkbox" value="COMUNE"> COMUNE</label>
+        <label><input type="checkbox" value="NON COMUNE"> NON COMUNE</label>
+        <label><input type="checkbox" value="RARO"> RARO</label>
+        <label><input type="checkbox" value="SUPER RARO"> SUPER RARO</label>
+        <label><input type="checkbox" value="LEGGENDARIO"> LEGGENDARIO</label>
+        <label><input type="checkbox" value="PROMO"> PROMO</label>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Classificazione')">CLASSIFICAZIONE</button>
+      <div class="dropdown-menu" id="dropdownClassificazione">
+        <label><input type="checkbox" value="ANIMALE"> ANIMALE</label>
+        <label><input type="checkbox" value="ATTENDIAMOCI"> ATTENDIAMOCI</label>
+        <label><input type="checkbox" value="COALIZZATI"> COALIZZATI</label>
+        <label><input type="checkbox" value="COLLEGA"> COLLEGA</label>
+        <label><input type="checkbox" value="DISERTORE"> DISERTORE</label>
+        <label><input type="checkbox" value="EREMITA"> EREMITA</label>
+        <label><input type="checkbox" value="FANTASIOSO"> FANTASIOSO</label>
+        <label><input type="checkbox" value="FRATELLANZA"> FRATELLANZA</label>
+        <label><input type="checkbox" value="FREQUENTANTE"> FREQUENTANTE</label>
+        <label><input type="checkbox" value="FONDATORE"> FONDATORE</label>
+        <label><input type="checkbox" value="GUIDA"> GUIDA</label>
+        <label><input type="checkbox" value="PARENTE"> PARENTE</label>
+        <label><input type="checkbox" value="POTENZIATO"> POTENZIATO</label>
+        <label><input type="checkbox" value="PROTAGONISTA"> PROTAGONISTA</label>
+        <label><input type="checkbox" value="SOSTENITORE"> SOSTENITORE</label>
+        <label><input type="checkbox" value="STARLIGHT"> STARLIGHT</label>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Tipo')">TIPO</button>
+      <div class="dropdown-menu" id="dropdownTipo">
+        <label><input type="checkbox" value="PERSONAGGIO"> PERSONAGGIO</label>
+        <label><input type="checkbox" value="OGGETTO"> OGGETTO</label>
+        <label><input type="checkbox" value="AZIONE"> AZIONE</label>
+        <label><input type="checkbox" value="LUOGO"> LUOGO</label>
+        <label><input type="checkbox" value="AZIONE (CANZONE)"> AZIONE (CANZONE)</label>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropdown-toggle" onclick="toggleDropdown('Costo')">COSTO</button>
+      <div class="dropdown-menu" id="dropdownCosto">
+        <label><input type="checkbox" value="1"> 1</label>
+        <label><input type="checkbox" value="2"> 2</label>
+        <label><input type="checkbox" value="3"> 3</label>
+        <label><input type="checkbox" value="4"> 4</label>
+        <label><input type="checkbox" value="5"> 5</label>
+        <label><input type="checkbox" value="6"> 6</label>
+        <label><input type="checkbox" value="7"> 7</label>
+        <label><input type="checkbox" value="8"> 8</label>
+        <label><input type="checkbox" value="9"> 9</label>
+      </div>
+    </div>
     <select id="sortBy"><option value="">ORDINA PER</option><option value="nome">NOME</option><option value="costo">COSTO</option><option value="rarita">RARITÀ</option></select>
     <button onclick="filtraCarte()">🎯 Applica Filtri</button>
     <button onclick="resetFiltri()">♻️ Reimposta filtri</button>
@@ -281,14 +382,34 @@ fetch('cards.json')
   .then(r => r.json())
   .then(data => { tutteLeCarte = data; mostraCarte(data); });
 
+function toggleDropdown(id) {
+  const clicked = document.querySelector(`.dropdown-toggle[onclick*="${id}"]`).parentElement;
+  const isOpen = clicked.classList.contains('open');
+
+  // Chiude tutti
+  document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+
+  // Se quello cliccato non era già aperto, aprilo
+  if (!isOpen) {
+    clicked.classList.add('open');
+  }
+  
+  aggiornaStileFiltri();
+}
+
+function getSelectedCheckboxes(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} input[type=checkbox]:checked`))
+    .map(cb => cb.value.toUpperCase());
+}
+
 function filtraCarte() {
   const testo = document.getElementById('search').value.toLowerCase();
-  const set = document.getElementById('filtroSet').value.toLowerCase();
-  const pietra = document.getElementById('filtroPietra').value.toLowerCase();
-  const rarita = document.getElementById('filtroRarita').value.toLowerCase();
-  const classi = document.getElementById('filtroClassificazione').value.trim().toLowerCase();
-  const tipo = document.getElementById('filtroTipo').value.toLowerCase();
-  const costo = document.getElementById('filtroCosto').value;
+  const set = getSelectedCheckboxes('dropdownSet');
+  const pietre = getSelectedCheckboxes('dropdownPietra');
+  const rarita = getSelectedCheckboxes('dropdownRarita');
+  const classi = getSelectedCheckboxes('dropdownClassificazione');
+  const tipo = getSelectedCheckboxes('dropdownTipo');
+  const costo = getSelectedCheckboxes('dropdownCosto');
   const sortBy = document.getElementById('sortBy').value;
 
   let filtrate = tutteLeCarte.filter(c =>
@@ -296,12 +417,12 @@ function filtraCarte() {
       (c["NOME CARTA"] || '').toLowerCase().includes(testo) ||
       (c["EFFETTI"] || '').toLowerCase().includes(testo)
     )) &&
-    (!set || (c.SET||'').toLowerCase() === set) &&
-    (!pietra || (c.PIETRA||'').toLowerCase() === pietra) &&
-    (!rarita || (c["RARITA'"]||'').toLowerCase() === rarita) &&
-    (!classi || (c.CLASSIFICAZIONE || '').toLowerCase().replace(/\s+/g, ' ').includes(classi))&&
-    (!tipo || (c.TIPO||'').toLowerCase() === tipo) &&
-    (!costo || (c.COSTO+'') === costo)
+    (set.length === 0 || set.includes((c.SET || '').toUpperCase())) &&
+    (pietre.length === 0 || pietre.includes((c.PIETRA || '').toUpperCase())) &&
+    (rarita.length === 0 || rarita.includes((c["RARITA'"] || '').toUpperCase())) &&
+    (classi.length === 0 || classi.includes((c.CLASSIFICAZIONE || '').toUpperCase())) &&
+    (tipo.length === 0 || tipo.includes((c.TIPO || '').toUpperCase())) &&
+    (costo.length === 0 || costo.includes((c.COSTO + '')))
   );
 
   if (sortBy) filtrate.sort((a,b) => {
@@ -311,19 +432,28 @@ function filtraCarte() {
   });
 
   mostraCarte(filtrate);
+  aggiornaStileFiltri();
 }
 
 function resetFiltri() {
   document.getElementById('search').value = '';
-  document.getElementById('filtroSet').value = '';
-  document.getElementById('filtroPietra').value = '';
-  document.getElementById('filtroRarita').value = '';
-  document.getElementById('filtroClassificazione').value = '';
-  document.getElementById('filtroTipo').value = '';
-  document.getElementById('filtroCosto').value = '';
+  ['Set', 'Pietra', 'Rarita', 'Classificazione', 'Tipo', 'Costo'].forEach(id => {
+    document.querySelectorAll(`#dropdown${id} input[type=checkbox]`).forEach(cb => cb.checked = false);
+  });
   document.getElementById('sortBy').value = '';
   filtraCarte();
+  aggiornaStileFiltri();
 }
+
+function aggiornaStileFiltri() {
+  ['Set', 'Pietra', 'Rarita', 'Classificazione', 'Tipo', 'Costo'].forEach(id => {
+    const checkboxes = document.querySelectorAll(`#dropdown${id} input[type=checkbox]`);
+    const attivi = Array.from(checkboxes).some(cb => cb.checked);
+    const btn = document.querySelector(`.dropdown-toggle[onclick*="${id}"]`);
+    if (btn) btn.style.backgroundColor = attivi ? '#eee' : '';
+  });
+}
+
 
 function mostraCarte(carte) {
   const c = document.getElementById('cards');
@@ -438,6 +568,14 @@ function closeMazzo() {
   document.getElementById('mazzoPopup').style.display='none';
   document.getElementById('overlay').style.display='none';
 }
+
+// Chiudi tutti i dropdown se clicchi fuori
+document.addEventListener('click', function(event) {
+  const isDropdown = event.target.closest('.dropdown');
+  if (!isDropdown) {
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
 </script>
 
 </body>
