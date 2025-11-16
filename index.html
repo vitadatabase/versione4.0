@@ -420,7 +420,7 @@ function filtraCarte() {
     (set.length === 0 || set.includes((c.SET || '').toUpperCase())) &&
     (pietre.length === 0 || pietre.includes((c.PIETRA || '').toUpperCase())) &&
     (rarita.length === 0 || rarita.includes((c["RARITA'"] || '').toUpperCase())) &&
-    (classi.length === 0 || classi.some(cl => (c.CLASSIFICAZIONE || '').toUpperCase().includes(cl)))
+    (classi.length === 0 || classi.some(cl => (c.CLASSIFICAZIONE || '').toUpperCase().includes(cl))) &&
     (tipo.length === 0 || tipo.includes((c.TIPO || '').toUpperCase())) &&
     (costo.length === 0 || costo.includes((c.COSTO + '')))
   );
