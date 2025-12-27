@@ -194,6 +194,40 @@
   </div>
 
   <script>
+    let __cardsPromise = null;
+    
+    async function loadAllCards() {
+      if (__cardsPromise) return __cardsPromise;
+    
+      __cardsPromise = (async () => {
+        try {
+          const manifestRes = await fetch("cards/manifest.json");
+          if (!manifestRes.ok) throw new Error("manifest non trovato");
+          const manifest = await manifestRes.json();
+    
+          const lists = await Promise.all(
+            (manifest.sets || []).map(async (s) => {
+              const r = await fetch(s.file);
+              if (!r.ok) throw new Error(`Errore fetch set: ${s.file} (${r.status})`);
+              const arr = await r.json();
+              return Array.isArray(arr) ? arr : [];
+            })
+          );
+    
+          // Unisce tutti i set in un unico array
+          return lists.flat();
+        } catch (e) {
+          // fallback compatibilità: prova il vecchio cards.json
+          const r = await fetch("cards.json");
+          if (!r.ok) throw e;
+          const data = await r.json();
+          return Array.isArray(data) ? data : [];
+        }
+      })();
+    
+      return __cardsPromise;
+    }
+
     /* =========================================================
        ✅ QUI AGGIUNGI I NUOVI MAZZI (UNA RIGA PER OGNI JSON)
        Quando crei un nuovo file JSON, aggiungi il suo path qui.
@@ -221,10 +255,11 @@
     }
 
     async function loadCardsJson() {
-      const cards = await fetchJson("cards.json");
+      const cards = await loadAllCards();
       idToCarta = {};
       cards.forEach(c => { idToCarta[c.ID] = c; });
     }
+
 
     function openPopupById(idCarta) {
       const carta = idToCarta[idCarta] || null;
