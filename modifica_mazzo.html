@@ -170,6 +170,45 @@
         </div>
       </div>
     </section>
+
+	<section id="exportMazzo" style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); max-width: 1200px; margin-left: auto; margin-right: auto;">
+	  <h2>Esporta mazzo come Database JSON</h2>
+	
+	  <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+	    <label>
+	      Nome file (.json):
+	      <input id="nomeFileJson" type="text" placeholder="starterdeckstarlight.json" style="margin-left:8px; padding:0.5em;">
+	    </label>
+	
+	    <label>
+	      Titolo mazzo:
+	      <input id="titoloJson" type="text" placeholder="Starter Deck Starlight" style="margin-left:8px; padding:0.5em;">
+	    </label>
+	
+	    <label>
+	      Autore:
+	      <input id="autoreJson" type="text" placeholder="Luigi" style="margin-left:8px; padding:0.5em;">
+	    </label>
+	  </div>
+	
+	  <div style="margin-top:12px;">
+	    <label>
+	      Descrizione:
+	      <input id="descrizioneJson" type="text" placeholder="Breve descrizione del mazzo..." style="width:min(900px, 100%); padding:0.5em;">
+	    </label>
+	  </div>
+	
+	  <div style="margin-top:14px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+	    <button id="btnCreaDbMazzo" style="padding: 0.6em 1.2em; font-size: 1.05em; cursor: pointer; background-color: #2d7ef7; border: none; border-radius: 6px; color: white;">
+	      Crea database del mazzo
+	    </button>
+	    <span id="exportInfo" style="color:#444;"></span>
+	  </div>
+	
+	  <div style="margin-top:10px; color:#666; font-size:0.92em;">
+	    Questo pulsante crea un file JSON scaricabile. Poi puoi caricarlo nella cartella <strong>mazzi/</strong> del repository GitHub.
+	  </div>
+	</section>
   </main>
 
   <div class="overlay" id="overlay"></div>
@@ -503,7 +542,77 @@
           }
       });
     }
-
+	function normalizzaNomeFile(nome) {
+	  let n = (nome || "").trim();
+	
+	  // se vuoto, metto un default
+	  if (!n) n = "mazzo.json";
+	
+	  // aggiungo estensione se manca
+	  if (!n.toLowerCase().endsWith(".json")) n += ".json";
+	
+	  // evita path strani, tieni solo nome file base
+	  n = n.split("/").pop().split("\\").pop();
+	
+	  return n;
+	}
+	
+	function scaricaTestoComeFile(nomeFile, testo, mime = "application/json") {
+	  const blob = new Blob([testo], { type: mime });
+	  const url = URL.createObjectURL(blob);
+	
+	  const a = document.createElement("a");
+	  a.href = url;
+	  a.download = nomeFile;
+	  document.body.appendChild(a);
+	  a.click();
+	  a.remove();
+	
+	  URL.revokeObjectURL(url);
+	}
+	
+	function costruisciJsonMazzo() {
+	  // mazzo è già nel tuo script: oggetto tipo { "1": 2, "4": 3, ... }
+	  // lo esportiamo ESATTAMENTE come serve per albodoro.html:
+	  // { titolo, autore, descrizione, carte: { "1":2, ... } }
+	  const titolo = document.getElementById("titoloJson").value.trim() || nomeMazzo || "Mazzo";
+	  const autore = document.getElementById("autoreJson").value.trim();
+	  const descrizione = document.getElementById("descrizioneJson").value.trim();
+	
+	  // opzionale: ordina le chiavi numericamente (solo estetica del file)
+	  const carteOrdinate = {};
+	  Object.keys(mazzo)
+	    .sort((a, b) => Number(a) - Number(b))
+	    .forEach(k => { carteOrdinate[String(k)] = Number(mazzo[k]) || 0; });
+	
+	  return {
+	    titolo,
+	    autore,
+	    descrizione,
+	    carte: carteOrdinate
+	  };
+	}
+	
+	// Hook sul pulsante
+	document.getElementById("btnCreaDbMazzo").onclick = () => {
+	  const nomeFileInput = document.getElementById("nomeFileJson").value;
+	  const nomeFile = normalizzaNomeFile(nomeFileInput);
+	
+	  const data = costruisciJsonMazzo();
+	
+	  // Controllo minimo: mazzo vuoto?
+	  const totale = Object.values(data.carte).reduce((s, v) => s + (Number(v) || 0), 0);
+	  if (totale === 0) {
+	    alert("Il mazzo è vuoto: aggiungi almeno una carta prima di esportare.");
+	    return;
+	  }
+	
+	  const testo = JSON.stringify(data, null, 2);
+	  scaricaTestoComeFile(nomeFile, testo);
+	
+	  const info = document.getElementById("exportInfo");
+	  info.textContent = `✅ Scaricato: ${nomeFile} (totale carte: ${totale})`;
+	};
 
   </script>
 </body>
