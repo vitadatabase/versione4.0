@@ -41,146 +41,312 @@
       text-align: center;
       margin-bottom: 1em;
     }
-    .mazzo {
-      background: white;
-      border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 2em;
-      max-width: 800px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    /* === VETRINA: riquadri/slot fissi === */
+    .grid-mazzi {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 18px;
+      align-items: start;
     }
-    .mazzo-header {
-      font-weight: bold;
-      margin-bottom: 1em;
+    .slot {
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.08);
+      min-height: 240px;
     }
-    .carte {
+    .slot-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .titolo-mazzo {
+      font-weight: 700;
+      font-size: 1.08em;
+      line-height: 1.2;
+    }
+    .meta {
+      font-size: 0.92em;
+      color: #444;
+    }
+    .desc {
+      font-size: 0.92em;
+      color: #333;
+      margin-top: 4px;
+    }
+    .separator {
+      height: 1px;
+      background: rgba(0,0,0,0.12);
+      margin: 10px 0 12px 0;
+    }
+
+    /* === Griglia carte stile enciclopedia === */
+    .carte-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
-    .carte img {
-      width: 80px;
+    .carte-grid img {
+      width: 78px;
       height: auto;
       border-radius: 6px;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.15s;
       border: 1px solid #aaa;
+      background: #fff;
     }
-    .carte img:hover {
-      transform: scale(1.2);
+    .carte-grid img:hover {
+      transform: scale(1.18);
+      z-index: 2;
+    }
+
+    /* === Popup carta (immagine grande + dettagli) === */
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9998;
     }
     #popupCarta {
       display: none;
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background: transparent;
       z-index: 9999;
+      max-width: min(95vw, 900px);
+      width: 92vw;
     }
-    #popupCarta img {
-      max-width: 90vw;
-      max-height: 80vh;
+    .popup-box {
+      background: rgba(255,255,255,0.97);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.35);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .popup-img {
+      max-width: 320px;
+      width: 40vw;
       border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: #fff;
+    }
+    .popup-details {
+      flex: 1;
+      min-width: 220px;
+      font-size: 0.98em;
+      line-height: 1.45;
+      color: #222;
+    }
+    .popup-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 1.05em;
+    }
+    .popup-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .popup-actions button {
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.25);
+      background: #f4f4f4;
+    }
+    .muted {
+      color: #666;
+      font-size: 0.92em;
     }
   </style>
 </head>
 <body>
   <header>
-    <button onclick="window.location.href='home.html'">
+    <button onclick="window.location.href='home.html'" title="Home">
       <img src="logo.jpg" alt="Home">
     </button>
   </header>
+
   <main>
     <h1>Albo d'Oro dei Mazzi</h1>
-    <div id="listaMazzi">Caricamento mazzi...</div>
+    <div id="vetrina" class="grid-mazzi">Caricamento...</div>
   </main>
-  <div id="listaMazzi">Caricamento mazzi...</div>
 
-  <div id="popupCarta" onclick="this.style.display='none'">
-    <img src="" alt="Carta Ingrandita" />
+  <div id="overlay"></div>
+  <div id="popupCarta">
+    <div class="popup-box">
+      <img id="popupImg" class="popup-img" src="" alt="Carta" />
+      <div class="popup-details">
+        <div id="popupTitle" class="popup-title"></div>
+        <div id="popupContent"></div>
+        <div class="popup-actions">
+          <button id="btnChiudi">Chiudi</button>
+        </div>
+        <div class="muted">Suggerimento: clicca fuori dal popup o premi ESC per chiudere.</div>
+      </div>
+    </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  <script>
+    /* =========================================================
+       ✅ QUI AGGIUNGI I NUOVI MAZZI (UNA RIGA PER OGNI JSON)
+       Quando crei un nuovo file JSON, aggiungi il suo path qui.
+       Esempio: "mazzi/starterdeckstarlight.json"
+    ========================================================= */
+    const MAZZI_JSON = [
+      "mazzi/starterdeckstarlight.json",
+      "mazzi/altro_mazzo.json"
+      // aggiungi nuove righe qui...
+    ];
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAVDt2e7O1cUVCFCKuet1ohIvpBdJjTnZo",
-      authDomain: "albo-d-oro-vita-tgc.firebaseapp.com",
-      projectId: "albo-d-oro-vita-tgc",
-      storageBucket: "albo-d-oro-vita-tgc.firebasestorage.app",
-      messagingSenderId: "750854799573",
-      appId: "1:750854799573:web:416499f272bee07d6f625c",
-      databaseURL: "https://albo-d-oro-vita-tgc-default-rtdb.europe-west1.firebasedatabase.app/"
-    };
+    // Mappa ID -> oggetto carta da cards.json (enciclopedia)
+    let idToCarta = {};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    function mostraPopup(src) {
-      const popup = document.getElementById('popupCarta');
-      popup.querySelector('img').src = src;
-      popup.style.display = 'block';
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
     }
 
-    async function caricaMazzi() {
-      const listaDiv = document.getElementById('listaMazzi');
-      listaDiv.textContent = 'Caricamento mazzi in corso...';
+    async function fetchJson(path) {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(`${path} (${res.status})`);
+      return await res.json();
+    }
+
+    async function loadCardsJson() {
+      const cards = await fetchJson("cards.json");
+      idToCarta = {};
+      cards.forEach(c => { idToCarta[c.ID] = c; });
+    }
+
+    function openPopupById(idCarta) {
+      const carta = idToCarta[idCarta] || null;
+
+      const img = document.getElementById("popupImg");
+      img.src = `img/${idCarta}.jpg`;
+      img.onerror = () => { img.src = ""; };
+
+      const title = document.getElementById("popupTitle");
+      title.textContent = carta ? (carta["NOME CARTA"] || idCarta) : idCarta;
+
+      const content = document.getElementById("popupContent");
+      if (!carta) {
+        content.innerHTML = `<div>Dettagli non trovati in cards.json per ID: <strong>${escapeHtml(idCarta)}</strong></div>`;
+      } else {
+        const dettagli = Object.entries(carta)
+          .filter(([_, v]) => v !== null && v !== undefined && v !== "")
+          .map(([k, v]) => `<strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}`)
+          .join("<br>");
+        content.innerHTML = `<div style="font-size:0.98em;line-height:1.45;">${dettagli}</div>`;
+      }
+
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("popupCarta").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("popupCarta").style.display = "none";
+    }
+
+    function renderSlotMazzo(mazzoData, fallbackTitle) {
+      const box = document.createElement("div");
+      box.className = "slot";
+
+      const titolo = mazzoData.titolo || fallbackTitle || "Mazzo";
+      const autore = mazzoData.autore || "";
+      const descrizione = mazzoData.descrizione || "";
+
+      const head = document.createElement("div");
+      head.className = "slot-header";
+      head.innerHTML = `
+        <div class="titolo-mazzo">${escapeHtml(titolo)}</div>
+        ${autore ? `<div class="meta">${escapeHtml(autore)}</div>` : ""}
+        ${descrizione ? `<div class="desc">${escapeHtml(descrizione)}</div>` : ""}
+      `;
+      box.appendChild(head);
+
+      const sep = document.createElement("div");
+      sep.className = "separator";
+      box.appendChild(sep);
+
+      const grid = document.createElement("div");
+      grid.className = "carte-grid";
+
+      const carte = mazzoData.carte || {};  // <- dal JSON del mazzo
+      const entries = Object.entries(carte);
+
+      if (entries.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "muted";
+        empty.textContent = "(Mazzo vuoto)";
+        box.appendChild(empty);
+        return box;
+      }
+
+      // ordina per COSTO se disponibile in cards.json (come facevi in mazzi.html)
+      const lista = entries.map(([id, qty]) => ({
+        id,
+        qty: Number(qty) || 0,
+        costo: (idToCarta[id] && Number(idToCarta[id].COSTO)) ? Number(idToCarta[id].COSTO) : 999
+      })).sort((a, b) => a.costo - b.costo);
+
+      lista.forEach(({id, qty}) => {
+        for (let i = 0; i < qty; i++) {
+          const img = document.createElement("img");
+          img.src = `img/${id}.jpg`;
+          img.alt = idToCarta[id]?.["NOME CARTA"] ? idToCarta[id]["NOME CARTA"] : id;
+          img.title = img.alt;
+          img.onclick = () => openPopupById(id);
+          img.onerror = () => { img.style.display = "none"; }; // se manca immagine, la nasconde
+          grid.appendChild(img);
+        }
+      });
+
+      box.appendChild(grid);
+      return box;
+    }
+
+    async function init() {
+      const vetrina = document.getElementById("vetrina");
+      vetrina.textContent = "Caricamento...";
 
       try {
-        const snapshot = await get(child(ref(db), "mazzi"));
-        if (!snapshot.exists()) {
-          listaDiv.textContent = 'Nessun mazzo caricato.';
-          return;
-        }
+        await loadCardsJson();
 
-        const data = snapshot.val();
-        const mazziArray = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+        const mazzi = await Promise.all(
+          MAZZI_JSON.map(async (path) => {
+            const data = await fetchJson(path);
+            return { path, data };
+          })
+        );
 
-        listaDiv.innerHTML = '';
-
-        mazziArray.forEach(m => {
-          const mazzoDiv = document.createElement('div');
-          mazzoDiv.className = 'mazzo';
-
-          const header = document.createElement('div');
-          header.className = 'mazzo-header';
-          header.innerText = `Utente: ${escapeHtml(m.username)} - Mazzo: ${escapeHtml(m.nomeMazzo)}`;
-          mazzoDiv.appendChild(header);
-
-          const carteContainer = document.createElement('div');
-          carteContainer.className = 'carte';
-
-          for (const idCarta in m.mazzo) {
-            const quantita = m.mazzo[idCarta];
-          
-            for (let i = 0; i < quantita; i++) {
-              const img = document.createElement('img');
-              img.src = `img/${idCarta}.jpg`;
-              img.alt = `Carta ID ${idCarta}`;
-              img.title = `Carta ID ${idCarta}`;
-              img.onclick = () => mostraPopup(img.src);
-              carteContainer.appendChild(img);
-            }
-          }
-
-          mazzoDiv.appendChild(carteContainer);
-          listaDiv.appendChild(mazzoDiv);
+        vetrina.innerHTML = "";
+        mazzi.forEach(({path, data}) => {
+          vetrina.appendChild(renderSlotMazzo(data, path));
         });
 
       } catch (e) {
-        listaDiv.textContent = 'Errore nel caricamento: ' + e.message;
+        vetrina.textContent = "Errore nel caricamento: " + e.message;
       }
     }
 
-    function escapeHtml(text) {
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
+    // Eventi popup
+    document.getElementById("btnChiudi").onclick = closePopup;
+    document.getElementById("overlay").onclick = closePopup;
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape") closePopup();
+    });
 
-    caricaMazzi();
+    init();
   </script>
 </body>
 </html>
