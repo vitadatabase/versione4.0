@@ -1,0 +1,6 @@
+{
+  "sets": [
+    { "name": "UN NUOVO INIZIO", "file": "cards/un_nuovo_inizio.json" },
+    { "name": "DIETRO LE QUINTE", "file": "cards/dietro_le_quinte.json" }
+  ]
+}
