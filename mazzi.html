@@ -85,39 +85,6 @@
 
 <button id="aggiungiMazzoBtn">Aggiungi nuovo mazzo</button>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-  
-    const firebaseConfig = {
-      apiKey: "AIzaSyAVDt2e7O1cUVCFCKuet1ohIvpBdJjTnZo",
-      authDomain: "albo-d-oro-vita-tgc.firebaseapp.com",
-      projectId: "albo-d-oro-vita-tgc",
-      storageBucket: "albo-d-oro-vita-tgc.firebasestorage.app",
-      messagingSenderId: "750854799573",
-      appId: "1:750854799573:web:416499f272bee07d6f625c",
-      databaseURL: "https://albo-d-oro-vita-tgc-default-rtdb.europe-west1.firebasedatabase.app/"
-    };
-  
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-  
-    // Espone funzione per caricare un mazzo
-    window.caricaMazzoFirebase = async function(nomeMazzo, mazzoData, username = "Anonimo") {
-      try {
-        const nuovoRef = push(ref(db, "mazzi"));
-        await set(nuovoRef, {
-          username,
-          nomeMazzo,
-          mazzo: mazzoData,
-          timestamp: Date.now()
-        });
-        alert(`Mazzo "${nomeMazzo}" caricato sull'Albo d'Oro!`);
-      } catch (err) {
-        alert("Errore nel caricamento: " + err.message);
-      }
-    };
-  </script>
 
 <script>
   // Carica mazzi da localStorage, mostra ordinati per nome
@@ -191,37 +158,6 @@
           const buttonsDiv = document.createElement('div');
           buttonsDiv.className = 'mazzo-buttons';
 
-          // Carica su Albo d'Oro
-          const btnCarica = document.createElement('button');
-          btnCarica.textContent = 'Carica';
-          
-            if (fuoriRange) {
-              btnCarica.disabled = true;
-              btnCarica.title = "Mazzo incompleto: deve avere tra 50 e 70 carte";
-              btnCarica.style.opacity = "0.5";
-              btnCarica.style.cursor = "not-allowed";
-            } else {
-              btnCarica.onclick = () => {
-            const username = prompt("Inserisci il tuo nome utente per questo mazzo") || "Anonimo";
-          
-            const conferma = confirm(
-              `Sei sicuro di voler caricare il mazzo "${nomeMazzo}" come utente "${username}"?\n` +
-              "⚠️ Questa azione non può essere annullata."
-            );
-          
-            if (conferma) {
-              if (typeof caricaMazzoFirebase === "function") {
-                caricaMazzoFirebase(nomeMazzo, mazzo, username); // passiamo anche lo username
-              } else {
-                alert("Funzione caricaMazzoFirebase non disponibile.");
-              }
-            } else {
-              alert("Caricamento annullato.");
-            }
-          };
-          }
-
-          buttonsDiv.appendChild(btnCarica);
 
           // Modifica
           const btnModifica = document.createElement('button');
