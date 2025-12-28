@@ -203,6 +203,16 @@
 	      Crea database del mazzo
 	    </button>
 	    <span id="exportInfo" style="color:#444;"></span>
+
+		<button id="btnCopiaTestoMazzo"
+		  style="padding: 0.6em 1.2em; font-size: 1.05em; cursor: pointer; background-color: #555; border: none; border-radius: 6px; color: white;">
+		  Copia il mazzo in formato testo
+		</button>
+		
+		<span id="toastCopiaMazzo"
+		  style="display:none; margin-left:10px; padding:6px 10px; background:#2e7d32; color:white; border-radius:8px; font-weight:700;">
+		  Mazzo copiato!
+		</span>
 	  </div>
 	
 	  <div style="margin-top:10px; color:#666; font-size:0.92em;">
@@ -648,6 +658,96 @@
 	  const info = document.getElementById("exportInfo");
 	  info.textContent = `✅ Scaricato: ${nomeFile} (totale carte: ${totale})`;
 	};
+
+	function mostraToastCopia() {
+	  const toast = document.getElementById("toastCopiaMazzo");
+	  if (!toast) return;
+	
+	  toast.style.display = "inline-block";
+	  toast.style.opacity = "1";
+	
+	  // sparisce da solo
+	  clearTimeout(window.__toastTimer);
+	  window.__toastTimer = setTimeout(() => {
+	    toast.style.opacity = "0";
+	    // dopo la dissolvenza lo nascondo
+	    setTimeout(() => { toast.style.display = "none"; toast.style.opacity = "1"; }, 250);
+	  }, 2000);
+	}
+	
+	function costruisciTestoMazzo() {
+	  const titolo = (document.getElementById("titoloJson")?.value || "").trim() || (typeof nomeMazzo !== "undefined" ? nomeMazzo : "Mazzo");
+	  const autore = (document.getElementById("autoreJson")?.value || "").trim();
+	  const descrizione = (document.getElementById("descrizioneJson")?.value || "").trim();
+	
+	  // ordina le carte per COSTO se possibile (serve idToCarta o cards index)
+	  // se non ce l'hai qui, ordiniamo per ID numerico
+	  const righeCarte = Object.keys(mazzo || {})
+	    .filter(id => (Number(mazzo[id]) || 0) > 0)
+	    .sort((a, b) => Number(a) - Number(b))
+	    .map(id => {
+	      const qty = Number(mazzo[id]) || 0;
+	      // se hai già caricato cards.json in questa pagina e hai una mappa idToCarta, usa il nome carta
+	      const nomeCarta =
+	        (typeof idToCarta !== "undefined" && idToCarta[String(id)] && (idToCarta[String(id)]["NOME CARTA"] || idToCarta[String(id)].NOME_CARTA))
+	          ? (idToCarta[String(id)]["NOME CARTA"] || idToCarta[String(id)].NOME_CARTA)
+	          : `ID ${id}`;
+	
+	      return `${qty}x ${nomeCarta} (ID ${id})`;
+	    });
+	
+	  const totale = Object.values(mazzo || {}).reduce((s, v) => s + (Number(v) || 0), 0);
+		
+	  // testo copincollabile
+	  const out = [];
+	  out.push(`TITOLO: ${titolo}`);
+	  if (autore) out.push(`AUTORE: ${autore}`);
+	  if (descrizione) out.push(`DESCRIZIONE: ${descrizione}`);
+	  out.push(`TOTALE CARTE: ${totale}`);
+	  out.push("");
+	  out.push("LISTA CARTE:");
+	  out.push(...(righeCarte.length ? righeCarte : ["(Mazzo vuoto)"]));
+	
+	  return out.join("\n");
+	}
+	
+	async function copiaNegliAppunti(testo) {
+	  // metodo moderno
+	  if (navigator.clipboard && window.isSecureContext) {
+	    await navigator.clipboard.writeText(testo);
+	    return;
+	  }
+	
+	  // fallback (vecchio ma funziona spesso)
+	  const ta = document.createElement("textarea");
+	  ta.value = testo;
+	  ta.style.position = "fixed";
+	  ta.style.left = "-9999px";
+	  document.body.appendChild(ta);
+	  ta.focus();
+	  ta.select();
+	  document.execCommand("copy");
+	  ta.remove();
+	}
+	
+	// Hook bottone
+	document.getElementById("btnCopiaTestoMazzo").onclick = async () => {
+	  try {
+	    const testo = costruisciTestoMazzo();
+	    const totale = Object.values(mazzo || {}).reduce((s, v) => s + (Number(v) || 0), 0);
+	
+	    if (totale === 0) {
+	      alert("Il mazzo è vuoto: aggiungi almeno una carta prima di copiare.");
+	      return;
+	    }
+	
+	    await copiaNegliAppunti(testo);
+	    mostraToastCopia();
+	  } catch (err) {
+	    alert("Errore durante la copia: " + err.message);
+	  }
+	};
+
 
   </script>
 </body>
