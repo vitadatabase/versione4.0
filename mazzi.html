@@ -83,9 +83,49 @@
   <!-- Lista mazzi caricata via JS -->
 </div>
 
-<button id="aggiungiMazzoBtn">Aggiungi nuovo mazzo</button>
+<div style="margin-top:1.5em; display:flex; gap:12px; flex-wrap:wrap;">
+  <button id="aggiungiMazzoBtn">Aggiungi nuovo mazzo</button>
+
+  <button id="importaMazzoBtn"
+    style="padding: 0.6em 1.2em; font-size: 1.1em; cursor: pointer; background-color: #2d7ef7; border: none; border-radius: 5px; color: white;">
+    Importa mazzo (.json)
+  </button>
+</div>
+
+  <!-- MODAL IMPORT MAZZO -->
+  <div id="importModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; padding:20px; box-sizing:border-box;">
+    <div style="max-width:700px; margin:60px auto; background:rgba(255,255,255,0.98); border-radius:12px; padding:18px; box-shadow:0 0 20px rgba(0,0,0,0.3);">
+      <h2 style="margin-top:0;">Importa mazzo</h2>
+  
+      <div id="dropZone"
+        style="border:2px dashed #888; border-radius:10px; padding:22px; text-align:center; background:#fafafa; cursor:pointer;">
+        Trascina qui un file <b>.json</b><br>
+        oppure clicca per sceglierlo
+      </div>
+  
+      <input id="fileInput" type="file" accept="application/json,.json" style="display:none;" />
+  
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:14px;">
+        <label style="display:flex; gap:8px; align-items:center;">
+          Nome mazzo (se vuoto usa il nome del file):
+          <input id="importNomeMazzo" type="text" placeholder="es: Starter Deck Starlight"
+                 style="padding:8px; min-width:260px;">
+        </label>
+      </div>
+  
+      <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:18px; flex-wrap:wrap;">
+        <button id="btnChiudiImport" style="padding:10px 14px; cursor:pointer;">Annulla</button>
+        <button id="btnConfermaImport" style="padding:10px 14px; cursor:pointer; background:#2d7ef7; color:#fff; border:none; border-radius:8px;">
+          Importa
+        </button>
+      </div>
+  
+      <div id="importMsg" style="margin-top:10px; color:#444;"></div>
+    </div>
+  </div>
 
 
+  
 <script>
   let __cardsPromise = null;
   
@@ -262,6 +302,172 @@
 
   // Carica mazzi a pagina pronta
   window.onload = caricaMazzi;
+
+  let __importFile = null;
+  
+  // apre/chiude modal
+  function openImportModal() {
+    document.getElementById("importModal").style.display = "block";
+    document.getElementById("importMsg").textContent = "";
+    document.getElementById("importNomeMazzo").value = "";
+    __importFile = null;
+  }
+  function closeImportModal() {
+    document.getElementById("importModal").style.display = "none";
+    __importFile = null;
+  }
+  
+  // legge file e lo mette in memoria
+  async function handleFile(file) {
+    const msg = document.getElementById("importMsg");
+    msg.style.color = "#444";
+    msg.textContent = "";
+  
+    if (!file) return;
+  
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      msg.style.color = "crimson";
+      msg.textContent = "Seleziona un file .json";
+      return;
+    }
+  
+    __importFile = file;
+    msg.textContent = `File selezionato: ${file.name}`;
+  }
+  
+  // normalizza nome mazzo per key localStorage
+  function pulisciNomeMazzo(nome) {
+    return (nome || "").trim();
+  }
+  
+  // accetta due formati:
+  // A) { "carte": { "1": 2, "4": 3 } , ... }
+  // B) { "1": 2, "4": 3 }  (mazzo “semplice”)
+  function estraiMappaCarte(jsonObj) {
+    if (!jsonObj || typeof jsonObj !== "object") return null;
+  
+    // formato A
+    if (jsonObj.carte && typeof jsonObj.carte === "object" && !Array.isArray(jsonObj.carte)) {
+      return jsonObj.carte;
+    }
+  
+    // formato B (oggetto semplice di id->qty)
+    // accetto solo se le chiavi sembrano numeri e i valori sono numerici
+    const keys = Object.keys(jsonObj);
+    if (keys.length === 0) return {}; // mazzo vuoto ok
+    const ok = keys.every(k => !isNaN(Number(k)) && (typeof jsonObj[k] === "number" || typeof jsonObj[k] === "string"));
+    return ok ? jsonObj : null;
+  }
+  
+  function contaTotaleCarte(deckMap) {
+    return Object.values(deckMap || {}).reduce((s, v) => s + (Number(v) || 0), 0);
+  }
+  
+  // importa nel localStorage come mazzo_<nome>
+  async function importaMazzoDaFile() {
+    const msg = document.getElementById("importMsg");
+  
+    if (!__importFile) {
+      msg.style.color = "crimson";
+      msg.textContent = "Nessun file selezionato.";
+      return;
+    }
+  
+    let json;
+    try {
+      const text = await __importFile.text();
+      json = JSON.parse(text);
+    } catch (e) {
+      msg.style.color = "crimson";
+      msg.textContent = "File non valido: impossibile leggere JSON.";
+      return;
+    }
+  
+    const deckMap = estraiMappaCarte(json);
+    if (!deckMap) {
+      msg.style.color = "crimson";
+      msg.textContent = "Formato non riconosciuto. Deve essere {carte:{ID:qty}} oppure {ID:qty}.";
+      return;
+    }
+  
+    // Nome mazzo: input oppure nome file senza estensione oppure json.nome/titolo
+    const nomeInput = pulisciNomeMazzo(document.getElementById("importNomeMazzo").value);
+    const baseFile = __importFile.name.replace(/\.json$/i, "");
+    const nomeDaJson = pulisciNomeMazzo(json.nome || json.titolo || "");
+    const nomeMazzo = nomeInput || nomeDaJson || baseFile;
+  
+    if (!nomeMazzo) {
+      msg.style.color = "crimson";
+      msg.textContent = "Nome mazzo non valido.";
+      return;
+    }
+  
+    const key = "mazzo_" + nomeMazzo;
+  
+    if (localStorage.getItem(key)) {
+      // se esiste già, chiedi conferma sovrascrittura
+      if (!confirm(`Esiste già un mazzo chiamato "${nomeMazzo}". Vuoi sovrascriverlo?`)) {
+        msg.style.color = "#444";
+        msg.textContent = "Import annullato.";
+        return;
+      }
+    }
+  
+    // pulizia: conserva solo id->qty numerici >0
+    const clean = {};
+    for (const id in deckMap) {
+      const q = Number(deckMap[id]) || 0;
+      if (q > 0) clean[String(Number(id))] = q;
+    }
+  
+    localStorage.setItem(key, JSON.stringify(clean));
+  
+    const tot = contaTotaleCarte(clean);
+    msg.style.color = "#2e7d32";
+    msg.textContent = `✅ Importato "${nomeMazzo}" (${tot} carte)`;
+  
+    // aggiorna lista e chiudi dopo un attimo
+    caricaMazzi();
+    setTimeout(closeImportModal, 700);
+  }
+  
+  // wiring UI
+  document.getElementById("importaMazzoBtn").onclick = openImportModal;
+  document.getElementById("btnChiudiImport").onclick = closeImportModal;
+  document.getElementById("btnConfermaImport").onclick = importaMazzoDaFile;
+  
+  // chiudi cliccando sullo sfondo scuro
+  document.getElementById("importModal").addEventListener("click", (e) => {
+    if (e.target.id === "importModal") closeImportModal();
+  });
+  
+  // drop zone + click per file picker
+  const dropZone = document.getElementById("dropZone");
+  const fileInput = document.getElementById("fileInput");
+  
+  dropZone.addEventListener("click", () => fileInput.click());
+  
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files && fileInput.files[0];
+    handleFile(file);
+  });
+  
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.style.background = "#f0f6ff";
+  });
+  
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.style.background = "#fafafa";
+  });
+  
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.style.background = "#fafafa";
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    handleFile(file);
+  });
+
 </script>
 
 </body>
