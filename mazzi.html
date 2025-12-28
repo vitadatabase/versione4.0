@@ -68,6 +68,20 @@
       border-radius: 5px;
       color: white;
     }
+    .action-btn {
+      padding: 0.6em 1.2em;
+      font-size: 1.1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      min-width: 220px;   /* 🔹 stessa larghezza */
+      height: 44px;       /* 🔹 stessa altezza */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
   </style>
 </head>
 <body>
@@ -84,13 +98,15 @@
 </div>
 
 <div style="margin-top:1.5em; display:flex; gap:12px; flex-wrap:wrap;">
-  <button id="aggiungiMazzoBtn">Aggiungi nuovo mazzo</button>
+  <button id="aggiungiMazzoBtn" class="action-btn" style="background-color:#4CAF50;">
+    Aggiungi nuovo mazzo
+  </button>
 
-  <button id="importaMazzoBtn"
-    style="padding: 0.6em 1.2em; font-size: 1.1em; cursor: pointer; background-color: #2d7ef7; border: none; border-radius: 5px; color: white;">
+  <button id="importaMazzoBtn" class="action-btn" style="background-color:#2d7ef7;">
     Importa mazzo (.json)
   </button>
 </div>
+
 
   <!-- MODAL IMPORT MAZZO -->
   <div id="importModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; padding:20px; box-sizing:border-box;">
