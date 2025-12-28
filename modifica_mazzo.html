@@ -270,11 +270,13 @@
 
 	  let modalitaElimina = false;
 	  let cardsDatabase = [];
+	  let cardsById = {};
 	  let mazzo = JSON.parse(localStorage.getItem(`mazzo_${nomeMazzo}`)) || {};
 	
 	loadAllCards()
 		.then(data => {
 			cardsDatabase = data;
+			cardsById = Object.fromEntries(cardsDatabase.map(c => [String(c.ID), c]));
 		
 			document.getElementById('inputRicerca').oninput = () => {
 		      const val = document.getElementById('inputRicerca').value.toLowerCase();
@@ -676,29 +678,27 @@
 	}
 	
 	function costruisciTestoMazzo() {
-	  const titolo = (document.getElementById("titoloJson")?.value || "").trim() || (typeof nomeMazzo !== "undefined" ? nomeMazzo : "Mazzo");
-	  const autore = (document.getElementById("autoreJson")?.value || "").trim();
-	  const descrizione = (document.getElementById("descrizioneJson")?.value || "").trim();
+	  const titolo = document.getElementById("titoloJson").value.trim() || nomeMazzo || "Mazzo";
+	  const autore = document.getElementById("autoreJson").value.trim();
+	  const descrizione = document.getElementById("descrizioneJson").value.trim();
 	
-	  // ordina le carte per COSTO se possibile (serve idToCarta o cards index)
-	  // se non ce l'hai qui, ordiniamo per ID numerico
-	  const righeCarte = Object.keys(mazzo || {})
-	    .filter(id => (Number(mazzo[id]) || 0) > 0)
-	    .sort((a, b) => Number(a) - Number(b))
+	  // lista items dal mazzo: {id, qty, costo, nome}
+	  const items = Object.keys(mazzo || {})
 	    .map(id => {
 	      const qty = Number(mazzo[id]) || 0;
-	      // se hai già caricato cards.json in questa pagina e hai una mappa idToCarta, usa il nome carta
-	      const nomeCarta =
-	        (typeof idToCarta !== "undefined" && idToCarta[String(id)] && (idToCarta[String(id)]["NOME CARTA"] || idToCarta[String(id)].NOME_CARTA))
-	          ? (idToCarta[String(id)]["NOME CARTA"] || idToCarta[String(id)].NOME_CARTA)
-	          : `ID ${id}`;
+	      if (qty <= 0) return null;
 	
-	      return `${qty}x ${nomeCarta} (ID ${id})`;
-	    });
+	      const carta = cardsById[String(id)];
+	      const nome = carta?.["NOME CARTA"] || "NOME CARTA NON TROVATO";
+	      const costo = Number(carta?.["COSTO"]) || 999;
 	
-	  const totale = Object.values(mazzo || {}).reduce((s, v) => s + (Number(v) || 0), 0);
-		
-	  // testo copincollabile
+	      return { id: String(id), qty, costo, nome };
+	    })
+	    .filter(Boolean)
+	    .sort((a, b) => a.costo - b.costo || a.nome.localeCompare(b.nome, "it"));
+	
+	  const totale = items.reduce((s, it) => s + it.qty, 0);
+	
 	  const out = [];
 	  out.push(`TITOLO: ${titolo}`);
 	  if (autore) out.push(`AUTORE: ${autore}`);
@@ -706,7 +706,7 @@
 	  out.push(`TOTALE CARTE: ${totale}`);
 	  out.push("");
 	  out.push("LISTA CARTE:");
-	  out.push(...(righeCarte.length ? righeCarte : ["(Mazzo vuoto)"]));
+	  out.push(...(items.length ? items.map(it => `${it.qty}x ${it.nome}`) : ["(Mazzo vuoto)"]));
 	
 	  return out.join("\n");
 	}
