@@ -146,6 +146,21 @@
   </header>
 
   <div class="board" id="board"></div>
+  <div style="text-align:center; margin-bottom: 30px;">
+    <button onclick="resetPunti()" style="
+      font-size: 1em;
+      padding: 0.6em 1.2em;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background-color: #2196F3;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+     ">
+       🔄 Reset punti
+     </button>
+   </div>
+
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -321,6 +336,16 @@
 
       document.body.appendChild(overlay);
     }
+
+    function resetPunti() {
+      for (let i = 1; i <= stato.numGiocatori; i++) {
+        const punti = document.getElementById('punti' + i);
+        if (punti) {
+          punti.textContent = "0";
+        }
+      }
+    }
+
   </script>
 </body>
 </html>
