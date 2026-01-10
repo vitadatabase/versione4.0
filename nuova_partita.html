@@ -49,6 +49,21 @@
       font-size: 1.2em;
       cursor: pointer;
     }
+    
+    .torneo-row{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      background: rgba(255,255,255,0.85);
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+    .torneo-row input{
+      width: 18px;
+      height: 18px;
+    }
+
   </style>
 </head>
 <body>
@@ -63,6 +78,12 @@
       <span class="counter" id="numeroGiocatori">2</span>
       <button onclick="modificaGiocatori(1)">+</button>
     </div>
+
+    <label class="torneo-row">
+      <input type="checkbox" id="chkTorneo">
+      Modalità torneo
+    </label>
+    
     <button class="start-btn" onclick="iniziaPartita()">INIZIA</button>
   </div>
 
@@ -77,8 +98,10 @@
     }
 
     function iniziaPartita() {
-      window.location.href = `punteggi.html?giocatori=${numero}`;
+      const torneo = document.getElementById('chkTorneo').checked ? 1 : 0;
+      window.location.href = `punteggi.html?giocatori=${numero}&torneo=${torneo}`;
     }
+
   </script>
 </body>
 </html>
