@@ -94,6 +94,35 @@
       filter: brightness(1.08);
     }
 
+    .subheader-bar{
+      position: fixed;
+      top: 60px;              /* sotto l’header */
+      left: 0;
+      right: 0;
+      z-index: 999;
+      padding: 10px;
+      pointer-events: none;
+    }
+    
+    .btn-back{
+      pointer-events: auto;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      cursor: pointer;
+    
+      font-size: 32px;
+      font-weight: bold;
+      line-height: 1;
+      color: #111;
+    
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
   </style>
 </head>
@@ -104,6 +133,13 @@
     <img src="logo.jpg" alt="Logo Vita" />
   </button>
 </header>
+
+  <div class="subheader-bar">
+    <button class="btn-back" onclick="goBack()" aria-label="Indietro">
+      ‹
+    </button>
+  </div>
+
 
 <h1>I tuoi Mazzi</h1>
 <div id="listaMazzi">
@@ -501,5 +537,15 @@
 
 </script>
 
+<script>
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = 'home.html';
+  }
+}
+</script>
+  
 </body>
 </html>
