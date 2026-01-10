@@ -138,6 +138,41 @@
       margin-top: 14px;
       line-height: 1.3;
     }
+
+    .torneo-ui{
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(0,0,0,0.25);
+    }
+    
+    .timer-row{
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 1.05em;
+    }
+    
+    .timer{
+      font-size: 1.2em;
+      letter-spacing: 1px;
+    }
+    
+    .passa-turno{
+      width: 100%;
+      padding: 0.55em 0.6em;
+      font-size: 0.95em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #ff9800;
+      color: #111;
+      font-weight: 700;
+    }
+    
+    .passa-turno:disabled{
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
   </style>
 </head>
 <body>
@@ -162,9 +197,28 @@
    </div>
 
 
+    <div style="text-align:center; margin-bottom: 30px;">
+      <button id="btnStartStop" onclick="startStopPartita()" style="
+        font-size: 1em;
+        padding: 0.6em 1.2em;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        background-color: #673ab7;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+       ">
+         ▶️ Inizia partita
+       </button>
+    </div>
+
+
+
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const numGiocatori = parseInt(urlParams.get('giocatori')) || 2;
+    const torneo = (urlParams.get('torneo') === '1');
+
 
     const board = document.getElementById('board');
 
@@ -189,9 +243,24 @@
         </div>
         <div class="giocatore" id="nomeGiocatore${i}" onclick="modificaNome(${i})">Giocatore ${i}</div>
         <button onclick="fineMazzo(${i})" class="mazzo-finito">Ho finito il mazzo</button>
+
+        <div class="torneo-ui" id="torneoUI${i}" style="display:none;">
+          <div class="timer-row">
+            ⏱️ <span class="timer" id="timer${i}">02:00</span>
+          </div>
+          <button onclick="passaTurno(${i})" class="passa-turno">Passa il turno</button>
+        </div>
       `;
       board.appendChild(div);
     }
+
+    showTorneoUI();
+    
+    if (!torneo) {
+      const b = document.getElementById('btnStartStop');
+      if (b) b.style.display = 'none'; // il bottone Inizia/Termina appare solo in torneo
+    }
+
 
     function getNome(id) {
       return document.getElementById('nomeGiocatore' + id).textContent.trim();
@@ -346,6 +415,127 @@
       }
     }
 
+    // =========================
+    // MODALITÀ TORNEO (2 minuti)
+    // =========================
+    const DURATA_TURNO = 120; // secondi
+    let partitaAvviata = false;
+    let currentTurnId = null;       // id giocatore attuale
+    let intervalId = null;
+    let secondsLeftById = {};       // {1:120, 2:120, ...}
+    
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+    
+    function updateTimerUI(id) {
+      const el = document.getElementById('timer' + id);
+      if (el) el.textContent = formatTime(secondsLeftById[id] ?? DURATA_TURNO);
+    }
+    
+    function showTorneoUI() {
+      for (let i = 1; i <= stato.numGiocatori; i++) {
+        const ui = document.getElementById('torneoUI' + i);
+        if (ui) ui.style.display = torneo ? 'block' : 'none';
+    
+        secondsLeftById[i] = DURATA_TURNO;
+        updateTimerUI(i);
+    
+        // all’inizio disabilito i “passa turno”
+        const btn = document.querySelector(`#torneoUI${i} .passa-turno`);
+        if (btn) btn.disabled = true;
+      }
+    }
+    
+    function stopInterval() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+    
+    function trovaProssimoAttivo(idCorrente) {
+      // scorre 1..N ciclico, saltando eliminati
+      for (let step = 1; step <= stato.numGiocatori; step++) {
+        const candidate = ((idCorrente - 1 + step) % stato.numGiocatori) + 1;
+        if (stato.attivi.has(candidate)) return candidate;
+      }
+      return null; // nessuno attivo
+    }
+    
+    function setPassButtonEnabled(id, enabled) {
+      const btn = document.querySelector(`#torneoUI${id} .passa-turno`);
+      if (btn) btn.disabled = !enabled;
+    }
+    
+    function startTurn(id) {
+      if (!torneo || !partitaAvviata) return;
+      if (!stato.attivi.has(id)) return;
+    
+      // disabilita tutti i passa-turno
+      for (let i = 1; i <= stato.numGiocatori; i++) setPassButtonEnabled(i, false);
+    
+      currentTurnId = id;
+      setPassButtonEnabled(id, true);
+    
+      stopInterval();
+      intervalId = setInterval(() => {
+        secondsLeftById[id] = Math.max(0, (secondsLeftById[id] ?? DURATA_TURNO) - 1);
+        updateTimerUI(id);
+    
+        if (secondsLeftById[id] === 0) {
+          stopInterval();
+          // tempo scaduto: reset e passa al prossimo
+          secondsLeftById[id] = DURATA_TURNO;
+          updateTimerUI(id);
+    
+          const next = trovaProssimoAttivo(id);
+          if (next !== null) startTurn(next);
+        }
+      }, 1000);
+    }
+    
+    function passaTurno(id) {
+      if (!torneo || !partitaAvviata) return;
+      if (id !== currentTurnId) return; // sicurezza: solo chi è di turno
+    
+      // reset e stop del giocatore corrente
+      secondsLeftById[id] = DURATA_TURNO;
+      updateTimerUI(id);
+      stopInterval();
+      setPassButtonEnabled(id, false);
+    
+      const next = trovaProssimoAttivo(id);
+      if (next !== null) startTurn(next);
+    }
+    
+    function startStopPartita() {
+      if (!torneo) return; // se non è torneo non fa nulla (puoi anche nascondere il bottone)
+    
+      const btn = document.getElementById('btnStartStop');
+    
+      if (!partitaAvviata) {
+        // INIZIA PARTITA
+        partitaAvviata = true;
+        if (btn) btn.textContent = '⏹️ Termina partita';
+    
+        // parte dal primo giocatore attivo (di default 1)
+        const primo = stato.attivi.has(1) ? 1 : trovaProssimoAttivo(1);
+        if (primo !== null) startTurn(primo);
+        return;
+      }
+    
+      // TERMINA PARTITA
+      const ok = confirm('Vuoi veramente terminare la partita?');
+      if (!ok) return;
+    
+      stopInterval();
+      window.location.href = 'nuova_partita.html';
+    }
+
+    
   </script>
 </body>
 </html>
