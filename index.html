@@ -251,7 +251,7 @@
       <div class="dropdown-menu" id="dropdownSet">
         <label><input type="checkbox" value="UN NUOVO INIZIO"> UN NUOVO INIZIO</label>
         <label><input type="checkbox" value="DIETRO LE QUINTE"> DIETRO LE QUINTE</label>
-        <label><input type="checkbox" value="DIETRO LE QUINTE"> ARIA DI CAMBIAMENTI</label>
+        <label><input type="checkbox" value="ARIA DI CAMBIAMENTI"> ARIA DI CAMBIAMENTI</label>
       </div>
     </div>
     <div class="dropdown">
@@ -499,15 +499,17 @@ function aggiornaStileFiltri() {
 function mostraCarte(carte) {
   const c = document.getElementById('cards');
   c.innerHTML = '';
+
   carte.forEach(carta => {
-    const div = document.createElement('div'); div.className='card-wrapper';
+    const div = document.createElement('div');
+    div.className = 'card-wrapper';
+
     const img = document.createElement('img');
     img.src = `img/${carta["ID"]}.jpg`;
     img.alt = carta["NOME CARTA"];
     img.className = 'card-img';
 
     const lim = Number(carta["LIMITATO"] ?? 0);
-    
     if (lim === 2) {
       img.style.boxShadow = '0 0 15px 5px gold';
       img.style.border = '2px solid gold';
@@ -516,12 +518,12 @@ function mostraCarte(carte) {
       img.style.border = '2px solid crimson';
     }
 
-    }
     img.onclick = () => apriPopup(carta);
+
     const btn = document.createElement('button');
     btn.className = 'btn-add';
     btn.onclick = () => aggiungiAlMazzo(carta["ID"]);
-    
+
     const imgBtn = document.createElement('img');
     imgBtn.src = 'symbols/add.jpg';
     imgBtn.alt = 'Aggiungi';
@@ -529,14 +531,14 @@ function mostraCarte(carte) {
     imgBtn.style.height = '30px';
     imgBtn.style.borderRadius = '50%';
     imgBtn.style.objectFit = 'cover';
-    
+
     btn.appendChild(imgBtn);
     div.appendChild(img);
     div.appendChild(btn);
-
     c.appendChild(div);
   });
 }
+
 
 function aggiungiAlMazzo(id) {
   const totale = Object.values(mazzo).reduce((a,b)=>a+b,0);
