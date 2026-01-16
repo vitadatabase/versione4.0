@@ -479,14 +479,28 @@
         updateTimerUI(id);
     
         if (secondsLeftById[id] === 0) {
+        if (secondsLeftById[id] === 0) {
           stopInterval();
-          // tempo scaduto: reset e passa al prossimo
-          secondsLeftById[id] = DURATA_TURNO;
-          updateTimerUI(id);
-    
+        
+          // ✅ TEMPO SCADUTO: elimina il giocatore
+          eliminaGiocatore(id);
+        
+          // (opzionale) puoi anche lasciare 00:00 visibile, oppure resettarlo:
+          // secondsLeftById[id] = DURATA_TURNO;
+          // updateTimerUI(id);
+        
+          // Se resta 1 solo attivo, vince lui
+          if (activeCount() === 1) {
+            const [solo] = Array.from(stato.attivi);
+            mostraVittoria(getNome(solo), `Tempo scaduto per ${getNome(id)}.`);
+            return;
+          }
+        
+          // Altrimenti parte il prossimo attivo
           const next = trovaProssimoAttivo(id);
           if (next !== null) startTurn(next);
         }
+
       }, 1000);
     }
     
