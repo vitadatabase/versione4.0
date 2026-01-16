@@ -251,6 +251,7 @@
       <div class="dropdown-menu" id="dropdownSet">
         <label><input type="checkbox" value="UN NUOVO INIZIO"> UN NUOVO INIZIO</label>
         <label><input type="checkbox" value="DIETRO LE QUINTE"> DIETRO LE QUINTE</label>
+        <label><input type="checkbox" value="DIETRO LE QUINTE"> ARIA DI CAMBIAMENTI</label>
       </div>
     </div>
     <div class="dropdown">
@@ -290,6 +291,7 @@
         <label><input type="checkbox" value="FREQUENTANTE"> FREQUENTANTE</label>
         <label><input type="checkbox" value="FONDATORE"> FONDATORE</label>
         <label><input type="checkbox" value="GUIDA"> GUIDA</label>
+        <label><input type="checkbox" value="HELLAVERSE"> HELLAVERSE</label>
         <label><input type="checkbox" value="PARENTE"> PARENTE</label>
         <label><input type="checkbox" value="POTENZIATO"> POTENZIATO</label>
         <label><input type="checkbox" value="PROTAGONISTA"> PROTAGONISTA</label>
@@ -503,9 +505,12 @@ function mostraCarte(carte) {
     img.src = `img/${carta["ID"]}.jpg`;
     img.alt = carta["NOME CARTA"];
     img.className = 'card-img';
-    if ((carta["RARITA'"]||'').toUpperCase()==='PROMO') {
+    if ((carta["LIMITATO"]||'').toUpperCase()==='2') {
       img.style.boxShadow='0 0 15px 5px gold';
       img.style.border='2px solid gold';
+    if ((carta["LIMITATO"]||'').toUpperCase()==='1') {
+      img.style.boxShadow='0 0 15px 5px red';
+      img.style.border='2px solid red';
     }
     img.onclick = () => apriPopup(carta);
     const btn = document.createElement('button');
