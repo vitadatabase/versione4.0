@@ -254,13 +254,6 @@
       board.appendChild(div);
     }
 
-    showTorneoUI();
-    
-    if (!torneo) {
-      const b = document.getElementById('btnStartStop');
-      if (b) b.style.display = 'none'; // il bottone Inizia/Termina appare solo in torneo
-    }
-
 
     function getNome(id) {
       return document.getElementById('nomeGiocatore' + id).textContent.trim();
@@ -533,6 +526,13 @@
     
       stopInterval();
       window.location.href = 'nuova_partita.html';
+    }
+
+    showTorneoUI();
+    
+    if (!torneo) {
+      const b = document.getElementById('btnStartStop');
+      if (b) b.style.display = 'none'; // il bottone Inizia/Termina appare solo in torneo
     }
 
     
