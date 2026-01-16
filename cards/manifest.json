@@ -1,7 +1,7 @@
 {
   "sets": [
     { "name": "UN NUOVO INIZIO", "file": "cards/un_nuovo_inizio.json" },
-    { "name": "DIETRO LE QUINTE", "file": "cards/dietro_le_quinte.json" }
+    { "name": "DIETRO LE QUINTE", "file": "cards/dietro_le_quinte.json" },
    { "name": "DIETRO LE QUINTE", "file": "cards/aria_di_cambiamenti.json" }
   ]
 }
