@@ -505,7 +505,7 @@ function mostraCarte(carte) {
     img.src = `img/${carta["ID"]}.jpg`;
     img.alt = carta["NOME CARTA"];
     img.className = 'card-img';
-    if ((carta["LIMITATO"]||'').toUpperCase()==='2') {
+    if ((carta["RARITA'"]||'').toUpperCase()==='PROMO') {
       img.style.boxShadow='0 0 15px 5px gold';
       img.style.border='2px solid gold';
     }
