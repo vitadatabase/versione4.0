@@ -508,9 +508,6 @@ function mostraCarte(carte) {
     if ((carta["LIMITATO"]||'').toUpperCase()==='2') {
       img.style.boxShadow='0 0 15px 5px gold';
       img.style.border='2px solid gold';
-    if ((carta["LIMITATO"]||'').toUpperCase()==='1') {
-      img.style.boxShadow='0 0 15px 5px red';
-      img.style.border='2px solid red';
     }
     img.onclick = () => apriPopup(carta);
     const btn = document.createElement('button');
