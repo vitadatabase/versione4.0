@@ -246,7 +246,7 @@
 
         <div class="torneo-ui" id="torneoUI${i}" style="display:none;">
           <div class="timer-row">
-            ⏱️ <span class="timer" id="timer${i}">02:00</span>
+            ⏱️ <span class="timer" id="timer${i}">02:30</span>
           </div>
           <button onclick="passaTurno(${i})" class="passa-turno">Passa il turno</button>
         </div>
@@ -409,9 +409,9 @@
     }
 
     // =========================
-    // MODALITÀ TORNEO (2 minuti)
+    // MODALITÀ TORNEO (2.30 minuti)
     // =========================
-    const DURATA_TURNO = 120; // secondi
+    const DURATA_TURNO = 150; // secondi
     let partitaAvviata = false;
     let currentTurnId = null;       // id giocatore attuale
     let intervalId = null;
