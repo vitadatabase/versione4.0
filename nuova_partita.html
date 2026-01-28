@@ -108,5 +108,15 @@
     }
 
   </script>
+
+  <script>
+  const KEY = "vita_state_v1";
+  
+  function startMatch(state) {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    window.location.href = "punteggi.html";
+  }
+  </script>
+
 </body>
 </html>
