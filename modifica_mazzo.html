@@ -533,8 +533,11 @@
         if (!carta) continue;
     
         // Conta per Tipo
-        const tipo = carta['TIPO'];
-        tipoCount[tipo] = (tipoCount[tipo] || 0) + mazzo[id];
+		let tipo = (carta['TIPO'] || '').toUpperCase().trim();
+		if (tipo.startsWith('AZIONE')) tipo = 'AZIONE';
+		
+		tipoCount[tipo] = (tipoCount[tipo] || 0) + mazzo[id];
+
     
         // Conta per Costo
         const costo = carta['COSTO'];
