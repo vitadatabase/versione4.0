@@ -174,6 +174,11 @@
     }
 
   </style>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff">
+  <script src="pwa.js" defer></script>
+
 </head>
 <body>
   <header>
@@ -545,5 +550,24 @@
 
     
   </script>
+
+  <script>
+  const KEY = "vita_state_v1";
+  
+  // Esempio stato (adattiamo ai tuoi campi reali)
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || null; }
+    catch { return null; }
+  }
+  
+  function saveState(state) {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+  
+  // TODO: chiamare saveState() quando cambi un punteggio / timer / torneo
+  // TODO: all'avvio, caricare loadState() e ripopolare la UI
+  
+  </script>
+
 </body>
 </html>
