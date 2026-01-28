@@ -365,9 +365,18 @@
 	  document.getElementById('filtroTipo').onchange = mostraCarte;
 	  document.getElementById('filtroPietra').onchange = mostraCarte;
 	  document.getElementById('filtroCosto').onchange = mostraCarte;
+
+
+		function normalizzaTipo(t) {
+			t = String(t || "").trim().toUpperCase();
+			if (t.startsWith("AZIONE")) return "AZIONE";   // AZIONE e AZIONE (CANZONE) => AZIONE
+			return t;
+		}
+
+
 	
 	  function mostraCarte() {
-	    const tipo = document.getElementById('filtroTipo').value;
+	    const tipo = normalizzaTipo(document.getElementById('filtroTipo').value);
 	    const pietra = document.getElementById('filtroPietra').value;
 	    const costo = document.getElementById('filtroCosto').value;
 	
@@ -389,7 +398,7 @@
       console.log('carte ordinate:', carteOrdinate);
       
 	    for (const { carta, id } of carteOrdinate) {
-	      if (tipo && carta['TIPO'] !== tipo) continue;
+	      if (tipo && normalizzaTipo(carta['TIPO']) !== tipo) continue;
 	      if (pietra && carta['PIETRA'] !== pietra) continue;
 	      if (costo && carta['COSTO'].toString() !== costo) continue;
 	
@@ -533,11 +542,8 @@
         if (!carta) continue;
     
         // Conta per Tipo
-		let tipo = (carta['TIPO'] || '').toUpperCase().trim();
-		if (tipo.startsWith('AZIONE')) tipo = 'AZIONE';
-		
+		const tipo = normalizzaTipo(carta['TIPO']);
 		tipoCount[tipo] = (tipoCount[tipo] || 0) + mazzo[id];
-
     
         // Conta per Costo
         const costo = carta['COSTO'];
