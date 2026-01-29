@@ -1,163 +1,327 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Regolamento - Vita</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Regolamento - Vita TCG</title>
   <style>
-    body {
+    body{
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: url('sfondo.jpg');
+      margin:0; padding:0;
+      background: url('sfondo.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: #111;
+      color:#111;
+      line-height:1.6;
+    }
+    header{
+      position:fixed; top:0; left:0; right:0;
+      height:60px;
+      background: rgba(255,255,255,0.92);
+      display:flex; align-items:center;
+      padding: 0 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      z-index:1000;
+      gap: 12px;
+    }
+    header a img{ height:42px; }
+    header .title{
+      font-weight:700;
+      letter-spacing:0.3px;
     }
 
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      z-index: 1000;
+    /* TOC */
+    nav.toc{
+      position: sticky;
+      top: 70px;
+      z-index: 5;
+      margin: 0 auto;
+      max-width: 980px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
     }
-
-    header img {
-      height: 40px;
-      cursor: pointer;
+    .toc .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
     }
-
-    .content-wrapper {
-      max-width: 900px;
-      margin: 100px auto 40px auto;
-      padding: 0 20px;
-    }
-
-    .back-btn {
-      margin-bottom: 20px;
-      padding: 10px 18px;
-      font-size: 1em;
-      cursor: pointer;
-      border-radius: 6px;
-      border: 1px solid #999;
+    .toc a{
+      text-decoration:none;
+      color:#111;
       background: rgba(255,255,255,0.9);
+      border:1px solid #bbb;
+      border-radius:999px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease;
+      white-space:nowrap;
     }
+    .toc a:hover{ transform: scale(1.02); background: rgba(255,255,255,1); }
 
-    .back-btn:hover {
-      background: white;
+    main{
+      padding: 92px 14px 50px;
+    }
+    .card{
+      max-width: 980px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.88);
+      border-radius: 14px;
+      padding: 18px 18px 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    }
+    h1{
+      margin: 6px 0 0;
+      text-align:center;
+    }
+    .subtitle{
+      text-align:center;
+      margin: 6px auto 14px;
+      font-style: italic;
+      opacity: 0.9;
+      max-width: 880px;
+    }
+    h2{
+      margin-top: 26px;
+      border-bottom: 2px solid #222;
+      padding-bottom: 6px;
+    }
+    h3{
+      margin-top: 18px;
+    }
+    .note{
+      background:#ffe0e0;
+      border-left: 5px solid crimson;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    ul{ margin-top: 8px; }
+    ul.clean{
+      list-style: none;
+      padding-left: 0;
+    }
+    .term{
+      padding: 8px 10px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.75);
+      margin: 8px 0;
+    }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 850px){
+      .grid2{ grid-template-columns: 1fr 1fr; }
+    }
+    .topBtn{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 2000;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.92);
+      border:1px solid #bbb;
+      cursor:pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 14px;
+    }
+    .topBtn:hover{ background: rgba(255,255,255,1); }
+    .anchor{
+      scroll-margin-top: 92px; /* header + spacing */
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <a href="home.html" title="Home">
       <img src="logo.jpg" alt="Home">
     </a>
+    <div class="title">Regolamento Vita</div>
   </header>
 
-  <div class="content-wrapper">
+  <main>
+    <nav class="toc" aria-label="Indice regolamento">
+      <div class="row">
+        <a href="#regole-base">📜 Regole di base</a>
+        <a href="#partite">🎮 Tipi di partita</a>
+        <a href="#ordine-turno">⏱️ Ordine turno</a>
+        <a href="#glossario">📚 Glossario</a>
+      </div>
+    </nav>
 
-    <!-- BOTTONE TORNA INDIETRO -->
-    <button class="back-btn" onclick="history.back()">⬅ Torna indietro</button>
+    <section class="card">
+      <h1>REGOLAMENTO</h1>
+      <div class="subtitle">
+        (ATTENZIONE: gran parte di queste regole sono riprese dal gioco di Disney Lorcana. Supportate i prodotti originali)
+      </div>
 
-    <!-- REGOLAMENTO -->
-    <div id="regole">
-      <section style="padding: 1em; background: rgba(255,255,255,0.85); border-radius: 12px; font-family: 'Arial', sans-serif; line-height: 1.6;">
-      
-        <h2><strong>REGOLAMENTO</strong></h2>
-        <p><em>(ATTENZIONE: gran parte di queste regole sono riprese dal gioco di Disney Lorcana. Supportate i prodotti originali)</em></p>
-      
-        <h3><strong>Come si Gioca a Vita: Le Regole di Base</strong></h3>
-        <p>
-          In <strong>Vita</strong>, i giocatori assumono il ruolo di persone normali e utilizzano <strong>l'inchiostro magico</strong> per evocare personaggi e mandarli all’avventura per raccogliere punti <strong>leggenda</strong>. 
-          Chi raggiunge per primo <strong>20 punti leggenda</strong> vince la partita, ma attenzione: si vince anche se l’avversario non può più pescare carte quando richiesto (all’inizio del turno o tramite effetti).
-        </p>
-      
-        <h3><strong>Preparazione del Gioco</strong></h3>
-        <ul>
-          <li><strong>Mazzo:</strong> Ogni giocatore costruisce un mazzo da 60 carte, che può contenere personaggi, azioni, oggetti, canzoni e luoghi.</li>
-          <li><strong>Carte Iniziali:</strong> Ogni giocatore pesca 7 carte. Se non soddisfatto, può fare <em>mulligan</em>: rimescola le carte scelte in fondo al mazzo e pesca altrettante nuove carte.</li>
-        </ul>
-      
-        <hr style="margin: 2em 0;">
-      
-        <h2 style="text-align: center; border-bottom: 2px solid #222;">Ordine Turno di Vita</h2>
-      
-        <p><strong>INIZIO DEL TURNO:</strong> puoi applicare gli effetti in cui c’è scritto “all’inizio del tuo turno”.</p>
-        <p><strong>PREPARA LE TUE CARTE:</strong> Personaggi, Oggetti e Inchiostri che erano impegnati.</p>
-        <p><strong>PESCA:</strong> Aggiungi alla mano la prima carta del tuo mazzo e pensa cosa fare.</p>
-        <p><strong>GIOCARE CARTE / INCHIOSTRARE UNA CARTA / ATTIVARE EFFETTI / SFIDARE / ANDARE ALL’AVVENTURA:</strong> Non c’è un ordine preciso per fare queste azioni.</p>
-        <p><strong>FINE TURNO:</strong> dichiaralo con “passo”; “ho finito”; “concludo il mio turno” o in qualsiasi altro modo.</p>
-      
-        <p style="background: #ffe0e0; padding: 0.5em; border-left: 5px solid crimson;">
-          <strong>ATTENZIONE:</strong><br>
-          Durante il <em>primo turno del primo giocatore</em>, si saltano le fasi 1, 2 e 3.<br>
-          Se devi acquisire leggende tramite i luoghi, potrai farlo <strong>SOLO</strong> nelle fasi previste.
-        </p>
-      
-        <hr style="margin: 2em 0;">
-      
-        <h2 style="text-align: center; border-bottom: 2px solid #222;">Glossario di Vita</h2>
-      
-        <ul style="list-style: none; padding: 0;">
-          <li><strong>PREPARARE:</strong> Mettere la carta in posizione verticale.</li>
-          <li><strong>IMPEGNARE:</strong> Mettere la carta in posizione orizzontale.</li>
-          <li><strong>ASCIUGARE:</strong> Personaggio appena giocato non utilizzabile nel turno.</li>
-          <li><strong>SCARTARE:</strong> Mettere una carta nella pila degli scarti.</li>
-          <li><strong>ESILIARE:</strong> Spostare una carta dal campo agli scarti.</li>
-          <li><strong>GIOCARE:</strong> Mettere una carta scoperta in campo.</li>
-          <li><strong>INCHIOSTRARE:</strong> Mettere una carta coperta in campo.</li>
-          <li><strong>PAGARE INCHIOSTRI:</strong> Impegnare gli inchiostri.</li>
-          <li><strong>FORZA:</strong> Valore di attacco.</li>
-          <li><strong>VITA / VOLONTÀ:</strong> Valore di difesa.</li>
-          <li><strong>COSTO:</strong> Numero in alto a sinistra sulla carta.</li>
-        </ul>
-      
-        <hr style="margin: 2em 0;">
-      
-        <h3><strong>Strategie per Vincere</strong></h3>
-        <ul>
-          <li><strong>Gestione dell'inchiostro:</strong> quando sacrificare una carta.</li>
-          <li><strong>Sinergie:</strong> carte che collaborano tra loro.</li>
-          <li><strong>Proteggi i personaggi chiave:</strong> anche la difesa conta.</li>
-        </ul>
-      
-        <h3><strong>COME POSSO OTTENERE LE CARTE?</strong></h3>
-        <h4>1. Pacchetto Base</h4>
-        <ul>
-          <li><strong>Costo:</strong> 20€</li>
-          <li><strong>Contenuto:</strong>
-            <ul>
-              <li>1 mazzo da 60 carte</li>
-              <li>1 porta-mazzo + 100 bustine</li>
-              <li>1 carta promo a scelta</li>
-            </ul>
-          </li>
-          <li><strong>Mazzi Disponibili:</strong>
-            <ul>
-              <li>Smeraldo–Acciaio</li>
-              <li>Ambra–Zaffiro</li>
-              <li>Ametista–Rubino</li>
-            </ul>
-          </li>
-        </ul>
+      <!-- SEZIONE 1 -->
+      <h2 id="regole-base" class="anchor">1) Regole di base</h2>
 
-      </section>
-
-      <p style="margin-top:20px;">
-        <strong>ATTENZIONE:</strong> in futuro sarà possibile ampliare la propria collezione acquistando singole carte!
+      <h3>Come si gioca a Vita</h3>
+      <p>
+        In <strong>Vita</strong>, i giocatori assumono il ruolo di persone normali e utilizzano <strong>l'inchiostro magico</strong>
+        per giocare personaggi e mandarli all’avventura per raccogliere <strong>punti leggenda</strong>.
+        Chi raggiunge per primo <strong>20 punti leggenda</strong> vince la partita.
+        Si vince anche se l’avversario non può più pescare carte quando richiesto (all’inizio del turno o tramite effetti).
       </p>
-    </div>
 
-  </div>
+      <h3>Preparazione del gioco</h3>
+      <ul>
+        <li><strong>Mazzo:</strong> ogni giocatore costruisce un mazzo da <strong>50 a 70 carte</strong> (personaggi, azioni, oggetti, luoghi).</li>
+        <li><strong>Pietre:</strong> ogni mazzo può contenere un massimo di <strong>2 pietre</strong> tra le 6 presenti (ACCIAIO, AMBRA, AMETISTA, RUBINO, SMERALDO, ZAFFIRO) + un’eventuale terza pietra: <strong>DIAMANTE</strong>.</li>
+        <li><strong>Chi inizia:</strong> prima di iniziare, ogni giocatore lancia un dado: chi fa il punteggio più alto decide se iniziare per primo o per ultimo.</li>
+        <li><strong>Carte iniziali:</strong> ogni giocatore pesca <strong>7 carte</strong>. Se non è soddisfatto può fare <em>mulligan</em>:
+          rimette un qualsiasi numero di carte in fondo al mazzo e pesca lo stesso numero di carte fino a tornare a 7.</li>
+      </ul>
+
+      <h3>Meccaniche di gioco</h3>
+      <div class="grid2">
+        <div class="term">
+          <strong>Inchiostrare le carte</strong><br>
+          Puoi trasformare alcune carte della tua mano in <strong>inchiostro</strong>, una risorsa per pagare i costi.
+          Scegliere quali carte inchiostrare è cruciale.
+        </div>
+        <div class="term">
+          <strong>Giocare un personaggio</strong><br>
+          Un personaggio appena giocato è <strong>in asciugatura</strong>: di norma dovrai aspettare un turno prima di poterlo impegnare per sfidare o andare all’avventura (a meno di eccezioni).
+        </div>
+        <div class="term">
+          <strong>Sfide tra personaggi</strong><br>
+          In una sfida, i personaggi si scambiano danni pari alla loro <strong>FORZA</strong>. Se un personaggio subisce danni pari o superiori alla sua <strong>VITA</strong>, viene <strong>esiliato</strong> (va negli scarti).
+        </div>
+        <div class="term">
+          <strong>Avventura</strong><br>
+          I personaggi possono <strong>andare all’avventura</strong> per ottenere punti leggenda pari al loro valore LEGGENDA.
+          Puoi ottenere leggenda anche con effetti e con alcuni luoghi.
+        </div>
+        <div class="term">
+          <strong>Oggetti, Azioni e Luoghi</strong><br>
+          Gli <strong>oggetti</strong> forniscono abilità e bonus, le <strong>azioni</strong> creano effetti immediati,
+          i <strong>luoghi</strong> possono dare leggenda e sinergie con i personaggi che si spostano lì pagando il costo di spostamento.
+        </div>
+      </div>
+
+      <h3>I personaggi: cosa trovi sulla carta</h3>
+      <p>Ogni carta personaggio è caratterizzata da: <strong>Nome</strong>, <strong>Soprannome</strong>, <strong>Costo</strong>, <strong>Icona calamaio</strong>, <strong>Classificazione</strong>, <strong>Abilità/Effetti</strong>, <strong>Forza</strong>, <strong>Vita</strong>, <strong>Valore leggenda</strong>, <strong>Rarità</strong>.</p>
+
+      <h3>Abilità (lista)</h3>
+      <ul>
+        <li><strong>Aiutante:</strong> ogni volta che questo personaggio va all’avventura, puoi aggiungere la sua FORZA alla FORZA di un altro personaggio a tua scelta per questo turno.</li>
+        <li><strong>Attaccabrighe:</strong> non può andare all’avventura e deve sfidare ogni turno, se possibile.</li>
+        <li><strong>Lesto:</strong> può sfidare nel turno in cui è stato giocato.</li>
+        <li><strong>Guardiano:</strong> può entrare in gioco impegnato; un personaggio avversario che sfida uno dei tuoi personaggi deve sceglierne uno con Guardiano, se possibile.</li>
+        <li><strong>Melodioso X:</strong> conta come di costo X per cantare una canzone.</li>
+        <li><strong>Protetto:</strong> gli avversari non possono scegliere questo personaggio se non per sfidarlo.</li>
+        <li><strong>Resistere +X:</strong> il danno inflitto a questo personaggio è ridotto di X.</li>
+        <li><strong>Sfidante +X:</strong> mentre sta sfidando, questo personaggio riceve +X FORZA.</li>
+        <li><strong>Sfuggente:</strong> solo altri personaggi con Sfuggente possono sfidare questo personaggio.</li>
+        <li><strong>Trasformazione X:</strong> puoi pagare X INCHIOSTRO per giocare questa carta sopra a uno dei tuoi personaggi chiamato quello indicato.</li>
+        <li><strong>Potenziamento X:</strong> una volta durante il tuo turno, puoi pagare X inchiostro per mettere la prima carta del tuo mazzo a faccia in giù sotto a questo personaggio.</li>
+        <li><strong>Ribaltante X (NEW):</strong> ogni volta che va all’avventura, ogni avversario mette le prime X carte del suo mazzo negli scarti.</li>
+        <li><strong>Iettatore (NEW):</strong> quando viene esiliato in una sfida, i tuoi avversari perdono leggenda pari alla sua LEGGENDA al momento dell’esilio.</li>
+        <li><strong>Trasgressore (NEW):</strong> può sfidare i personaggi preparati avversari.</li>
+        <li><strong>Trascinatore (NEW):</strong> se viene esiliato quando viene sfidato, esilia il personaggio che lo ha esiliato.</li>
+      </ul>
+
+      <p>
+        È importante valutare la <strong>classificazione</strong> del proprio personaggio, perché spesso ci sono effetti che sinergizzano con personaggi di una determinata classificazione
+        (utile anche in costruzione mazzo).
+      </p>
+      <p><strong>Classificazioni personaggi (lista):</strong> STARLIGHT, FRATELLANZA, POTENZIATO, PROTAGONISTA, SOSTENITORE, DISERTORE, FONDATORE, ANIMALE, ATTENDIAMOCI, GUIDA, FANTASIOSO, COALIZZATI, PARENTE, COLLEGA, EREMITA, FREQUENTANTE, HELLAVERSE.</p>
+
+      <!-- SEZIONE 2 -->
+      <h2 id="partite" class="anchor">2) Tipi di partita</h2>
+
+      <h3>Battle Royal (tutti vs tutti)</h3>
+      <p>
+        Partita “normale”: vince il primo che arriva a <strong>20 punti leggenda</strong>,
+        oppure l’unico che ha ancora carte del mazzo (se gli altri non possono pescare quando richiesto).
+      </p>
+
+      <h3>Match a squadre (team vs team)</h3>
+      <p>
+        Nei match a squadre (spesso 2 vs 2) i punti leggenda sono <strong>condivisi</strong> con quelli del partner
+        e vince il primo team che arriva a <strong>30 punti leggenda</strong>.
+        Si gioca in modo alternato (team1-A, team2-A, team1-B, team2-B, ecc.).
+      </p>
+      <ul>
+        <li>Se un giocatore finisce il proprio mazzo non potrà continuare il match; se il compagno può ancora giocare, il team può comunque vincere.</li>
+        <li>Hai la possibilità <strong>solo una volta</strong> di mostrare (e vedere) le carte in mano al tuo partner per consigliarvi.</li>
+        <li>L’abilità <strong>Guardiano</strong> è estesa e può proteggere anche i compagni di squadra.</li>
+      </ul>
+
+      <h3>Nei tornei</h3>
+      <ul>
+        <li><strong>Tempo:</strong> 2 minuti e 30 secondi per ogni tuo turno. Se scaduti, il turno passa all’avversario.</li>
+        <li><strong>Mosse:</strong> non puoi ritirare le tue mosse, a meno che tutti gli avversari non siano d’accordo.</li>
+        <li><strong>Judge:</strong> puoi chiedere a un judge (Francesco G. e/o Daniele C.) dubbi su regole/dinamiche; il judge risponde sinceramente.</li>
+        <li><strong>Cheating:</strong> se stai imbrogliando consapevolmente e il judge lo conferma, perdi automaticamente la partita.</li>
+      </ul>
+
+      <!-- SEZIONE 3 -->
+      <h2 id="ordine-turno" class="anchor">3) Ordine turno di Vita</h2>
+
+      <p><strong>INIZIO DEL TURNO:</strong> puoi applicare gli effetti in cui c’è scritto “all’inizio del tuo turno”.</p>
+      <p><strong>PREPARA E ASCIUGA LE TUE CARTE:</strong> Personaggi, Oggetti e Inchiostri che erano impegnati.</p>
+      <p><strong>PESCA:</strong> aggiungi alla mano la prima carta del tuo mazzo e pensa cosa fare.</p>
+      <p><strong>AZIONI LIBERE:</strong> giocare carte / inchiostrare una carta / attivare effetti / sfidare / andare all’avventura:
+        non c’è un ordine preciso o un limite di volte in cui puoi fare queste azioni (se possibile).</p>
+      <p><strong>FINE TURNO:</strong> dichiaralo con “passo”, “ho finito”, “concludo il mio turno” o in qualsiasi altro modo.</p>
+
+      <div class="note">
+        <strong>ATTENZIONE</strong><br>
+        Durante il <em>primo turno del primo giocatore</em> si saltano le fasi 1, 2 e 3.<br>
+        Se devi acquisire leggende tramite i luoghi, potrai farlo <strong>SOLO</strong> nelle fasi 1, 2 e 3.
+      </div>
+
+      <!-- GLOSSARIO -->
+      <h2 id="glossario" class="anchor">Glossario di Vita</h2>
+
+      <ul class="clean">
+        <li class="term"><strong>PREPARARE:</strong> mettere la carta in posizione verticale.</li>
+        <li class="term"><strong>IMPEGNARE:</strong> mettere la carta in posizione orizzontale. Si impegna per sfidare, andare all’avventura, cantare canzoni, pagare inchiostri o come costo per attivare effetti.</li>
+        <li class="term"><strong>IN ASCIUGATURA:</strong> un personaggio appena giocato non potrà impegnarsi in quel turno (a meno di eccezioni).</li>
+        <li class="term"><strong>ASCIUGATO:</strong> un personaggio che ha completato il turno di asciugatura e può impegnarsi.</li>
+        <li class="term"><strong>SCARTARE:</strong> mettere una carta dalla mano alla pila degli scarti.</li>
+        <li class="term"><strong>ESILIARE:</strong> mettere una carta dal campo di gioco alla pila degli scarti.</li>
+        <li class="term"><strong>GIOCARE:</strong> mettere una carta sul campo di gioco, scoperta.</li>
+        <li class="term"><strong>INCHIOSTRARE:</strong> mettere una carta sul campo di gioco, coperta.</li>
+        <li class="term"><strong>PAGARE INCHIOSTRI:</strong> sinonimo di impegnare ma specifico per gli inchiostri: metti orizzontali gli inchiostri richiesti.</li>
+        <li class="term"><strong>CONTROLLARE:</strong> avere scoperto sul campo da gioco.</li>
+        <li class="term"><strong>FORZA:</strong> valore d’attacco del personaggio (spade).</li>
+        <li class="term"><strong>VITA / VOLONTÀ:</strong> valore di difesa (scudo).</li>
+        <li class="term"><strong>COSTO:</strong> valore in alto a sinistra di ogni carta.</li>
+        <li class="term"><strong>CALAMAIO:</strong> parte del campo di gioco destinata alle carte inchiostrate.</li>
+      </ul>
+
+      <div style="height:10px"></div>
+    </section>
+  </main>
+
+  <button class="topBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆️ Su</button>
+
+  <script>
+    // Smooth scroll (fallback per browser vecchi)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if(!el) return;
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+        history.replaceState(null, '', id);
+      });
+    });
+  </script>
 
 </body>
 </html>
