@@ -1,0 +1,548 @@
+ /*home*/
+ 
+.page-home {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('../img/utils/sfondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #111;
+}
+
+.page-home header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-family: 'Georgia', serif;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+header a {
+    color: #111;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+}
+
+.content-wrapper {
+    background-color: rgba(255, 255, 255, 0.85);
+    margin: 80px auto 40px auto;
+    padding: 40px;
+    max-width: 900px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+h1, h2 { color: #222; }
+p { margin-bottom: 1em; }
+
+.btn-container {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.btn-container button {
+    padding: 1em;
+    font-size: 1.1em;
+    background-color: rgba(255,255,255,0.85);
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #111;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+}
+
+.btn-container button:hover {
+    background-color: rgba(255,255,255,1);
+}
+
+#regole {
+    margin-top: 4em;
+    padding-top: 2em;
+    border-top: 1px solid #ccc;
+}
+
+ul { margin-top: 1em; }
+#goTopBtn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#goTopBtn img {
+    height: 50px;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+}
+
+#goTopBtn img:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/*index*/
+
+.body_index {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 2em;
+    background: url('../img/utils/sfondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #111;
+}
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 1000;
+    background: transparent;
+}
+header img {
+    height: 60px;
+    cursor: pointer;
+}
+#toggleSidebar {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+#sidebar {
+    position: fixed;
+    top: 60px;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: rgba(255,255,255,0.95);
+    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    padding: 5em 1em 1em 1em;  /* 👈 questo aggiunge spazio in alto */
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+}
+#sidebar.open {
+    right: 0;
+}
+#sidebar select {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+#search-container {
+    margin-top: 150px;
+}
+#search-container input {
+    width: calc(100% - 22px);
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+#cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 1em;
+}
+.card-img {
+    width: 160px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: block;
+    margin: auto;
+}
+.card-img:hover {
+    transform: scale(1.05);
+}
+.card-wrapper {
+    text-align: center;
+}
+button {
+    padding: 0.3em 0.6em;
+    cursor: pointer;
+}
+#mazzoBtn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 18px;
+    z-index: 1001;
+}
+#linkMazzi {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 18px;
+    padding: 0.4em 0.8em;
+    text-decoration: none;
+    color: black;
+    z-index: 1001;
+    cursor: pointer;
+}
+#messaggioAggiunta {
+    position: fixed;
+    top: 170px;
+    right: 20px;
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 0.5em 1em;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1001;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 1em;
+    border: 2px solid black;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+.popup img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 1em auto;
+    border-radius: 6px;
+}
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.popup button {
+    margin-top: 10px;
+    display: inline-block;
+}
+.mazzo-popup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 1.5em;
+    border: 2px solid black;
+    z-index: 1000;
+    max-width: 80%; max-height: 80%;
+    overflow: auto;
+}
+
+/*mazzi*/
+
+.body_mazzi {
+    font-family: Arial, sans-serif;
+    margin: 2em;
+    background: url('../img/utils/sfondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #222;
+}
+header {
+    text-align: center;
+    margin-bottom: 1em;
+}
+header button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+header button img {
+    height: 60px;
+}
+h1 {
+    margin-bottom: 1em;
+}
+#listaMazzi {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.mazzo-item {
+    background: rgba(255 255 255 / 0.85);
+    border-radius: 8px;
+    padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 5px #aaa;
+}
+.mazzo-info {
+    flex: 1;
+}
+.mazzo-info strong {
+    font-size: 1.2em;
+}
+.mazzo-cards {
+    margin-top: 0.5em;
+    font-size: 0.9em;
+    color: #444;
+}
+.mazzo-buttons button {
+    margin-left: 0.5em;
+    padding: 0.4em 0.8em;
+    font-size: 1em;
+    cursor: pointer;
+}
+#aggiungiMazzoBtn {
+    margin-top: 1.5em;
+    padding: 0.6em 1.2em;
+    font-size: 1.1em;
+    cursor: pointer;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+/* modifica_mazzo */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('sfondo.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+}
+header {
+    background: white;
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+header button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+header img {
+    height: 50px;
+}
+main {
+    padding: 2em;
+    background-color: rgba(255, 255, 255, 0.8);
+    max-width: 1200px;
+    margin: auto;
+}
+select, input[type="text"] {
+    margin-right: 1em;
+    padding: 0.5em;
+}
+.carte-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 1em;
+}
+.carte-container img {
+    width: 80px;
+    height: auto;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.carte-container img:hover {
+    transform: scale(1.2);
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 1.5em;
+    border: 2px solid black;
+    z-index: 100;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    border-radius: 10px;
+}
+.popup .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 99;
+}
+#totaleCarte {
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+/*nuova_partita*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background-image: url('sfondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #111;
+}
+
+header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 60px; background: rgba(255, 255, 255, 0.9);
+    display: flex; align-items: center; padding-left: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+header a img { height: 40px; cursor: pointer; }
+
+.container {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.counter {
+    font-size: 48px;
+    margin: 1em;
+}
+
+.controls button {
+    font-size: 32px;
+    margin: 0 20px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+
+.start-btn {
+    margin-top: 2em;
+    padding: 1em 2em;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+/*punteggi*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background-image: url('sfondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #111;
+}
+
+header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 60px; background: rgba(255, 255, 255, 0.9);
+    display: flex; align-items: center; padding-left: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+header a img { height: 40px; cursor: pointer; }
+
+.board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 80px;
+    padding: 1em;
+    gap: 1em;
+}
+
+.segnapunto {
+    background: rgba(255,255,255,0.85);
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 1em;
+    width: 140px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.punteggio {
+    font-size: 36px;
+    margin: 0.5em 0;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.controls button {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.giocatore {
+    margin-top: 0.5em;
+    font-weight: bold;
+}

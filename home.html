@@ -3,112 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Vita - Il Gioco</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: url('sfondo.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #111;
-    }
-
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      font-size: 24px;
-      font-weight: bold;
-      letter-spacing: 3px;
-      font-family: 'Georgia', serif;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
-
-    header a {
-      color: #111;
-      text-decoration: none;
-      text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
-    }
-
-    .content-wrapper {
-      background-color: rgba(255, 255, 255, 0.85);
-      margin: 80px auto 40px auto;
-      padding: 40px;
-      max-width: 900px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-
-    h1, h2 { color: #222; }
-    p { margin-bottom: 1em; }
-
-    .btn-container {
-      margin-top: 2em;
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-    }
-
-    .btn-container button {
-      padding: 1em;
-      font-size: 1.1em;
-      background-color: rgba(255,255,255,0.85);
-      border: 1px solid #aaa;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #111;
-      text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
-    }
-
-    .btn-container button:hover {
-      background-color: rgba(255,255,255,1);
-    }
-
-    #regole {
-      margin-top: 4em;
-      padding-top: 2em;
-      border-top: 1px solid #ccc;
-    }
-
-    ul { margin-top: 1em; }
-    #goTopBtn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    
-    #goTopBtn img {
-      height: 50px;
-      transition: transform 0.2s ease, opacity 0.3s ease;
-    }
-    
-    #goTopBtn img:hover {
-      transform: scale(1.1);
-      opacity: 0.8;
-    }
-
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
+<body class="body_homepage">
   <a href="#" id="goTopBtn" title="Torna su">
-    <img src="logo.jpg" alt="Home" />
+    <img src="img/utils/logo.jpg" alt="Home" />
   </a>
-
-
     <div class="content-wrapper">
       <h1>Vita - il gioco di carte collezionabili</h1>
     
