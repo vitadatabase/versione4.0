@@ -1,0 +1,6 @@
+/* components/buttons.css */
+/* Bottone generico usato in index (nel tuo CSS era "button { ... }") */
+button {
+  padding: 0.3em 0.6em;
+  cursor: pointer;
+}

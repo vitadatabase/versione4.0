@@ -1,0 +1,101 @@
+/* pages/modifica-mazzo.css */
+/* Qui manteniamo i selettori globali (body/header/...) perché nel tuo style.css erano così.
+   IMPORTANTISSIMO: includi questo file solo in modifica_mazzo.html
+*/
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('sfondo.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+header {
+  background: white;
+  padding: 1em;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+header img {
+  height: 50px;
+}
+
+main {
+  padding: 2em;
+  background-color: rgba(255, 255, 255, 0.8);
+  max-width: 1200px;
+  margin: auto;
+}
+
+select, input[type="text"] {
+  margin-right: 1em;
+  padding: 0.5em;
+}
+
+.carte-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1em;
+}
+
+.carte-container img {
+  width: 80px;
+  height: auto;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.carte-container img:hover {
+  transform: scale(1.2);
+}
+
+/* Override popup/overlay rispetto a components/popup.css (z-index diversi) */
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 1.5em;
+  border: 2px solid black;
+  z-index: 100;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  border-radius: 10px;
+}
+
+.popup .close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+
+#totaleCarte {
+  margin-top: 1em;
+  font-weight: bold;
+}
