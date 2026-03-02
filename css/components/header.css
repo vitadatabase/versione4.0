@@ -1,0 +1,4 @@
+/* NON si centralizza "header" perché ogni pagina lo stila in modo diverso.
+   Questo file resta vuoto apposta: lo si userà quando farai il refactor successivo
+   introducendo una classe tipo .site-header.
+*/

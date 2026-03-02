@@ -1,0 +1,73 @@
+/* pages/mazzi.css */
+
+.body_mazzi {
+  font-family: Arial, sans-serif;
+  margin: 2em;
+  background: url('../../img/utils/sfondo.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #222;
+}
+
+.body_mazzi header {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.body_mazzi header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.body_mazzi header button img {
+  height: 60px;
+}
+
+.body_mazzi h1 {
+  margin-bottom: 1em;
+}
+
+#listaMazzi {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mazzo-item {
+  background: rgba(255 255 255 / 0.85);
+  border-radius: 8px;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 5px #aaa;
+}
+
+.mazzo-info { flex: 1; }
+
+.mazzo-info strong { font-size: 1.2em; }
+
+.mazzo-cards {
+  margin-top: 0.5em;
+  font-size: 0.9em;
+  color: #444;
+}
+
+.mazzo-buttons button {
+  margin-left: 0.5em;
+  padding: 0.4em 0.8em;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#aggiungiMazzoBtn {
+  margin-top: 1.5em;
+  padding: 0.6em 1.2em;
+  font-size: 1.1em;
+  cursor: pointer;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  color: white;
+}
