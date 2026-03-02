@@ -4,7 +4,7 @@
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 2em;
-  background: url('../img/utils/sfondo.jpg') no-repeat center center fixed;
+  background: url('../../img/utils/sfondo.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #111;
 }

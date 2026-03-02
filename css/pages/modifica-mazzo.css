@@ -3,40 +3,40 @@
    IMPORTANTISSIMO: includi questo file solo in modifica_mazzo.html
 */
 
-body {
+.body_modifica_mazzo {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-image: url('sfondo.jpg');
+  background-image: url("../../img/utils/sfondo.jpg");
   background-size: cover;
   background-attachment: fixed;
 }
 
-header {
+.body_modifica_mazzo header {
   background: white;
   padding: 1em;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-header button {
+.body_modifica_mazzo header button {
   background: none;
   border: none;
   cursor: pointer;
 }
 
-header img {
+.body_modifica_mazzo header img {
   height: 50px;
 }
 
-main {
+.body_modifica_mazzo main {
   padding: 2em;
   background-color: rgba(255, 255, 255, 0.8);
   max-width: 1200px;
   margin: auto;
 }
 
-select, input[type="text"] {
+.body_modifica_mazzo select, input[type="text"] {
   margin-right: 1em;
   padding: 0.5em;
 }

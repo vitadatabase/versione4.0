@@ -1,10 +1,10 @@
 /* pages/nuova-partita.css */
 /* Manteniamo selettori globali come nel tuo CSS: includi solo in nuova_partita.html */
 
-body {
+.body_nuova_partita {
   font-family: Arial, sans-serif;
   margin: 0; padding: 0;
-  background-image: url('sfondo.jpg');
+  background-image: url("../../img/utils/sfondo.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -12,7 +12,7 @@ body {
   color: #111;
 }
 
-header {
+.body_punteggnuova_partita {
   position: fixed; top: 0; left: 0; right: 0;
   height: 60px; background: rgba(255, 255, 255, 0.9);
   display: flex; align-items: center; padding-left: 10px;
@@ -20,7 +20,7 @@ header {
   z-index: 1000;
 }
 
-header a img { height: 40px; cursor: pointer; }
+.body_nuova_partita header a img { height: 40px; cursor: pointer; }
 
 .counter {
   font-size: 48px;
