@@ -1,0 +1,65 @@
+/* pages/index.css */
+
+.body_index {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 2em;
+  background: url('../../img/utils/sfondo.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #111;
+}
+
+.body_index header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 1000;
+  background: transparent;
+}
+
+.body_index header img {
+  height: 60px;
+  cursor: pointer;
+}
+
+#mazzoBtn {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 18px;
+  z-index: 1001;
+}
+
+#linkMazzi {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 18px;
+  padding: 0.4em 0.8em;
+  text-decoration: none;
+  color: black;
+  z-index: 1001;
+  cursor: pointer;
+}
+
+#messaggioAggiunta {
+  position: fixed;
+  top: 170px;
+  right: 20px;
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 1001;
+}

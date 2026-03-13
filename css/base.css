@@ -1,0 +1,5 @@
+/* base.css */
+/* Reset minimo e base comune (non impone layout specifici) */
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }

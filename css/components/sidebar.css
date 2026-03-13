@@ -1,0 +1,45 @@
+/* components/sidebar.css */
+
+#toggleSidebar {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+#sidebar {
+  position: fixed;
+  top: 60px;
+  right: -300px;
+  width: 280px;
+  height: 100%;
+  background: rgba(255,255,255,0.95);
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  padding: 5em 1em 1em 1em; /* spazio in alto */
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+#sidebar.open {
+  right: 0;
+}
+
+#sidebar select {
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+#search-container {
+  margin-top: 150px;
+}
+
+#search-container input {
+  width: calc(100% - 22px);
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
