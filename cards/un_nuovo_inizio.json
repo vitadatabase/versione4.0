@@ -1212,12 +1212,12 @@
     "CLASSIFICAZIONE": "Fratellanza - Protagonista",
     "FORZA": 1,
     "VITA": 4,
-    "VAL. LEGGENDA": 2,
-    "ABILITA'": "Resistere 1",
-    "EFFETTI": "HO PESCATO OVUNQUE! - Questo personaggio può spostarsi in un luogo gratis.",
+    "VAL. LEGGENDA": 1,
+    "ABILITA'": "",
+    "EFFETTI": "HO PESCATO OVUNQUE! - Questo personaggio può spostarsi in un luogo gratis. Una volta, durante il tuo turno, questo personaggio puó spostarsi in un luogo gratis.",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
-    "LIMITATO": 2
+    "LIMITATO": 3
   },
   {
     "ID": 62,
@@ -1741,7 +1741,7 @@
   },
   {
     "ID": 88,
-    "NOME CARTA": "ALBERTO POL. - Er Vivido",
+    "NOME CARTA": "ALBERTO POL. - Diamante Grezzo",
     "N.": 88,
     "RARITA'": "NON COMUNE",
     "COSTO": 4,
@@ -1821,7 +1821,7 @@
   },
   {
     "ID": 92,
-    "NOME CARTA": "ALBERTO POL. - Diamante Grezzo",
+    "NOME CARTA": "ALBERTO POL. - Er Vivido",
     "N.": 92,
     "RARITA'": "SUPER RARO",
     "COSTO": 7,
@@ -3414,7 +3414,7 @@
     "VITA": "",
     "VAL. LEGGENDA": "",
     "ABILITA'": "",
-    "EFFETTI": "CE L'ABBIAMO SOLO NOI! - IMPEGNA + IMPEGNA + PAGA 1 INCHIOSTRO:\nScegli un tuo personaggio Starlight. I tuoi avversari perdono leggenda pari alla LEGGENDA del personaggio scelto.",
+    "EFFETTI": "VEDI CHE C'É IL NOSTRO LOGO? - IMPEGNA:\nScegli un tuo personaggio Starlight; quel personaggio non puó andare all'avventura questo turno. I tuoi avversari perdono leggenda pari alla LEGGENDA del personaggio scelto.",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
     "LIMITATO": 1
