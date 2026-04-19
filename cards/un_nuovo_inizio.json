@@ -1857,7 +1857,7 @@
     "EFFETTI": "1. DA' QUA! - Quando giochi questo personaggio e quando va all'avventura, puoi aggiungere un oggetto dalla tua pila degli scarti alla tua mano. 2. QUESTO L'HO FATTO IO! - Questo personaggio riceve +1 FORZA e +1 VITA' per ogni oggetto che hai in gioco.",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
-    "LIMITATO": ""
+    "LIMITATO": 2
   },
   {
     "ID": 94,
@@ -2057,7 +2057,7 @@
     "EFFETTI": "(un personaggio con costo 7 o superiore può IMPEGNARSI per cantare questa canzone gratis.) Esilia tutti i personaggi non Fratellanza. Non puoi andare all'avventura nel turno in cui attivi questa carta,",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
-    "LIMITATO": 2
+    "LIMITATO": 1
   },
   {
     "ID": 104,
