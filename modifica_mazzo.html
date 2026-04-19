@@ -498,6 +498,22 @@
 	    }
 	    popup.querySelector('img').src = src;
     }
+
+	function getPietreMazzo() {
+	  const set = new Set();
+	
+	  for (const id in mazzo) {
+	    const carta = cardsById[String(id)];
+	    if (!carta) continue;
+	
+	    const pietra = (carta["PIETRA"] || "").toUpperCase();
+	    if (pietra && pietra !== "DIAMANTE") {
+	      set.add(pietra);
+	    }
+	  }
+	
+	  return set;
+	}
     
     function aggiungiCarta(id) {
 	  const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
@@ -505,7 +521,20 @@
 	  
 	  const lim = Number(carta?.["LIMITATO"] ?? 0);
 	  const max = (lim === 1) ? 1 : (lim === 2) ? 2 : 3;
-    
+
+	  const pietreAttuali = getPietreMazzo();
+	  const pietraCarta = (carta["PIETRA"] || "").toUpperCase();
+		
+	  // ignora diamante
+	  if (pietraCarta !== "DIAMANTE") {
+		// se è una nuova pietra
+		if (!pietreAttuali.has(pietraCarta)) {
+		  if (pietreAttuali.size >= 2) {
+		    alert("Puoi avere massimo 2 pietre diverse nel mazzo (escluso DIAMANTE).");
+		    return;
+		  }
+		}
+	  }
       if ((mazzo[id] || 0) >= max) {
         alert(`Puoi avere al massimo ${max} copie di questa carta.`);
         return;
