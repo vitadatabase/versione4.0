@@ -837,7 +837,7 @@
     "EFFETTI": "Infliggi un totale di 3 danni a fino a 3 personaggi avversari a tua scelta.",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
-    "LIMITATO": ""
+    "LIMITATO": 2
   },
   {
     "ID": 215,
@@ -877,7 +877,7 @@
     "EFFETTI": "CI VORRA' DEL TEMPO - Quando giochi questo oggetto, puoi aggiungere alla tua mano un personaggio chiamato ALESSIO dal tuo mazzo.\n30 E LODE IN AUTOCAD - I personaggi chiamati ALESSIO ottengono Protetto e Resistere +1. (Gli avversari non possono scegliere quei personaggi se non per sfidarli. Il danno inflitto a quei personaggi è ridotto di 1.)",
     "COSTO SPOSTAMENTO": "",
     "NOTE": "",
-    "LIMITATO": ""
+    "LIMITATO": 2
   },
   {
     "ID": 217,
