@@ -498,10 +498,13 @@
 	    }
 	    popup.querySelector('img').src = src;
     }
+    
     function aggiungiCarta(id) {
-      const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
-      const carta = cardsDatabase.find(c => c["ID"] === id);
-      const max = (carta && carta["RARITA'"].toUpperCase() === 'PROMO') ? 1 : 3;
+	  const Totale = Object.values(mazzo).reduce((a, b) => a + b, 0);
+	  const carta = cardsDatabase.find(c => String(c["ID"]) === String(id));
+	  
+	  const lim = Number(carta?.["LIMITATO"] ?? 0);
+	  const max = (lim === 1) ? 1 : (lim === 2) ? 2 : 3;
     
       if ((mazzo[id] || 0) >= max) {
         alert(`Puoi avere al massimo ${max} copie di questa carta.`);
