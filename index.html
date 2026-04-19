@@ -418,10 +418,17 @@ document.getElementById('salvaMazzo').onclick = () => {
   alert('Mazzo salvato come "' + nome + '"');
 };
 
+let cardsById = {};
+
 loadAllCards()
-  .then(data => { tutteLeCarte = data; mostraCarte(data); })
+  .then(data => {
+    tutteLeCarte = data;
+    cardsById = Object.fromEntries(
+      tutteLeCarte.map(c => [String(c.ID), c])
+    );
+    mostraCarte(data);
+  })
   .catch(err => alert("Errore caricamento carte: " + err.message));
-;
 
 function toggleDropdown(id) {
   const clicked = document.querySelector(`.dropdown-toggle[onclick*="${id}"]`).parentElement;
@@ -539,15 +546,47 @@ function mostraCarte(carte) {
   });
 }
 
+function getPietreMazzo() {
+  const set = new Set();
 
+  for (const id in mazzo) {
+    const carta = tutteLeCarte.find(c => String(c["ID"]) === String(id));
+    if (!carta) continue;
+
+    const pietra = (carta["PIETRA"] || "").toUpperCase();
+    if (pietra && pietra !== "DIAMANTE") {
+      set.add(pietra);
+    }
+  }
+
+  return set;
+}
+  
 function aggiungiAlMazzo(id) {
   const totale = Object.values(mazzo).reduce((a,b)=>a+b,0);
-  if (totale>=70) return alert('Mazzo pieno!');
-  const carta = tutteLeCarte.find(c=> String(c["ID"]) === String(id));
+  if (totale >= 70) return alert('Mazzo pieno!');
+
+  const carta = cardsById[String(id)];
   if (!carta) return alert("Carta non trovata nel database.");
+
+  // limite copie
   const lim = Number(carta["LIMITATO"] ?? 0);
   const max = (lim === 1) ? 1 : (lim === 2) ? 2 : 3;
-  if ((mazzo[id]||0)>=max) return alert(`puoi avere massimo ${max} copie di questa carta!`);
+
+  if ((mazzo[id]||0) >= max) {
+    return alert(`puoi avere massimo ${max} copie di questa carta!`);
+  }
+
+  // controllo pietre
+  const pietreAttuali = getPietreMazzo();
+  const pietraCarta = (carta["PIETRA"] || "").toUpperCase();
+
+  if (pietraCarta !== "DIAMANTE") {
+    if (!pietreAttuali.has(pietraCarta) && pietreAttuali.size >= 2) {
+      return alert("Puoi avere massimo 2 pietre diverse nel mazzo (escluso DIAMANTE).");
+    }
+  }
+
   mazzo[id] = (mazzo[id]||0) +1;
   aggiornaMazzo();
   mostraMessaggio();
@@ -558,7 +597,7 @@ function aggiornaMazzo() {
   ul.innerHTML='';
   let tot=0;
   for(const id in mazzo) {
-    const carta = tutteLeCarte.find(c=> String(c.ID) === String(id));
+    const carta = cardsById[String(id)];
     if (!carta) continue;
     const nome = carta["NOME CARTA"];
     const li=document.createElement('li');
